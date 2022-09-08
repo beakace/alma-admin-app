@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Couple {
+  id             String   @id
+  husband        Person   @relation("husband", fields: [husbandId], references: [id])
+  husbandId      String   @unique
+  wife           Person   @relation("wife", fields: [wifeId], references: [id])
+  wifeId         String   @unique
+  group          Group
+  city           String
+  postalCode     String
+  weddingYear    Int
+  invitedBy      Couple?  @relation("invitedBy", fields: [invitedById], references: [id])
+  invitedById    String?
+  invitedCouples Couple[] @relation("invitedBy")
+}
+
+enum Group {
+  A
+  B
+  C
+  D
+  S
+  X
+}
+
+model Person {
+  id            String  @id
+  husbandCouple Couple? @relation("husband")
+  wifeCouple    Couple? @relation("wife")
+  email         String
+  firstName     String
+  lastName      String
+  phoneNumber   String
+  birthYear     Int
+}
