@@ -26,6 +26,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.4",
+    "@mui/x-data-grid": "^5.17.3",
     "@prisma/client": "^4.3.1",
     "@remix-run/cloudflare": "^1.7.0",
     "@remix-run/cloudflare-pages": "^1.7.0",

@@ -11,8 +11,8 @@ import FormControlLabel from "@mui/material/FormControlLabel"
 import FormControl from "@mui/material/FormControl"
 import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
-import MyTable from "../components/table"
 import Box from "@mui/material/Box"
+import DataTable from "../components/datatable"
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   return {
@@ -79,7 +79,7 @@ type LoaderData = {
 
 export default function Index() {
   const loaderData = useLoaderData()
-
+  const greeting = "Welcome to React"
   return (
     <Box style={{ margin: "5rem" }}>
       <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
@@ -142,8 +142,9 @@ export default function Index() {
           </FormGroup>
         </FormControl>
 
-        <MyTable />
-        {loaderData.couples.map((couple: any) => (
+        {/* <MyTable loader={loader} /> */}
+        <DataTable loaderData={loaderData} text={greeting} />
+        {/* {loaderData.couples.map((couple: any) => (
           <div key={couple.id}>
             <h2>
               {couple.wife.firstName} {couple.wife.lastName} &{" "}
@@ -155,7 +156,7 @@ export default function Index() {
             <p>{couple.wife.email}</p>
             <p>{couple.husband.email}</p>
           </div>
-        ))}
+        ))} */}
 
         <Button variant="contained" component={Link} to="/about">
           Go to the about page
