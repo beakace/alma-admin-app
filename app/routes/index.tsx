@@ -56,7 +56,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           id: "12340",
           email: "email2@email-wife.com",
           lastName: "Nowak",
-          firstName: "Grazyna",
+          firstName: "Grażyna",
           birthYear: 1981,
           phoneNumber: "123456780",
         },
@@ -79,7 +79,6 @@ type LoaderData = {
 
 export default function Index() {
   const loaderData = useLoaderData()
-  const greeting = "Welcome to React"
   return (
     <Box style={{ margin: "5rem" }}>
       <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
@@ -142,21 +141,7 @@ export default function Index() {
           </FormGroup>
         </FormControl>
 
-        {/* <MyTable loader={loader} /> */}
-        <DataTable loaderData={loaderData} text={greeting} />
-        {/* {loaderData.couples.map((couple: any) => (
-          <div key={couple.id}>
-            <h2>
-              {couple.wife.firstName} {couple.wife.lastName} &{" "}
-              {couple.husband.firstName} {couple.husband.lastName}
-            </h2>
-            <p>
-              {couple.city}, {couple.postalCode}
-            </p>
-            <p>{couple.wife.email}</p>
-            <p>{couple.husband.email}</p>
-          </div>
-        ))} */}
+        <DataTable loaderData={loaderData} />
 
         <Button variant="contained" component={Link} to="/about">
           Go to the about page
