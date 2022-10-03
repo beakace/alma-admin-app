@@ -1,18 +1,21 @@
 import { LoaderFunction } from "@remix-run/cloudflare"
-import { useLoaderData, Link } from "@remix-run/react"
+import { useLoaderData, Link, useSearchParams } from "@remix-run/react"
 import { CoupleWithSpouses } from "~/db/couples-db.server"
-import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
-import ClearIcon from "@mui/icons-material/Clear"
-import IconButton from "@mui/material/IconButton"
-import Checkbox from "@mui/material/Checkbox"
-import FormGroup from "@mui/material/FormGroup"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import FormControl from "@mui/material/FormControl"
-import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
+import ClearIcon from "@mui/icons-material/Clear"
+import AddIcon from "@mui/icons-material/Add"
 import Box from "@mui/material/Box"
 import DataTable from "../components/datatable"
+import { useState } from "react"
+import { randomId } from "@mui/x-data-grid-generator"
+import {
+  FormControl,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material"
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   return {
@@ -27,7 +30,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         husbandId: "5678",
         invitedById: null,
         wife: {
-          id: "1234",
+          id: randomId(),
           email: "email@email-wife.com",
           lastName: "Kowalska",
           firstName: "Anna",
@@ -35,7 +38,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           phoneNumber: "123456789",
         },
         husband: {
-          id: "123",
+          id: randomId(),
           email: "husband@email.com",
           lastName: "Kowalski",
           firstName: "Jan",
@@ -53,7 +56,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         husbandId: "56780",
         invitedById: null,
         wife: {
-          id: "12340",
+          id: randomId(),
           email: "email2@email-wife.com",
           lastName: "Nowak",
           firstName: "Grażyna",
@@ -61,7 +64,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           phoneNumber: "123456780",
         },
         husband: {
-          id: "1230",
+          id: randomId(),
           email: "husband2@email.com",
           lastName: "Nowak",
           firstName: "Janusz",
@@ -79,7 +82,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         husbandId: "96780",
         invitedById: null,
         wife: {
-          id: "92340",
+          id: randomId(),
           email: "email32@email-wife.com",
           lastName: "Lewandowska",
           firstName: "Barbara",
@@ -87,7 +90,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           phoneNumber: "923456780",
         },
         husband: {
-          id: "9230",
+          id: randomId(),
           email: "husband23@email.com",
           lastName: "Lewandowski",
           firstName: "Andrzej",
@@ -105,7 +108,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         husbandId: "961780",
         invitedById: null,
         wife: {
-          id: "921340",
+          id: randomId(),
           email: "email312@email-wife.com",
           lastName: "Leszczyńska",
           firstName: "Oliwia",
@@ -113,7 +116,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           phoneNumber: "913456780",
         },
         husband: {
-          id: "92130",
+          id: randomId(),
           email: "husband213@email.com",
           lastName: "Leszczyński",
           firstName: "Dawid",
@@ -131,7 +134,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         husbandId: "296780",
         invitedById: null,
         wife: {
-          id: "292340",
+          id: randomId(),
           email: "email232@email-wife.com",
           lastName: "Kaczyński",
           firstName: "Kot",
@@ -139,7 +142,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           phoneNumber: "323456780",
         },
         husband: {
-          id: "93230",
+          id: randomId(),
           email: "husband323@email.com",
           lastName: "Kaczyński",
           firstName: "Jarosław",
@@ -157,7 +160,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         husbandId: "46780",
         invitedById: null,
         wife: {
-          id: "42340",
+          id: randomId(),
           email: "email342@email-wife.com",
           lastName: "Dziuba",
           firstName: "Sara",
@@ -165,7 +168,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
           phoneNumber: "423456780",
         },
         husband: {
-          id: "49230",
+          id: randomId(),
           email: "husband243@email.com",
           lastName: "Dziuba",
           firstName: "Michał",
@@ -182,74 +185,202 @@ type LoaderData = {
 }
 
 export default function Index() {
-  const loaderData = useLoaderData()
+  const [search, setSearch] = useState<string>("")
+  const couples = useLoaderData().couples
+  const [isCheckedA, setIsCheckedA] = useState(false)
+  const [isCheckedB, setIsCheckedB] = useState(false)
+  const [isCheckedC, setIsCheckedC] = useState(false)
+  const [isCheckedD, setIsCheckedD] = useState(false)
+  const [isCheckedSX, setIsCheckedSX] = useState(false)
+  const [isCheckedNoMail, setIsCheckedNoMail] = useState(false)
+
+  const handleClearClick = () => {
+    setIsCheckedA(false)
+    setIsCheckedB(false)
+    setIsCheckedC(false)
+    setIsCheckedD(false)
+    setIsCheckedSX(false)
+    setIsCheckedNoMail(false)
+  }
+
+  const handleCheckboxFilter = () => {}
+
+  const customFilters = couples.filter(
+    (c: CoupleWithSpouses) =>
+      c.city.toLowerCase().includes(search.toLowerCase()) ||
+      c.wife.firstName.toLowerCase().includes(search.toLowerCase()) ||
+      c.wife.lastName.toLowerCase().includes(search.toLowerCase()) ||
+      c.wife.email.toLowerCase().includes(search.toLowerCase()) ||
+      c.husband.firstName.toLowerCase().includes(search.toLowerCase()) ||
+      c.husband.lastName.toLowerCase().includes(search.toLowerCase()) ||
+      c.husband.email.toLowerCase().includes(search.toLowerCase())
+  )
+
   return (
     <Box style={{ margin: "5rem" }}>
       <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
         <h1>Alma</h1>
-        <TextField
-          style={{ marginRight: "1rem", marginBottom: "2rem" }}
-          id="outlined-basic"
-          label="Szukaj..."
-          variant="standard"
-        />
         <p></p>
-        <FormControl
-          style={{
+
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          sx={{
             display: "flex",
-            alignItems: "flex-end",
+            flexDirection: "column",
           }}
-          component="fieldset"
         >
-          <FormLabel component="legend"></FormLabel>
-          <FormGroup aria-label="position" row>
-            <FormControlLabel
-              value="Bez maila"
-              control={<Checkbox />}
-              label="Bez maila"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              value="A"
-              control={<Checkbox />}
-              label="A"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              value="B"
-              control={<Checkbox />}
-              label="B"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              value="C"
-              control={<Checkbox />}
-              label="C"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              value="D"
-              control={<Checkbox />}
-              label="D"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              value="S/X"
-              control={<Checkbox />}
-              label="S/X"
-              labelPlacement="end"
-            />
-            <Button variant="outlined" startIcon={<ClearIcon />}>
-              Wyczyść filtry
-            </Button>
-          </FormGroup>
-        </FormControl>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Szukaj..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              size="small"
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                mt: "1rem",
+                height: "3rem",
+              }}
+            />{" "}
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "flex-end",
+              }}
+            >
+              <FormControl
+                style={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+                component="fieldset"
+              >
+                <FormLabel component="legend"></FormLabel>
+                <Button
+                  style={{
+                    paddingLeft: "0.2rem",
+                  }}
+                  size="small"
+                  variant="contained"
+                  component={Link}
+                  to="/create"
+                >
+                  <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
+                </Button>{" "}
+                <Button
+                  size="small"
+                  disabled={
+                    isCheckedA ||
+                    isCheckedB ||
+                    isCheckedC ||
+                    isCheckedD ||
+                    isCheckedNoMail ||
+                    isCheckedSX
+                      ? false
+                      : true
+                  }
+                  onClick={handleClearClick}
+                  variant="outlined"
+                  startIcon={<ClearIcon />}
+                >
+                  Wyczyść filtry
+                </Button>
+                <FormGroup aria-label="position" row>
+                  <FormControlLabel
+                    value="Bez maila"
+                    control={
+                      <Checkbox
+                        checked={isCheckedNoMail}
+                        onChange={(e) => {
+                          setIsCheckedNoMail(e.target.checked)
+                        }}
+                      />
+                    }
+                    label="Bez maila"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="A"
+                    control={
+                      <Checkbox
+                        checked={isCheckedA}
+                        onChange={(e) => {
+                          setIsCheckedA(e.target.checked)
+                        }}
+                      />
+                    }
+                    label="A"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="B"
+                    control={
+                      <Checkbox
+                        checked={isCheckedB}
+                        onChange={(e) => {
+                          setIsCheckedB(e.target.checked)
+                        }}
+                      />
+                    }
+                    label="B"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="C"
+                    control={
+                      <Checkbox
+                        checked={isCheckedC}
+                        onChange={(e) => {
+                          setIsCheckedC(e.target.checked)
+                        }}
+                      />
+                    }
+                    label="C"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="D"
+                    control={
+                      <Checkbox
+                        checked={isCheckedD}
+                        onChange={(e) => {
+                          setIsCheckedD(e.target.checked)
+                        }}
+                      />
+                    }
+                    label="D"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="S/X"
+                    control={
+                      <Checkbox
+                        checked={isCheckedSX}
+                        onChange={(e) => {
+                          setIsCheckedSX(e.target.checked)
+                        }}
+                      />
+                    }
+                    label="S/X"
+                    labelPlacement="end"
+                  />
+                </FormGroup>
+              </FormControl>
+            </Box>
+          </Box>
 
-        <DataTable loaderData={loaderData} />
-
-        <Button variant="contained" component={Link} to="/about">
-          Go to the about page
-        </Button>
+          <DataTable couples={customFilters} />
+        </Box>
       </div>
     </Box>
   )

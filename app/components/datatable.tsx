@@ -1,20 +1,31 @@
-import {
-  DataGrid,
-  GridColDef,
-  plPL,
-  GridToolbar,
-  GridCellParams,
-} from "@mui/x-data-grid"
+import { DataGrid, GridColDef, plPL, GridCellParams } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import TableActions from "./tableactions"
-import { useState } from "react"
 import clsx from "clsx"
-import { Box } from "@mui/material"
+import { Box, IconButton, Tooltip } from "@mui/material"
+import { useState } from "react"
+import { Edit, Delete } from "@mui/icons-material"
+import { Link } from "@remix-run/react"
 
+const TableActions = () => {
+  return (
+    <Box>
+      <Tooltip title="edytuj">
+        <IconButton component={Link} to="/edit">
+          <Edit />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="usuń">
+        <IconButton onClick={() => {}}>
+          <Delete />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  )
+}
 const columns: GridColDef[] = [
   {
     field: "para",
-    headerName: "Para",
+    headerName: "Małżeństwo",
     minWidth: 125,
     flex: 2,
 
@@ -85,7 +96,7 @@ const columns: GridColDef[] = [
     headerName: "Akcje",
     minWidth: 120,
     flex: 2.5,
-    renderCell: (params) => <TableActions {...{ params }} />,
+    renderCell: () => <TableActions />,
   },
 ]
 
@@ -97,12 +108,12 @@ const theme = createTheme(
   },
   plPL
 )
-// const statuses = ["All", "A", "B", "C", "D", "S/X"]
-export default function DataTable({ loaderData }: any) {
-  // const [filterStatus, setFilterStatus] = useState(0)
+
+export default function DataTable({ couples }: any) {
+  const [pageSize, setPageSize] = useState<number>(25)
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 800, width: "100%" }}>
       <ThemeProvider theme={theme}>
         <Box
           sx={{
@@ -132,12 +143,16 @@ export default function DataTable({ loaderData }: any) {
         >
           <DataGrid
             disableColumnFilter
-            rows={loaderData.couples}
+            disableColumnSelector
+            disableColumnMenu
+            disableSelectionOnClick
+            rows={couples}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            rowsPerPageOptions={[5, 15, 25, 50, 100]}
             getRowHeight={() => "auto"}
+            paginationMode="client"
           />
         </Box>
       </ThemeProvider>
