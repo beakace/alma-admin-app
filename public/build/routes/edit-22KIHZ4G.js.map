@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../app/routes/edit.tsx"],
+  "sourcesContent": ["import * as React from \"react\"\nimport Box from \"@mui/material/Box\"\nimport TextField from \"@mui/material/TextField\"\n\nexport default function Edit() {\n  return (\n    <Box\n      component=\"form\"\n      sx={{\n        \"& > :not(style)\": { m: 1, width: \"25ch\" },\n      }}\n      noValidate\n      autoComplete=\"off\"\n    >\n      <TextField id=\"outlined-basic\" label=\"Outlined\" variant=\"outlined\" />\n      <TextField id=\"filled-basic\" label=\"Filled\" variant=\"filled\" />\n      <TextField id=\"standard-basic\" label=\"Standard\" variant=\"standard\" />\n    </Box>\n  )\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;AAAA;AAIe,SAAR,OAAwB;AAC7B,SACE,mDAAC;AAAA,IACC,WAAU;AAAA,IACV,IAAI;AAAA,MACF,mBAAmB,EAAE,GAAG,GAAG,OAAO,OAAO;AAAA,IAC3C;AAAA,IACA,YAAU;AAAA,IACV,cAAa;AAAA,IAEb;AAAA,yDAAC;AAAA,QAAU,IAAG;AAAA,QAAiB,OAAM;AAAA,QAAW,SAAQ;AAAA,SAAxD;AAAA;AAAA;AAAA;AAAA,aAAmE;AAAA,MACnE,mDAAC;AAAA,QAAU,IAAG;AAAA,QAAe,OAAM;AAAA,QAAS,SAAQ;AAAA,SAApD;AAAA;AAAA;AAAA;AAAA,aAA6D;AAAA,MAC7D,mDAAC;AAAA,QAAU,IAAG;AAAA,QAAiB,OAAM;AAAA,QAAW,SAAQ;AAAA,SAAxD;AAAA;AAAA;AAAA;AAAA,aAAmE;AAAA;AAAA,KAVrE;AAAA;AAAA;AAAA;AAAA,SAWA;AAEJ;",
+  "names": []
+}

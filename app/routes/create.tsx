@@ -1,19 +1,16 @@
 import * as React from "react"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
-import WeddingYearPicker from "~/components/weddingdatepicker"
 import {
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent,
   Button,
 } from "@mui/material"
-import BirthYearPicker from "~/components/birthyearpicker"
+import { Form } from "@remix-run/react"
 
 export default function Create() {
-  const [city, setCity] = React.useState("")
   const [inputs, setInputs] = React.useState({
     wifeFirstName: "",
     wifeLastName: "",
@@ -23,6 +20,10 @@ export default function Create() {
     husbandLastName: "",
     husbandPhoneNumber: "",
     husbandEmail: "",
+    wifeBirthYear: "",
+    husbandBirthYear: "",
+    weddingYear: "",
+    city: "",
   })
   const handleInputChange = (e: any) => {
     setInputs((prevState) => ({
@@ -30,9 +31,7 @@ export default function Create() {
       [e.target.name]: e.target.value,
     }))
   }
-  const handleChange = (event: SelectChangeEvent) => {
-    setCity(event.target.value as string)
-  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault()
     console.log(inputs)
@@ -40,7 +39,7 @@ export default function Create() {
   return (
     <div>
       {" "}
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Box
           component="form"
           sx={{
@@ -87,7 +86,22 @@ export default function Create() {
             variant="outlined"
             required
           />
-          <BirthYearPicker />
+          <TextField
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 2010,
+                min: 1920,
+              },
+            }}
+            name="wifeBirthYear"
+            value={inputs.wifeBirthYear}
+            onChange={handleInputChange}
+            id="wife.birthYear"
+            label="Rok urodzenia"
+            variant="outlined"
+            required
+          />
 
           <h1>Mąż</h1>
           <TextField
@@ -128,19 +142,52 @@ export default function Create() {
             variant="outlined"
             required
           />
-          <BirthYearPicker />
+
+          <TextField
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 2010,
+                min: 1920,
+              },
+            }}
+            name="husbandBirthYear"
+            value={inputs.husbandBirthYear}
+            onChange={handleInputChange}
+            id="husband.birthYear"
+            label="Rok urodzenia"
+            variant="outlined"
+            required
+          />
           <h1>Wspólne</h1>
 
-          <WeddingYearPicker />
+          <TextField
+            type="number"
+            InputProps={{
+              inputProps: {
+                maxLength: 4, //not working on type number
+                max: 2010,
+                min: 1920,
+              },
+            }}
+            name="weddingYear"
+            value={inputs.weddingYear}
+            onChange={handleInputChange}
+            id="wife.weddingYear"
+            label="Rok ślubu"
+            variant="outlined"
+            required
+          />
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel id="city-label">Oddział</InputLabel>
               <Select
+                name="city"
                 labelId="city-label"
                 id="city"
-                value={city}
+                value={inputs.city}
                 label="Oddział"
-                onChange={handleChange}
+                onChange={handleInputChange}
               >
                 <MenuItem value={1}>Wrocław</MenuItem>
                 <MenuItem value={2}>Warszawa</MenuItem>
@@ -156,9 +203,9 @@ export default function Create() {
               <Select
                 labelId="invitedBy-select-label"
                 id="invitedBy-select"
-                value={city}
+                value={inputs.city}
                 label="Zaproszeni przez"
-                onChange={handleChange}
+                onChange={handleInputChange}
               >
                 <MenuItem value={4}>Tu</MenuItem>
                 <MenuItem value={5}>Będą</MenuItem>
@@ -167,8 +214,10 @@ export default function Create() {
             </FormControl>
           </Box>
         </Box>
-        <Button type="submit">Submit</Button>
-      </form>
+        <Button size="large" variant="outlined" type="submit">
+          Submit
+        </Button>
+      </Form>
     </div>
   )
 }

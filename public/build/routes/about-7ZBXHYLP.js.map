@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../app/routes/about.tsx"],
-  "sourcesContent": ["import { LoaderFunction } from \"@remix-run/cloudflare\"\nimport { useLoaderData, Link } from \"@remix-run/react\"\n\nimport Typography from \"@mui/material/Typography\"\nimport Button from \"@mui/material/Button\"\n\nexport default function Index() {\n  const loaderData = useLoaderData()\n\n  return (\n    <div style={{ fontFamily: \"system-ui, sans-serif\", lineHeight: \"1.4\" }}>\n      <h1>Alma</h1>\n\n      <Button variant=\"contained\" component={Link} to=\"/\">\n        Go to the main page\n      </Button>\n    </div>\n  )\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAMe,SAAR,QAAyB;AAC9B,QAAM,aAAa,cAAc;AAEjC,SACE,mDAAC;AAAA,IAAI,OAAO,EAAE,YAAY,yBAAyB,YAAY,MAAM;AAAA,IACnE;AAAA,yDAAC;AAAA,QAAG;AAAA,SAAJ;AAAA;AAAA;AAAA;AAAA,aAAQ;AAAA,MAER,mDAAC;AAAA,QAAO,SAAQ;AAAA,QAAY,WAAW;AAAA,QAAM,IAAG;AAAA,QAAI;AAAA,SAApD;AAAA;AAAA;AAAA;AAAA,aAEA;AAAA;AAAA,KALF;AAAA;AAAA;AAAA;AAAA,SAMA;AAEJ;",
-  "names": []
-}

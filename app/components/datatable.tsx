@@ -6,22 +6,6 @@ import { useState } from "react"
 import { Edit, Delete } from "@mui/icons-material"
 import { Link } from "@remix-run/react"
 
-const TableActions = () => {
-  return (
-    <Box>
-      <Tooltip title="edytuj">
-        <IconButton component={Link} to="/edit">
-          <Edit />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="usuń">
-        <IconButton onClick={() => {}}>
-          <Delete />
-        </IconButton>
-      </Tooltip>
-    </Box>
-  )
-}
 const columns: GridColDef[] = [
   {
     field: "para",
@@ -96,7 +80,20 @@ const columns: GridColDef[] = [
     headerName: "Akcje",
     minWidth: 120,
     flex: 2.5,
-    renderCell: () => <TableActions />,
+    renderCell: () => (
+      <Box>
+        <Tooltip title="edytuj">
+          <IconButton component={Link} to="/edit">
+            <Edit />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="usuń">
+          <IconButton onClick={() => {}}>
+            <Delete />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
   },
 ]
 
@@ -111,7 +108,6 @@ const theme = createTheme(
 
 export default function DataTable({ couples }: any) {
   const [pageSize, setPageSize] = useState<number>(25)
-
   return (
     <div style={{ height: 800, width: "100%" }}>
       <ThemeProvider theme={theme}>
@@ -142,10 +138,11 @@ export default function DataTable({ couples }: any) {
           }}
         >
           <DataGrid
+            onSelectionModelChange={(rows) => console.log(rows)}
             disableColumnFilter
-            disableColumnSelector
-            disableColumnMenu
-            disableSelectionOnClick
+            // disableColumnSelector
+            // disableColumnMenu
+            // disableSelectionOnClick
             rows={couples}
             columns={columns}
             pageSize={pageSize}

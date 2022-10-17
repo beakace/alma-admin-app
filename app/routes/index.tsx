@@ -186,24 +186,33 @@ type LoaderData = {
 
 export default function Index() {
   const [search, setSearch] = useState<string>("")
+  const [checkboxFilters, setCheckboxFilters] = useState({
+    isCheckedA: false,
+    isCheckedB: false,
+    isCheckedC: false,
+    isCheckedD: false,
+    isCheckedSX: false,
+    isCheckedNoMail: false,
+  })
+
+  const handleCheckboxFilterChange = (e: any) => {
+    setCheckboxFilters((checkboxFilters) => ({
+      ...checkboxFilters,
+      [e.target.id]: e.target.checked,
+    }))
+  }
   const couples = useLoaderData().couples
-  const [isCheckedA, setIsCheckedA] = useState(false)
-  const [isCheckedB, setIsCheckedB] = useState(false)
-  const [isCheckedC, setIsCheckedC] = useState(false)
-  const [isCheckedD, setIsCheckedD] = useState(false)
-  const [isCheckedSX, setIsCheckedSX] = useState(false)
-  const [isCheckedNoMail, setIsCheckedNoMail] = useState(false)
 
   const handleClearClick = () => {
-    setIsCheckedA(false)
-    setIsCheckedB(false)
-    setIsCheckedC(false)
-    setIsCheckedD(false)
-    setIsCheckedSX(false)
-    setIsCheckedNoMail(false)
+    setCheckboxFilters({
+      isCheckedA: false,
+      isCheckedB: false,
+      isCheckedC: false,
+      isCheckedD: false,
+      isCheckedSX: false,
+      isCheckedNoMail: false,
+    })
   }
-
-  const handleCheckboxFilter = () => {}
 
   const customFilters = couples.filter(
     (c: CoupleWithSpouses) =>
@@ -280,12 +289,12 @@ export default function Index() {
                 <Button
                   size="small"
                   disabled={
-                    isCheckedA ||
-                    isCheckedB ||
-                    isCheckedC ||
-                    isCheckedD ||
-                    isCheckedNoMail ||
-                    isCheckedSX
+                    checkboxFilters.isCheckedA ||
+                    checkboxFilters.isCheckedB ||
+                    checkboxFilters.isCheckedC ||
+                    checkboxFilters.isCheckedD ||
+                    checkboxFilters.isCheckedNoMail ||
+                    checkboxFilters.isCheckedSX
                       ? false
                       : true
                   }
@@ -300,10 +309,9 @@ export default function Index() {
                     value="Bez maila"
                     control={
                       <Checkbox
-                        checked={isCheckedNoMail}
-                        onChange={(e) => {
-                          setIsCheckedNoMail(e.target.checked)
-                        }}
+                        onChange={handleCheckboxFilterChange}
+                        id="isCheckedNoMail"
+                        checked={checkboxFilters.isCheckedNoMail}
                       />
                     }
                     label="Bez maila"
@@ -313,10 +321,9 @@ export default function Index() {
                     value="A"
                     control={
                       <Checkbox
-                        checked={isCheckedA}
-                        onChange={(e) => {
-                          setIsCheckedA(e.target.checked)
-                        }}
+                        onChange={handleCheckboxFilterChange}
+                        id="isCheckedA"
+                        checked={checkboxFilters.isCheckedA}
                       />
                     }
                     label="A"
@@ -326,10 +333,9 @@ export default function Index() {
                     value="B"
                     control={
                       <Checkbox
-                        checked={isCheckedB}
-                        onChange={(e) => {
-                          setIsCheckedB(e.target.checked)
-                        }}
+                        onChange={handleCheckboxFilterChange}
+                        id="isCheckedB"
+                        checked={checkboxFilters.isCheckedB}
                       />
                     }
                     label="B"
@@ -339,10 +345,9 @@ export default function Index() {
                     value="C"
                     control={
                       <Checkbox
-                        checked={isCheckedC}
-                        onChange={(e) => {
-                          setIsCheckedC(e.target.checked)
-                        }}
+                        onChange={handleCheckboxFilterChange}
+                        id="isCheckedC"
+                        checked={checkboxFilters.isCheckedC}
                       />
                     }
                     label="C"
@@ -352,10 +357,9 @@ export default function Index() {
                     value="D"
                     control={
                       <Checkbox
-                        checked={isCheckedD}
-                        onChange={(e) => {
-                          setIsCheckedD(e.target.checked)
-                        }}
+                        onChange={handleCheckboxFilterChange}
+                        id="isCheckedD"
+                        checked={checkboxFilters.isCheckedD}
                       />
                     }
                     label="D"
@@ -365,10 +369,9 @@ export default function Index() {
                     value="S/X"
                     control={
                       <Checkbox
-                        checked={isCheckedSX}
-                        onChange={(e) => {
-                          setIsCheckedSX(e.target.checked)
-                        }}
+                        onChange={handleCheckboxFilterChange}
+                        id="isCheckedSX"
+                        checked={checkboxFilters.isCheckedSX}
                       />
                     }
                     label="S/X"
