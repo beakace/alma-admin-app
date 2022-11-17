@@ -35,6 +35,7 @@ export default function Create() {
   const handleSubmit = (e: any) => {
     e.preventDefault()
     console.log(inputs)
+    
   }
   return (
     <div>

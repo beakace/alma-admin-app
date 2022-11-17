@@ -136,8 +136,8 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         wife: {
           id: randomId(),
           email: "email232@email-wife.com",
-          lastName: "Kaczyński",
-          firstName: "Kot",
+          lastName: "Błaszczak",
+          firstName: "Mariusz",
           birthYear: 2002,
           phoneNumber: "323456780",
         },
@@ -161,7 +161,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         invitedById: null,
         wife: {
           id: randomId(),
-          email: "email342@email-wife.com",
+          email: "",
           lastName: "Dziuba",
           firstName: "Sara",
           birthYear: 1993,
@@ -169,7 +169,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         },
         husband: {
           id: randomId(),
-          email: "husband243@email.com",
+          email: "",
           lastName: "Dziuba",
           firstName: "Michał",
           birthYear: 1994,
@@ -186,7 +186,12 @@ type LoaderData = {
 
 export default function Index() {
   const [search, setSearch] = useState<string>("")
-  const couples = useLoaderData().couples
+  const [checkboxA, setCheckboxA] = useState<string>("")
+  const [checkboxB, setCheckboxB] = useState<string>("")
+  const [checkboxC, setCheckboxC] = useState<string>("")
+  const [checkboxD, setCheckboxD] = useState<string>("")
+  const [checkboxSX, setCheckboxSX] = useState<string[]>([""])
+  const [checkboxNoMail, setCheckboxNoMail] = useState<string>("")
   const [isCheckedA, setIsCheckedA] = useState(false)
   const [isCheckedB, setIsCheckedB] = useState(false)
   const [isCheckedC, setIsCheckedC] = useState(false)
@@ -201,19 +206,56 @@ export default function Index() {
     setIsCheckedD(false)
     setIsCheckedSX(false)
     setIsCheckedNoMail(false)
+    setCheckboxA("")
+    setCheckboxB("")
+    setCheckboxC("")
+    setCheckboxD("")
+    setSearch("")
   }
 
-  const handleCheckboxFilter = () => {}
+  const handleChangeA = (event: React.ChangeEvent<HTMLInputElement>) => {
+    checkboxA == "A" ? setCheckboxA("") : setCheckboxA("A")
+    checkboxA == "A" ? setIsCheckedA(false) : setIsCheckedA(true)
+  }
+  const handleChangeB = (event: React.ChangeEvent<HTMLInputElement>) => {
+    checkboxB == "B" ? setCheckboxB("") : setCheckboxB("B")
+    checkboxB == "B" ? setIsCheckedB(false) : setIsCheckedB(true)
+  }
+  const handleChangeC = (event: React.ChangeEvent<HTMLInputElement>) => {
+    checkboxC == "C" ? setCheckboxC("") : setCheckboxC("C")
+    checkboxC == "C" ? setIsCheckedC(false) : setIsCheckedC(true)
+  }
+  const handleChangeD = (event: React.ChangeEvent<HTMLInputElement>) => {
+    checkboxD == "D" ? setCheckboxD("") : setCheckboxD("D")
+    checkboxD == "D" ? setIsCheckedD(false) : setIsCheckedD(true)
+  }
+  const handleChangeSX = (event: React.ChangeEvent<HTMLInputElement>) => {
+    checkboxSX == ["S", "X"] ? setCheckboxSX([""]) : setCheckboxSX(["S", "X"])
+    checkboxSX == ["S", "X"] ? setIsCheckedSX(false) : setIsCheckedSX(true)
+  }
 
-  const customFilters = couples.filter(
+  const couples = useLoaderData().couples
+  // const handleChangeNoMail = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   // checkboxNoMail.length === 0
+  //   //   ? setCheckboxNoMail("")
+  //   //   : setCheckboxNoMail("email_true")
+  //   couples.wife.email.length === 0
+  //     ? setIsCheckedNoMail(false)
+  //     : setIsCheckedNoMail(true)
+  // }
+  const searchFilters = couples.filter(
     (c: CoupleWithSpouses) =>
-      c.city.toLowerCase().includes(search.toLowerCase()) ||
-      c.wife.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      c.wife.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      c.wife.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.husband.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      c.husband.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      c.husband.email.toLowerCase().includes(search.toLowerCase())
+      c.group.toLowerCase().includes(checkboxA.toLowerCase()) &&
+      c.group.toLowerCase().includes(checkboxB.toLowerCase()) &&
+      c.group.toLowerCase().includes(checkboxC.toLowerCase()) &&
+      c.group.toLowerCase().includes(checkboxD.toLowerCase()) &&
+      (c.city.toLowerCase().includes(search.toLowerCase()) ||
+        c.wife.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        c.wife.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        c.wife.email.toLowerCase().includes(search.toLowerCase()) ||
+        c.husband.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        c.husband.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        c.husband.email.toLowerCase().includes(search.toLowerCase()))
   )
 
   return (
@@ -278,7 +320,6 @@ export default function Index() {
                   <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
                 </Button>{" "}
                 <Button
-                  size="small"
                   disabled={
                     isCheckedA ||
                     isCheckedB ||
@@ -290,6 +331,7 @@ export default function Index() {
                       : true
                   }
                   onClick={handleClearClick}
+                  size="small"
                   variant="outlined"
                   startIcon={<ClearIcon />}
                 >
@@ -301,9 +343,8 @@ export default function Index() {
                     control={
                       <Checkbox
                         checked={isCheckedNoMail}
-                        onChange={(e) => {
-                          setIsCheckedNoMail(e.target.checked)
-                        }}
+                        // onChange={handleChangeNoMail}
+                        id="isCheckedNoMail"
                       />
                     }
                     label="Bez maila"
@@ -314,9 +355,8 @@ export default function Index() {
                     control={
                       <Checkbox
                         checked={isCheckedA}
-                        onChange={(e) => {
-                          setIsCheckedA(e.target.checked)
-                        }}
+                        onChange={handleChangeA}
+                        id="isCheckedA"
                       />
                     }
                     label="A"
@@ -326,10 +366,9 @@ export default function Index() {
                     value="B"
                     control={
                       <Checkbox
+                        onChange={handleChangeB}
                         checked={isCheckedB}
-                        onChange={(e) => {
-                          setIsCheckedB(e.target.checked)
-                        }}
+                        id="isCheckedB"
                       />
                     }
                     label="B"
@@ -340,9 +379,8 @@ export default function Index() {
                     control={
                       <Checkbox
                         checked={isCheckedC}
-                        onChange={(e) => {
-                          setIsCheckedC(e.target.checked)
-                        }}
+                        onChange={handleChangeC}
+                        id="isCheckedC"
                       />
                     }
                     label="C"
@@ -353,9 +391,8 @@ export default function Index() {
                     control={
                       <Checkbox
                         checked={isCheckedD}
-                        onChange={(e) => {
-                          setIsCheckedD(e.target.checked)
-                        }}
+                        onChange={handleChangeD}
+                        id="isCheckedD"
                       />
                     }
                     label="D"
@@ -364,12 +401,7 @@ export default function Index() {
                   <FormControlLabel
                     value="S/X"
                     control={
-                      <Checkbox
-                        checked={isCheckedSX}
-                        onChange={(e) => {
-                          setIsCheckedSX(e.target.checked)
-                        }}
-                      />
+                      <Checkbox onChange={handleChangeSX} id="isCheckedSX" />
                     }
                     label="S/X"
                     labelPlacement="end"
@@ -379,7 +411,7 @@ export default function Index() {
             </Box>
           </Box>
 
-          <DataTable couples={customFilters} />
+          <DataTable couples={searchFilters} />
         </Box>
       </div>
     </Box>

@@ -16,6 +16,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material"
+import { Controller, useForm } from "react-hook-form"
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   return {
@@ -136,8 +137,8 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         wife: {
           id: randomId(),
           email: "email232@email-wife.com",
-          lastName: "Kaczyński",
-          firstName: "Kot",
+          lastName: "Błaszczak",
+          firstName: "Mariusz",
           birthYear: 2002,
           phoneNumber: "323456780",
         },
@@ -161,7 +162,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         invitedById: null,
         wife: {
           id: randomId(),
-          email: "email342@email-wife.com",
+          email: "",
           lastName: "Dziuba",
           firstName: "Sara",
           birthYear: 1993,
@@ -169,7 +170,7 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
         },
         husband: {
           id: randomId(),
-          email: "husband243@email.com",
+          email: "",
           lastName: "Dziuba",
           firstName: "Michał",
           birthYear: 1994,
@@ -186,43 +187,46 @@ type LoaderData = {
 
 export default function Index() {
   const [search, setSearch] = useState<string>("")
-  const [checkboxFilters, setCheckboxFilters] = useState({
-    isCheckedA: false,
-    isCheckedB: false,
-    isCheckedC: false,
-    isCheckedD: false,
-    isCheckedSX: false,
-    isCheckedNoMail: false,
+  const defaultNames = [""]
+  const { control } = useForm({
+    defaultValues: { names: defaultNames },
   })
 
-  const handleCheckboxFilterChange = (e: any) => {
-    setCheckboxFilters((checkboxFilters) => ({
-      ...checkboxFilters,
-      [e.target.id]: e.target.checked,
-    }))
+  const [checkedValues, setCheckedValues] = useState(defaultNames)
+
+  function handleSelectCheckbox(checkedName: any) {
+    const newNames = checkedValues?.includes(checkedName)
+      ? checkedValues?.filter((name) => name !== checkedName)
+      : [...(checkedValues ?? []), checkedName]
+    setCheckedValues(newNames)
+    console.log(checkedValues.toString())
+
+    return newNames
+  }
+  function handleClearClick() {
+    setCheckedValues(defaultNames)
+    setSearch("")
   }
   const couples = useLoaderData().couples
 
-  const handleClearClick = () => {
-    setCheckboxFilters({
-      isCheckedA: false,
-      isCheckedB: false,
-      isCheckedC: false,
-      isCheckedD: false,
-      isCheckedSX: false,
-      isCheckedNoMail: false,
-    })
-  }
+  const checkedString = checkedValues.toString().replace(/,/g, "")
+  console.log("string ", { checkedString })
 
-  const customFilters = couples.filter(
+  const searchFilters = couples.filter(
     (c: CoupleWithSpouses) =>
-      c.city.toLowerCase().includes(search.toLowerCase()) ||
-      c.wife.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      c.wife.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      c.wife.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.husband.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      c.husband.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      c.husband.email.toLowerCase().includes(search.toLowerCase())
+      [
+        c.city,
+        c.wife.firstName,
+        c.wife.lastName,
+        c.wife.email,
+        c.husband.firstName,
+        c.husband.lastName,
+        c.husband.email,
+      ]
+        .join("")
+        .toLowerCase()
+        .includes(search.toLowerCase()) &&
+      c.group.toLowerCase().includes(checkedString.toLowerCase())
   )
 
   return (
@@ -287,102 +291,46 @@ export default function Index() {
                   <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
                 </Button>{" "}
                 <Button
-                  size="small"
-                  disabled={
-                    checkboxFilters.isCheckedA ||
-                    checkboxFilters.isCheckedB ||
-                    checkboxFilters.isCheckedC ||
-                    checkboxFilters.isCheckedD ||
-                    checkboxFilters.isCheckedNoMail ||
-                    checkboxFilters.isCheckedSX
-                      ? false
-                      : true
-                  }
+                  disabled={checkedString === "" && search === ""}
                   onClick={handleClearClick}
+                  size="small"
                   variant="outlined"
                   startIcon={<ClearIcon />}
                 >
                   Wyczyść filtry
                 </Button>
-                <FormGroup aria-label="position" row>
-                  <FormControlLabel
-                    value="Bez maila"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedNoMail"
-                        checked={checkboxFilters.isCheckedNoMail}
-                      />
-                    }
-                    label="Bez maila"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="A"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedA"
-                        checked={checkboxFilters.isCheckedA}
-                      />
-                    }
-                    label="A"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="B"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedB"
-                        checked={checkboxFilters.isCheckedB}
-                      />
-                    }
-                    label="B"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="C"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedC"
-                        checked={checkboxFilters.isCheckedC}
-                      />
-                    }
-                    label="C"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="D"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedD"
-                        checked={checkboxFilters.isCheckedD}
-                      />
-                    }
-                    label="D"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="S/X"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedSX"
-                        checked={checkboxFilters.isCheckedSX}
-                      />
-                    }
-                    label="S/X"
-                    labelPlacement="end"
-                  />
-                </FormGroup>
+                <form>
+                  {["A", "B", "C", "D", "S/X"].map((name) => (
+                    <FormControlLabel
+                      control={
+                        <Controller
+                          name="names"
+                          render={(renderProps) => {
+                            return (
+                              <Checkbox
+                                checked={checkedValues.includes(name)}
+                                onChange={() =>
+                                  renderProps.field.onChange(
+                                    handleSelectCheckbox(name)
+                                  )
+                                }
+                              />
+                            )
+                          }}
+                          control={control}
+                        />
+                      }
+                      key={name}
+                      label={name}
+                    />
+                  ))}
+                </form>
+                <FormGroup aria-label="position" row></FormGroup>
               </FormControl>
             </Box>
           </Box>
 
-          <DataTable couples={customFilters} />
+          <DataTable couples={searchFilters} />
         </Box>
       </div>
     </Box>

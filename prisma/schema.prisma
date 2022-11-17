@@ -44,3 +44,10 @@ model Person {
   phoneNumber   String
   birthYear     Int
 }
+model User {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  username     String   @unique
+  passwordHash String
+}

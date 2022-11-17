@@ -1,10 +1,12 @@
 import { DataGrid, GridColDef, plPL, GridCellParams } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import clsx from "clsx"
-import { Box, IconButton, Tooltip } from "@mui/material"
+import { Box, Button, IconButton, Tooltip } from "@mui/material"
 import { useState } from "react"
 import { Edit, Delete } from "@mui/icons-material"
 import { Link } from "@remix-run/react"
+import { randomId } from "@mui/x-data-grid-generator"
+import { Couple } from "@prisma/client"
 
 const columns: GridColDef[] = [
   {
@@ -106,8 +108,71 @@ const theme = createTheme(
   plPL
 )
 
+const createRow = () => {
+  return {
+    id: "2-1-2005.01-15",
+    city: "Wrocław",
+    group: "A",
+    postalCode: "50-123",
+    weddingYear: 2000,
+    wifeId: "1234",
+    husbandId: "5678",
+    invitedById: null,
+    wife: {
+      id: randomId(),
+      email: "email@email-wife.com",
+      lastName: "Kowalska",
+      firstName: "Anna",
+      birthYear: 1980,
+      phoneNumber: "123456789",
+    },
+    husband: {
+      id: randomId(),
+      email: "husband@email.com",
+      lastName: "Kowalski",
+      firstName: "Jan",
+      birthYear: 1975,
+      phoneNumber: "987654321",
+    },
+  }
+}
+
 export default function DataTable({ couples }: any) {
   const [pageSize, setPageSize] = useState<number>(25)
+  // console.log({ couples })
+  interface CouplesData {
+    couple: {
+      id: string
+      city: string
+      group: string
+      postalCode: string
+      weddingYear: string
+      wifeId: string
+      husbandId: string
+      invitedById: null
+      wife: {
+        id: number
+        email: string
+        lastName: string
+        firstName: string
+        birthYear: number
+        phoneNumber: number
+      }
+      husband: {
+        id: number
+        email: string
+        lastName: string
+        firstName: string
+        birthYear: number
+        phoneNumber: number
+      }
+    }
+  }
+  // trying to add state to update rows
+  // const [rows, setRows] = useState<CouplesData>({ couples })
+  // const handleAddRow = () => {
+  //   setRows((prevRows: any) => [...prevRows, createRow()])
+  // }
   return (
     <div style={{ height: 800, width: "100%" }}>
       <ThemeProvider theme={theme}>
@@ -138,7 +203,7 @@ export default function DataTable({ couples }: any) {
           }}
         >
           <DataGrid
-            onSelectionModelChange={(rows) => console.log(rows)}
+            // onSelectionModelChange={(rows) => console.log(rows)}
             disableColumnFilter
             // disableColumnSelector
             // disableColumnMenu
@@ -151,6 +216,12 @@ export default function DataTable({ couples }: any) {
             getRowHeight={() => "auto"}
             paginationMode="client"
           />
+          <Button
+            size="small"
+            // onClick={handleAddRow}
+          >
+            Add a row
+          </Button>
         </Box>
       </ThemeProvider>
     </div>
