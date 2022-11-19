@@ -24,6 +24,9 @@
     "@emotion/react": "^11.10.4",
     "@emotion/server": "latest",
     "@emotion/styled": "^11.10.4",
+    "@hookform/resolvers": "^2.9.10",
+    "@material-ui/core": "^5.0.0-beta.5",
+    "@material-ui/lab": "^5.0.0-alpha.44",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.4",
     "@mui/x-data-grid": "^5.17.3",
@@ -34,11 +37,14 @@
     "@remix-run/cloudflare-pages": "^1.7.0",
     "@remix-run/react": "^1.7.0",
     "cross-env": "^7.0.3",
+    "date-fns": "2.22.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.39.4",
     "remix": "^1.7.0",
-    "serve": "^14.0.1"
+    "serve": "^14.0.1",
+    "yup": "^0.32.11",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",

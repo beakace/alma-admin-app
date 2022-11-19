@@ -1,5 +1,5 @@
 import { LoaderFunction } from "@remix-run/cloudflare"
-import { useLoaderData, Link, useSearchParams } from "@remix-run/react"
+import { useLoaderData, Link, useSearchParams, Form } from "@remix-run/react"
 import { CoupleWithSpouses } from "~/db/couples-db.server"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
@@ -299,7 +299,7 @@ export default function Index() {
                 >
                   Wyczyść filtry
                 </Button>
-                <form>
+                <Form>
                   {["A", "B", "C", "D", "S/X"].map((name) => (
                     <FormControlLabel
                       control={
@@ -324,7 +324,7 @@ export default function Index() {
                       label={name}
                     />
                   ))}
-                </form>
+                </Form>
                 <FormGroup aria-label="position" row></FormGroup>
               </FormControl>
             </Box>

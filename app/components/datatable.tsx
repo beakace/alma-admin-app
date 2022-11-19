@@ -203,7 +203,7 @@ export default function DataTable({ couples }: any) {
           }}
         >
           <DataGrid
-            // onSelectionModelChange={(rows) => console.log(rows)}
+            // onSelectionModelChange={(columns) => console.log(columns)}
             disableColumnFilter
             // disableColumnSelector
             // disableColumnMenu

@@ -1,224 +1,271 @@
-import * as React from "react"
-import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-} from "@mui/material"
+import { Box, Button, Input, MenuItem, Select, TextField } from "@mui/material"
+import { useForm, Controller, SubmitHandler } from "react-hook-form"
+
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as Yup from "yup"
 import { Form } from "@remix-run/react"
+import { FC } from "react"
 
-export default function Create() {
-  const [inputs, setInputs] = React.useState({
-    wifeFirstName: "",
-    wifeLastName: "",
-    wifePhoneNumber: "",
-    wifeEmail: "",
-    husbandFirstName: "",
-    husbandLastName: "",
-    husbandPhoneNumber: "",
-    husbandEmail: "",
-    wifeBirthYear: "",
-    husbandBirthYear: "",
-    weddingYear: "",
-    city: "",
+interface IFormInput {
+  wifeFirstName: string
+  wifeLastName: string
+  wifePhoneNumber: number
+  wifeEmail: string
+  wifeBirthYear: number
+  husbandFirstName: string
+  husbandLastName: string
+  husbandPhoneNumber: string
+  husbandEmail: string
+  husbandBirthYear: number
+  weddingYear: number
+  city: string
+  invitedBy: string
+}
+const schema = Yup.object().shape({
+  wifeFirstName: Yup.string().required("Imię jest wymagane"),
+  wifeLastName: Yup.string().required("Nazwisko jest wymagane"),
+  wifePhoneNumber: Yup.number().required("Numer telefonu jest wymagany"),
+  wifeEmail: Yup.string()
+    .required("Email jest wymagany")
+    .email("Email jest nieprawidłowy"),
+  wifeBirthYear: Yup.number().required("Rok urodzenia jest wymagany"),
+  husbandFirstName: Yup.string().required("Imię jest wymagane"),
+  husbandLastName: Yup.string().required("Nazwisko jest wymagane"),
+  husbandPhoneNumber: Yup.number().required("Numer telefonu jest wymagany"),
+  husbandEmail: Yup.string()
+    .required("Email jest wymagany")
+    .email("Email jest nieprawidłowy"),
+  husbandBirthYear: Yup.number().required("Rok urodzenia jest wymagany"),
+  weddingYear: Yup.number().required("Rok ślubu jest wymagany"),
+  city: Yup.number().required("Miasto jest wymagane"),
+  // invitedBy: Yup.number().required("To pole jest wymagane"),
+  // username: Yup.string()
+  //   .required("Username is required")
+  //   .min(6, "Username must be at least 6 characters")
+  //   .max(20, "Username must not exceed 20 characters"),
+  // email: Yup.string().required("Email is required").email("Email is invalid"),
+})
+
+const CreateForm: FC = () => {
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(schema),
   })
-  const handleInputChange = (e: any) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
-  }
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    console.log(inputs)
-    
-  }
+  const onSubmit: SubmitHandler<IFormInput> = (data) =>
+    console.log("data submitted: ", data)
+
+  console.log(watch("husbandEmail"))
+  console.log("errors are", errors)
+
   return (
     <div>
       {" "}
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Box
-          component="form"
           sx={{
             "& > :not(style)": { m: 1, width: "25ch" },
           }}
-          autoComplete="off"
         >
           <h1>Żona</h1>
-          <TextField
-            onChange={handleInputChange}
+          <Controller
             name="wifeFirstName"
-            value={inputs.wifeFirstName}
-            id="wife.firstName"
-            label="Imię"
-            variant="outlined"
-            required
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Imię"
+                {...field}
+                error={!!errors.wifeFirstName}
+                helperText={
+                  errors.wifeFirstName ? errors.wifeFirstName?.message : ""
+                }
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="wifeLastName"
-            value={inputs.wifeLastName}
-            onChange={handleInputChange}
-            id="wife.lastName"
-            label="Nazwisko"
-            variant="outlined"
-            required
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Nazwisko"
+                {...field}
+                error={!!errors.wifeLastName}
+                helperText={
+                  errors.wifeLastName ? errors.wifeLastName?.message : ""
+                }
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="wifePhoneNumber"
-            value={inputs.wifePhoneNumber}
-            onChange={handleInputChange}
-            type="tel"
-            id="wife.phoneNumber"
-            label="Nr telefonu"
-            variant="outlined"
-            required
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Numer telefonu"
+                {...field}
+                error={!!errors.wifePhoneNumber}
+                helperText={
+                  errors.wifePhoneNumber ? errors.wifePhoneNumber?.message : ""
+                }
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="wifeEmail"
-            value={inputs.wifeEmail}
-            onChange={handleInputChange}
-            type="email"
-            id="wife.email"
-            label="Email"
-            variant="outlined"
-            required
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Email"
+                {...field}
+                error={!!errors.wifeEmail}
+                helperText={errors.wifeEmail ? errors.wifeEmail?.message : ""}
+              />
+            )}
           />
-          <TextField
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 2010,
-                min: 1920,
-              },
-            }}
+          <Controller
             name="wifeBirthYear"
-            value={inputs.wifeBirthYear}
-            onChange={handleInputChange}
-            id="wife.birthYear"
-            label="Rok urodzenia"
-            variant="outlined"
-            required
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Rok urodzenia"
+                {...field}
+                error={!!errors.wifeBirthYear}
+                helperText={
+                  errors.wifeBirthYear ? errors.wifeBirthYear?.message : ""
+                }
+              />
+            )}
           />
-
           <h1>Mąż</h1>
-          <TextField
+          <Controller
             name="husbandFirstName"
-            value={inputs.husbandFirstName}
-            onChange={handleInputChange}
-            id="husband.firstName"
-            label="Imię"
-            variant="outlined"
-            required
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Imię"
+                {...field}
+                error={!!errors.husbandFirstName}
+                helperText={
+                  errors.husbandFirstName
+                    ? errors.husbandFirstName?.message
+                    : ""
+                }
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="husbandLastName"
-            value={inputs.husbandLastName}
-            onChange={handleInputChange}
-            id="husband.lastName"
-            label="Nazwisko"
-            variant="outlined"
-            required
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                label="Nazwisko"
+                {...field}
+                error={!!errors.husbandLastName}
+                helperText={
+                  errors.husbandLastName ? errors.husbandLastName?.message : ""
+                }
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="husbandPhoneNumber"
-            value={inputs.husbandPhoneNumber}
-            onChange={handleInputChange}
-            type="tel"
-            id="husband.phoneNumber"
-            label="Nr telefonu"
-            variant="outlined"
-            required
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Numer telefonu"
+                {...field}
+                error={!!errors.husbandPhoneNumber}
+                helperText={
+                  errors.husbandPhoneNumber
+                    ? errors.husbandPhoneNumber?.message
+                    : ""
+                }
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="husbandEmail"
-            value={inputs.husbandEmail}
-            onChange={handleInputChange}
-            type="email"
-            id="husband.email"
-            label="Email"
-            variant="outlined"
-            required
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Email"
+                variant="outlined"
+                error={!!errors.husbandEmail}
+                helperText={
+                  errors.husbandEmail ? errors.husbandEmail?.message : ""
+                }
+                fullWidth
+                margin="dense"
+              />
+            )}
           />
-
-          <TextField
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 2010,
-                min: 1920,
-              },
-            }}
+          <Controller
             name="husbandBirthYear"
-            value={inputs.husbandBirthYear}
-            onChange={handleInputChange}
-            id="husband.birthYear"
-            label="Rok urodzenia"
-            variant="outlined"
-            required
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Rok urodzenia"
+                {...field}
+                error={!!errors.husbandBirthYear}
+                helperText={
+                  errors.husbandBirthYear
+                    ? errors.husbandBirthYear?.message
+                    : ""
+                }
+              />
+            )}
           />
-          <h1>Wspólne</h1>
 
-          <TextField
-            type="number"
-            InputProps={{
-              inputProps: {
-                maxLength: 4, //not working on type number
-                max: 2010,
-                min: 1920,
-              },
-            }}
-            name="weddingYear"
-            value={inputs.weddingYear}
-            onChange={handleInputChange}
-            id="wife.weddingYear"
-            label="Rok ślubu"
-            variant="outlined"
-            required
-          />
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="city-label">Oddział</InputLabel>
-              <Select
-                name="city"
-                labelId="city-label"
-                id="city"
-                value={inputs.city}
-                label="Oddział"
-                onChange={handleInputChange}
-              >
+          <h1>Wspólne</h1>
+          <Controller
+            name="city"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Select label="Oddział" {...field} name="city">
                 <MenuItem value={1}>Wrocław</MenuItem>
                 <MenuItem value={2}>Warszawa</MenuItem>
                 <MenuItem value={3}>Białystok</MenuItem>
               </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="invitedBy-select-label">
-                Zaproszeni przez
-              </InputLabel>
-              <Select
-                labelId="invitedBy-select-label"
-                id="invitedBy-select"
-                value={inputs.city}
-                label="Zaproszeni przez"
-                onChange={handleInputChange}
-              >
-                <MenuItem value={4}>Tu</MenuItem>
-                <MenuItem value={5}>Będą</MenuItem>
-                <MenuItem value={6}>Rózne pary</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+            )}
+          />
+          <Controller
+            name="weddingYear"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="number"
+                label="Rok urodzenia"
+                {...field}
+                error={!!errors.weddingYear}
+                helperText={
+                  errors.weddingYear ? errors.weddingYear?.message : ""
+                }
+              />
+            )}
+          />
+          <p></p>
+          <Button size="large" variant="outlined" type="submit">
+            Submit
+          </Button>
         </Box>
-        <Button size="large" variant="outlined" type="submit">
-          Submit
-        </Button>
       </Form>
+      {""}
     </div>
   )
 }
+
+export default CreateForm
