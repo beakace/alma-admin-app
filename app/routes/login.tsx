@@ -1,11 +1,11 @@
 import { LinksFunction } from "@remix-run/cloudflare"
 import { Link, useSearchParams } from "@remix-run/react"
 
-import stylesUrl from "../styles/login.css"
+// import stylesUrl from "./styles/login.css"
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }]
-}
+// export const links: LinksFunction = () => {
+//   return [{ rel: "stylesheet", href: stylesUrl }]
+// }
 
 export default function Login() {
   const [searchParams] = useSearchParams()

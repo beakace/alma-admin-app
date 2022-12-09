@@ -108,38 +108,45 @@ const theme = createTheme(
   plPL
 )
 
-const createRow = () => {
-  return {
-    id: "2-1-2005.01-15",
-    city: "Wrocław",
-    group: "A",
-    postalCode: "50-123",
-    weddingYear: 2000,
-    wifeId: "1234",
-    husbandId: "5678",
-    invitedById: null,
-    wife: {
-      id: randomId(),
-      email: "email@email-wife.com",
-      lastName: "Kowalska",
-      firstName: "Anna",
-      birthYear: 1980,
-      phoneNumber: "123456789",
-    },
-    husband: {
-      id: randomId(),
-      email: "husband@email.com",
-      lastName: "Kowalski",
-      firstName: "Jan",
-      birthYear: 1975,
-      phoneNumber: "987654321",
-    },
-  }
-}
-
 export default function DataTable({ couples }: any) {
   const [pageSize, setPageSize] = useState<number>(25)
-  // console.log({ couples })
+  const [updatedRows, setUpdatedRows] = useState(couples)
+  const arr = [
+    {
+      id: "2-1-2002.01-15",
+      city: "Olsztyn",
+      group: "A",
+      postalCode: "50-123",
+      weddingYear: 2000,
+      wifeId: "1234",
+      husbandId: "5678",
+      invitedById: null,
+      wife: {
+        id: randomId(),
+        email: "email@email-wife.com",
+        lastName: "Jolie",
+        firstName: "Angelina",
+        birthYear: 1980,
+        phoneNumber: "123456789",
+      },
+      husband: {
+        id: randomId(),
+        email: "husband@email.com",
+        lastName: "Pitt",
+        firstName: "Brad",
+        birthYear: 1975,
+        phoneNumber: "987654321",
+      },
+    },
+  ]
+  const handleClick = () => {
+    console.log("our initial rows ", { updatedRows })
+    // const arr3 = [...updatedRows, ...arr]
+    setUpdatedRows([...updatedRows, ...arr])
+    console.log("our merged rows", updatedRows)
+  }
+
+  // console.log("couples right now: ", { couples })
   interface CouplesData {
     couple: {
       id: string
@@ -169,9 +176,9 @@ export default function DataTable({ couples }: any) {
     }
   }
   // trying to add state to update rows
-  // const [rows, setRows] = useState<CouplesData>({ couples })
-  // const handleAddRow = () => {
-  //   setRows((prevRows: any) => [...prevRows, createRow()])
+
+  // const handleClick = () => {
+  //   // setUpdatedRows({newRow})
   // }
   return (
     <div style={{ height: 800, width: "100%" }}>
@@ -203,7 +210,7 @@ export default function DataTable({ couples }: any) {
           }}
         >
           <DataGrid
-            // onSelectionModelChange={(columns) => console.log(columns)}
+            onSelectionModelChange={(columns) => console.log(columns)}
             disableColumnFilter
             // disableColumnSelector
             // disableColumnMenu
@@ -216,10 +223,7 @@ export default function DataTable({ couples }: any) {
             getRowHeight={() => "auto"}
             paginationMode="client"
           />
-          <Button
-            size="small"
-            // onClick={handleAddRow}
-          >
+          <Button size="small" onClick={handleClick}>
             Add a row
           </Button>
         </Box>

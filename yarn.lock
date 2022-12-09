@@ -1297,7 +1297,7 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@hookform/resolvers@^2.9.10":
+"@hookform/resolvers@^2.8.8", "@hookform/resolvers@^2.9.10":
   version "2.9.10"
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.9.10.tgz#e7e88942ee34e97b7bc937b0be4694194c9cd420"
   integrity sha512-JIL1DgJIlH9yuxcNGtyhsWX/PgNltz+5Gr6+8SX9fhXc/hPbEIk6wPI82nhgvp3uUb6ZfAM5mqg/x7KR7NAb+A==
@@ -3535,6 +3535,14 @@ dom-helpers@^5.0.1:
   dependencies:
     "@babel/runtime" "^7.8.7"
     csstype "^3.0.2"
+
+domain-functions@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/domain-functions/-/domain-functions-1.4.0.tgz#2df8ec45245425873467985b3ee3a26fb1ad2d40"
+  integrity sha512-zg74Okh1HxvSkybBuZac35NaueR/7Gv0czcFZMtDKpp9r6AmfV25pqSZNZmtk2jNaU2uw9EfXeZMmL1ZW3LkFg==
+  dependencies:
+    qs "^6.10.3"
+    zod "^3.19.1"
 
 dotenv@^10.0.0:
   version "10.0.0"
@@ -6947,6 +6955,13 @@ qs@6.10.3:
   dependencies:
     side-channel "^1.0.4"
 
+qs@^6.10.3:
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
+  integrity sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==
+  dependencies:
+    side-channel "^1.0.4"
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
@@ -7242,6 +7257,13 @@ remark-rehype@^9.0.0:
     "@types/mdast" "^3.0.0"
     mdast-util-to-hast "^11.0.0"
     unified "^10.0.0"
+
+remix-forms@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/remix-forms/-/remix-forms-1.1.0.tgz#8d7e063ea5894f4ca4d7a72fd108da83104a152a"
+  integrity sha512-rw0Dglw/SvSbGfHBqajAtrN0Ze6XOrD60tDBNxl/TsJxlzlB0bcJ5XjieBGg0CNrbcOx5uIqQh9zHupYML9U9Q==
+  dependencies:
+    "@hookform/resolvers" "^2.8.8"
 
 remix@^1.7.0:
   version "1.7.0"
