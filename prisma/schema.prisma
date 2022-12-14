@@ -11,18 +11,19 @@ datasource db {
 }
 
 model Couple {
-  id             String   @id
-  husband        Person   @relation("husband", fields: [husbandId], references: [id])
-  husbandId      String   @unique
-  wife           Person   @relation("wife", fields: [wifeId], references: [id])
-  wifeId         String   @unique
-  group          Group
-  city           String
-  postalCode     String
-  weddingYear    Int
-  invitedBy      Couple?  @relation("invitedBy", fields: [invitedById], references: [id])
-  invitedById    String?
-  invitedCouples Couple[] @relation("invitedBy")
+  id               String   @id
+  husband          Person   @relation("husband", fields: [husbandId], references: [id])
+  husbandId        String   @unique
+  wife             Person   @relation("wife", fields: [wifeId], references: [id])
+  wifeId           String   @unique
+  group            Group
+  city             String
+  postalCode       String
+  weddingYear      Int
+  attendanceNumber Int
+  invitedBy        Couple?  @relation("invitedBy", fields: [invitedById], references: [id])
+  invitedById      String?
+  invitedCouples   Couple[] @relation("invitedBy")
 }
 
 enum Group {
@@ -44,6 +45,7 @@ model Person {
   phoneNumber   String
   birthYear     Int
 }
+
 model User {
   id           String   @id @default(uuid())
   createdAt    DateTime @default(now())

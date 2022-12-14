@@ -1,4 +1,5 @@
-import { DataGrid, GridColDef, plPL, GridCellParams } from "@mui/x-data-grid"
+import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
+import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import clsx from "clsx"
 import { Box, Button, IconButton, Tooltip } from "@mui/material"

@@ -11,6 +11,7 @@ async function main() {
       group: "A",
       postalCode: "50-123",
       weddingYear: 2000,
+      attendanceNumber: 40,
       wife: {
         create: {
           id: randomUUID(),

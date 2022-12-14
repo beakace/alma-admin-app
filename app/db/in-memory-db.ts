@@ -91,7 +91,7 @@ const couples = [
     invitedById: null,
     wife: {
       id: randomId(),
-      email: "",
+      email: "email312@email-wife.com",
       lastName: "Leszczyńska",
       firstName: "Oliwia",
       birthYear: 1991,
@@ -125,7 +125,7 @@ const couples = [
     },
     husband: {
       id: randomId(),
-      email: "",
+      email: "husband323@email.com",
       lastName: "Kaczyński",
       firstName: "Jarosław",
       birthYear: 1959,

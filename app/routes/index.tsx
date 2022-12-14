@@ -10,16 +10,17 @@ import {
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
-import { LoaderFunction } from "@remix-run/cloudflare"
 import { Link, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
-import { CoupleWithSpouses } from "~/db/couples-db.server"
-import { readCouples } from "~/db/in-memory-db"
+import type { CoupleWithSpouses } from "~/db/couples-db.server"
+import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
 
-export const loader: LoaderFunction = async (): Promise<LoaderData> => {
+export const loader = async (): Promise<LoaderData> => {
   return {
-    couples: readCouples(),
+    couples: await db.couple.findMany({
+      include: { husband: true, wife: true, invitedBy: true },
+    }),
   }
 }
 
@@ -58,21 +59,16 @@ export default function Index() {
   }
 
   const filteredCouples = couples
-    .filter((c: CoupleWithSpouses) =>
-      [
-        c.city,
-        c.wife.firstName,
-        c.wife.lastName,
-        c.wife.email,
-        c.husband.firstName,
-        c.husband.lastName,
-        c.husband.email,
-      ]
-        .join("")
-        .toLowerCase()
-        .includes(search.toLowerCase())
+    .filter(
+      (c: CoupleWithSpouses) =>
+        c.city.toLowerCase().includes(search.toLowerCase()) ||
+        c.wife.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        c.wife.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        c.wife.email.toLowerCase().includes(search.toLowerCase()) ||
+        c.husband.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        c.husband.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        c.husband.email.toLowerCase().includes(search.toLowerCase())
     )
-
     .filter((c: CoupleWithSpouses) => {
       const selectedGroups = ["A", "B", "C", "D", "S", "X"].filter((group) => {
         switch (group) {
@@ -87,24 +83,12 @@ export default function Index() {
           case "S":
           case "X":
             return checkboxFilters.isCheckedSX
+          default:
+            return true
         }
       })
 
       return selectedGroups.includes(c.group)
-    })
-    .filter((c: CoupleWithSpouses) => {
-      const emptyEmails = [c.wife.email].filter((email) => {
-        switch (email) {
-          case "":
-            return checkboxFilters.isCheckedNoMail
-          default:
-            return !checkboxFilters.isCheckedNoMail
-        }
-      })
-      return (
-        emptyEmails.includes(c.wife.email) ||
-        emptyEmails.includes(c.husband.email)
-      )
     })
 
   return (
@@ -171,9 +155,12 @@ export default function Index() {
                 <Button
                   size="small"
                   disabled={
-                    !checkboxFilters.isCheckedD ||
-                    !checkboxFilters.isCheckedNoMail ||
-                    !checkboxFilters.isCheckedSX
+                    !checkboxFilters.isCheckedA ||
+                    !checkboxFilters.isCheckedB ||
+                    !checkboxFilters.isCheckedC ||
+                    checkboxFilters.isCheckedD ||
+                    checkboxFilters.isCheckedNoMail ||
+                    checkboxFilters.isCheckedSX
                   }
                   onClick={handleClearClick}
                   variant="outlined"
