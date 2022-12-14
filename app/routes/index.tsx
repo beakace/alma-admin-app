@@ -10,16 +10,17 @@ import {
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
-import { LoaderFunction } from "@remix-run/cloudflare"
 import { Link, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
-import { CoupleWithSpouses } from "~/db/couples-db.server"
-import { readCouples } from "~/db/in-memory-db"
+import type { CoupleWithSpouses } from "~/db/couples-db.server"
+import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
 
-export const loader: LoaderFunction = async (): Promise<LoaderData> => {
+export const loader = async (): Promise<LoaderData> => {
   return {
-    couples: readCouples(),
+    couples: await db.couple.findMany({
+      include: { husband: true, wife: true, invitedBy: true },
+    }),
   }
 }
 
@@ -82,6 +83,8 @@ export default function Index() {
           case "S":
           case "X":
             return checkboxFilters.isCheckedSX
+          default:
+            return true
         }
       })
 

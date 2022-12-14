@@ -1,6 +1,6 @@
-import { LoaderFunction } from "@remix-run/cloudflare"
+import type { LoaderFunction } from "@remix-run/cloudflare"
 import { useLoaderData, Link, useSearchParams } from "@remix-run/react"
-import { CoupleWithSpouses } from "~/db/couples-db.server"
+import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import ClearIcon from "@mui/icons-material/Clear"

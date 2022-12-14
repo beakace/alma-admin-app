@@ -1,10 +1,11 @@
 import { Box, Button, Input, MenuItem, Select, TextField } from "@mui/material"
-import { useForm, Controller, SubmitHandler } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form"
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { Form } from "@remix-run/react"
-import { FC } from "react"
+import type { FC } from "react"
 
 interface IFormInput {
   wifeFirstName: string

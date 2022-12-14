@@ -1,48 +1,57 @@
-import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
 import {
+  Button,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
-  Button,
+  Select,
 } from "@mui/material"
+import Box from "@mui/material/Box"
+import TextField from "@mui/material/TextField"
+import { redirect, type ActionArgs } from "@remix-run/node"
 import { Form } from "@remix-run/react"
-import { ActionFunction, redirect } from "@remix-run/cloudflare"
-import { createCouple } from "~/db/in-memory-db"
-import { randomId } from "@mui/x-data-grid-generator"
+import { db } from "~/db/db.server"
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
 
   const formObject = Object.fromEntries(formData.entries())
 
-  createCouple({
-    id: randomId(),
-    city: String(formObject.city),
-    husband: {
-      email: String(formObject.husbandEmail),
-      lastName: String(formObject.husbandLastName),
-      firstName: String(formObject.husbandFirstName),
-      phoneNumber: String(formObject.husbandPhoneNumber),
-      id: "123",
-      birthYear: Number(formObject.husbandBirthYear),
+  await db.couple.create({
+    data: {
+      // TODO: calculate ID according to our rules
+      id: "calculate the id",
+      // TODO: add this to form and all hardcoded values
+      attendanceNumber: 1,
+      city: String(formObject.city),
+      group: "A",
+      postalCode: "postal code",
+      weddingYear: Number(formObject.weddingYear),
+      wife: {
+        create: {
+          // TODO: calculate ID according to our rules + suffix "-wife"
+          id: "calculate id wife",
+          email: String(formObject.wifeEmail),
+          lastName: String(formObject.wifeLastName),
+          firstName: String(formObject.wifeFirstName),
+          phoneNumber: String(formObject.wifePhoneNumber),
+          birthYear: Number(formObject.wifeBirthYear),
+        },
+      },
+      husband: {
+        create: {
+          // TODO: calculate ID according to our rules + suffix "-husband"
+          id: "calc id husband",
+          email: String(formObject.husbandEmail),
+          lastName: String(formObject.husbandLastName),
+          firstName: String(formObject.husbandFirstName),
+          phoneNumber: String(formObject.husbandPhoneNumber),
+          birthYear: Number(formObject.husbandBirthYear),
+        },
+      },
+      // TODO: handle invited by
     },
-    wife: {
-      email: String(formObject.wifeEmail),
-      lastName: String(formObject.wifeLastName),
-      firstName: String(formObject.wifeFirstName),
-      phoneNumber: String(formObject.wifePhoneNumber),
-      id: "123",
-      birthYear: Number(formObject.wifeBirthYear),
-    },
-    group: "A",
-    wifeId: "123",
-    husbandId: "123",
-    postalCode: "postal code",
-    invitedById: "!23",
-    weddingYear: Number(formObject.weddingYear),
   })
+
   return redirect("/")
 }
 
