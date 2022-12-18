@@ -98,7 +98,9 @@ export default function Index() {
       if (checkboxFilters.isCheckedNoMail) {
         return !c.wife.email || !c.husband.email
       } else {
-        return true
+        return (
+          (c.wife.email && c.husband.email) || !c.wife.email || !c.husband.email
+        )
       }
     })
 

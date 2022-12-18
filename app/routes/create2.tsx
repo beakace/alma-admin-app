@@ -12,6 +12,7 @@ import { Form } from "@remix-run/react"
 import { db } from "~/db/db.server"
 import { useState } from "react"
 import { Group } from "@prisma/client"
+import { random, randomId } from "@mui/x-data-grid-generator"
 
 export const groups = (group: string) => {
   switch (group) {
@@ -39,7 +40,7 @@ export const action = async ({ request }: ActionArgs) => {
   await db.couple.create({
     data: {
       // TODO: calculate ID according to our rules
-      id: "c123312",
+      id: randomId(),
       // TODO: add this to form and all hardcoded values
       attendanceNumber: Number(formObject.attendanceNumber),
       city: String(formObject.city),
@@ -49,7 +50,7 @@ export const action = async ({ request }: ActionArgs) => {
       wife: {
         create: {
           // TODO: calculate ID according to our rules + suffix "-wife"
-          id: "calculate id wife1",
+          id: randomId(),
           email: String(formObject.wifeEmail),
           lastName: String(formObject.wifeLastName),
           firstName: String(formObject.wifeFirstName),
@@ -60,7 +61,7 @@ export const action = async ({ request }: ActionArgs) => {
       husband: {
         create: {
           // TODO: calculate ID according to our rules + suffix "-husband"
-          id: "calc id husband1",
+          id: randomId(),
           email: String(formObject.husbandEmail),
           lastName: String(formObject.husbandLastName),
           firstName: String(formObject.husbandFirstName),
@@ -120,7 +121,6 @@ export default function Create() {
             id="wife.email"
             label="Email"
             variant="outlined"
-            required
           />
           <TextField
             type="number"
@@ -166,7 +166,6 @@ export default function Create() {
             id="husband.email"
             label="Email"
             variant="outlined"
-            required
           />
 
           <TextField
@@ -196,12 +195,12 @@ export default function Create() {
             InputProps={{
               inputProps: {
                 maxLength: 4, //not working on type number
-                max: 2010,
+                max: 2100,
                 min: 1920,
               },
             }}
             name="weddingYear"
-            id="wife.weddingYear"
+            id="weddingYear"
             label="Rok ślubu"
             variant="outlined"
             required

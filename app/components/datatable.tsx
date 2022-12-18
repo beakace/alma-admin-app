@@ -22,11 +22,11 @@ const columns: GridColDef[] = [
     flex: 2,
     renderCell: (params) => (
       <Box>
-        <Typography>
+        <Typography sx={{ fontSize: "15px" }}>
           {params.row.wife.firstName} {params.row.wife.lastName}
         </Typography>
 
-        <Typography>
+        <Typography sx={{ fontSize: "15px" }}>
           {params.row.husband.firstName} {params.row.husband.lastName}
         </Typography>
       </Box>
@@ -74,9 +74,13 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <Box>
-        <Typography>{params.row.wife.birthYear}</Typography>
+        <Typography sx={{ fontSize: "15px" }}>
+          {params.row.wife.birthYear}
+        </Typography>
 
-        <Typography>{params.row.husband.birthYear}</Typography>
+        <Typography sx={{ fontSize: "15px" }}>
+          {params.row.husband.birthYear}
+        </Typography>
       </Box>
     ),
 
@@ -101,9 +105,13 @@ const columns: GridColDef[] = [
     flex: 2.5,
     renderCell: (params) => (
       <Box>
-        <Typography>{params.row.wife.email}</Typography>
+        <Typography sx={{ fontSize: "15px" }}>
+          {params.row.wife.email}
+        </Typography>
 
-        <Typography>{params.row.husband.email}</Typography>
+        <Typography sx={{ fontSize: "15px" }}>
+          {params.row.husband.email}
+        </Typography>
       </Box>
     ),
     // valueGetter: (params) =>
@@ -168,11 +176,12 @@ export default function DataTable({ couples }: any) {
               backgroundColor: "#BDC3C7",
             },
             "& .alma-app.X": {
-              backgroundColor: "#BFBFBF",
+              backgroundColor: "#3E3C3C",
             },
           }}
         >
           <DataGrid
+            sx={{ fontSize: "15px" }}
             onSelectionModelChange={(columns) => console.log(columns)}
             disableColumnFilter
             // disableColumnSelector
