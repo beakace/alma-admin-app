@@ -59,15 +59,19 @@ export default function Index() {
   }
 
   const filteredCouples = couples
-    .filter(
-      (c: CoupleWithSpouses) =>
-        c.city.toLowerCase().includes(search.toLowerCase()) ||
-        c.wife.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        c.wife.lastName.toLowerCase().includes(search.toLowerCase()) ||
-        c.wife.email.toLowerCase().includes(search.toLowerCase()) ||
-        c.husband.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        c.husband.lastName.toLowerCase().includes(search.toLowerCase()) ||
-        c.husband.email.toLowerCase().includes(search.toLowerCase())
+    .filter((c: CoupleWithSpouses) =>
+      [
+        c.city,
+        c.wife.firstName,
+        c.wife.lastName,
+        c.wife.email,
+        c.husband.firstName,
+        c.husband.lastName,
+        c.husband.email,
+      ]
+        .join("")
+        .toLowerCase()
+        .includes(search.toLowerCase())
     )
     .filter((c: CoupleWithSpouses) => {
       const selectedGroups = ["A", "B", "C", "D", "S", "X"].filter((group) => {
@@ -89,6 +93,13 @@ export default function Index() {
       })
 
       return selectedGroups.includes(c.group)
+    })
+    .filter((c: CoupleWithSpouses) => {
+      if (checkboxFilters.isCheckedNoMail) {
+        return !c.wife.email || !c.husband.email
+      } else {
+        return true
+      }
     })
 
   return (

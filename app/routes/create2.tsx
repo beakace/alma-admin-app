@@ -10,7 +10,27 @@ import TextField from "@mui/material/TextField"
 import { redirect, type ActionArgs } from "@remix-run/node"
 import { Form } from "@remix-run/react"
 import { db } from "~/db/db.server"
+import { useState } from "react"
+import { Group } from "@prisma/client"
 
+export const groups = (group: string) => {
+  switch (group) {
+    case "A":
+      return Group.A
+    case "B":
+      return Group.B
+    case "C":
+      return Group.C
+    case "D":
+      return Group.D
+    case "S":
+      return Group.S
+    case "X":
+      return Group.X
+    default:
+      return Group.A
+  }
+}
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
 
@@ -19,17 +39,17 @@ export const action = async ({ request }: ActionArgs) => {
   await db.couple.create({
     data: {
       // TODO: calculate ID according to our rules
-      id: "calculate the id",
+      id: "c123312",
       // TODO: add this to form and all hardcoded values
-      attendanceNumber: 1,
+      attendanceNumber: Number(formObject.attendanceNumber),
       city: String(formObject.city),
-      group: "A",
-      postalCode: "postal code",
+      group: formObject.group as Group,
+      postalCode: String(formObject.postalCode),
       weddingYear: Number(formObject.weddingYear),
       wife: {
         create: {
           // TODO: calculate ID according to our rules + suffix "-wife"
-          id: "calculate id wife",
+          id: "calculate id wife1",
           email: String(formObject.wifeEmail),
           lastName: String(formObject.wifeLastName),
           firstName: String(formObject.wifeFirstName),
@@ -40,7 +60,7 @@ export const action = async ({ request }: ActionArgs) => {
       husband: {
         create: {
           // TODO: calculate ID according to our rules + suffix "-husband"
-          id: "calc id husband",
+          id: "calc id husband1",
           email: String(formObject.husbandEmail),
           lastName: String(formObject.husbandLastName),
           firstName: String(formObject.husbandFirstName),
@@ -56,6 +76,13 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function Create() {
+  const [group, setGroup] = useState("")
+  const handleChange = (event: any) => {
+    setGroup(event.target.value)
+
+    console.log("group value is:", event.target.value)
+  }
+
   return (
     <div>
       <Form method="post">
@@ -158,6 +185,13 @@ export default function Create() {
           />
           <h1>Wspólne</h1>
           <TextField
+            name="postalCode"
+            id="postalCode"
+            label="Kod pocztowy"
+            variant="outlined"
+            required
+          />
+          <TextField
             type="number"
             InputProps={{
               inputProps: {
@@ -172,6 +206,40 @@ export default function Create() {
             variant="outlined"
             required
           />
+          <TextField
+            type="number"
+            // InputProps={{
+            //   inputProps: {
+            //     maxLength: 4, //not working on type number
+            //     max: 1,
+            //     min: 100,
+            //   },
+            // }}
+            name="attendanceNumber"
+            id="attendanceNumber"
+            label="Numer indentyfikacyjny"
+            variant="outlined"
+          />
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="group">Grupa</InputLabel>
+              <Select
+                name="group"
+                labelId="group-label"
+                id="group"
+                label="Grupa"
+                onChange={handleChange}
+                value={group}
+              >
+                <MenuItem value={"A"}>A</MenuItem>
+                <MenuItem value={"B"}>B</MenuItem>
+                <MenuItem value={"C"}>C</MenuItem>
+                <MenuItem value={"D"}>D</MenuItem>
+                <MenuItem value={"S"}>S</MenuItem>
+                <MenuItem value={"X"}>X</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel id="city-label">Oddział</InputLabel>
@@ -181,9 +249,9 @@ export default function Create() {
                 id="city"
                 label="Oddział"
               >
-                <MenuItem value={1}>Wrocław</MenuItem>
-                <MenuItem value={2}>Warszawa</MenuItem>
-                <MenuItem value={3}>Białystok</MenuItem>
+                <MenuItem value={"Wrocław"}>Wrocław</MenuItem>
+                <MenuItem value={"Warszawa"}>Warszawa</MenuItem>
+                <MenuItem value={"Białystok"}>Białystok</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -208,6 +276,7 @@ export default function Create() {
           Submit
         </Button>
       </Form>
+      {/* <p>{groups()}</p> */}
     </div>
   )
 }
