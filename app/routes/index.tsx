@@ -166,18 +166,18 @@ export default function Index() {
                 <Button
                   size="small"
                   disabled={
-                    !checkboxFilters.isCheckedA ||
-                    !checkboxFilters.isCheckedB ||
-                    !checkboxFilters.isCheckedC ||
-                    checkboxFilters.isCheckedD ||
-                    checkboxFilters.isCheckedNoMail ||
-                    checkboxFilters.isCheckedSX
+                    checkboxFilters.isCheckedA &&
+                    checkboxFilters.isCheckedB &&
+                    checkboxFilters.isCheckedC &&
+                    !checkboxFilters.isCheckedD &&
+                    !checkboxFilters.isCheckedNoMail &&
+                    !checkboxFilters.isCheckedSX
                   }
                   onClick={handleClearClick}
                   variant="outlined"
                   startIcon={<ClearIcon />}
                 >
-                  Wyczyść filtry
+                  Przywróć domyślne filtry
                 </Button>
                 <FormGroup aria-label="position" row>
                   <FormControlLabel
