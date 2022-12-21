@@ -7,31 +7,18 @@ import {
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
+import { randomId } from "@mui/x-data-grid-generator"
+import { type Group } from "@prisma/client"
 import { redirect, type ActionArgs } from "@remix-run/node"
 import { Form } from "@remix-run/react"
-import { db } from "~/db/db.server"
 import { useState } from "react"
-import { Group } from "@prisma/client"
-import { random, randomId } from "@mui/x-data-grid-generator"
+import { db } from "~/db/db.server"
 
-export const groups = (group: string) => {
-  switch (group) {
-    case "A":
-      return Group.A
-    case "B":
-      return Group.B
-    case "C":
-      return Group.C
-    case "D":
-      return Group.D
-    case "S":
-      return Group.S
-    case "X":
-      return Group.X
-    default:
-      return Group.A
-  }
-}
+// TODO: add loader for all couples 
+// but return only structure needed for dropdown
+// couples.map(couple => ...)
+// { value: "id of the couple", label: "husband.lastname husband.firstname wife.firstname, managing alma" } // Kowalski Jan Anna, 2
+
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
 
@@ -70,6 +57,7 @@ export const action = async ({ request }: ActionArgs) => {
         },
       },
       // TODO: handle invited by
+      // invitedById: String(formObject.invitedBy),
     },
   })
 
@@ -83,6 +71,9 @@ export default function Create() {
 
     console.log("group value is:", event.target.value)
   }
+
+  // TODO use loader
+  // take input data for dropdown
 
   return (
     <div>
