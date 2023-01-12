@@ -4,20 +4,43 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { randomId } from "@mui/x-data-grid-generator"
 import { type Group } from "@prisma/client"
 import { redirect, type ActionArgs } from "@remix-run/node"
-import { Form } from "@remix-run/react"
+import { Form, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
+import { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 
-// TODO: add loader for all couples 
-// but return only structure needed for dropdown
-// couples.map(couple => ...)
-// { value: "id of the couple", label: "husband.lastname husband.firstname wife.firstname, managing alma" } // Kowalski Jan Anna, 2
+export const loader = async (): Promise<any> => {
+  return {
+    couples: await db.couple.findMany({
+      select: {
+        id: true,
+        husband: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        wife: {
+          select: {
+            firstName: true,
+          },
+        },
+        invitedBy: true,
+      },
+    }),
+  }
+}
+
+type LoaderData = {
+  couples: CoupleWithSpouses[]
+}
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
@@ -71,9 +94,12 @@ export default function Create() {
 
     console.log("group value is:", event.target.value)
   }
+  console.log("this couples:", useLoaderData().couples)
 
   // TODO use loader
   // take input data for dropdown
+
+  const couples = useLoaderData().couples
 
   return (
     <div>
@@ -255,18 +281,27 @@ export default function Create() {
                 id="invitedBy-select"
                 label="Zaproszeni przez"
               >
-                <MenuItem value={4}>Tu</MenuItem>
-                <MenuItem value={5}>Będą</MenuItem>
-                <MenuItem value={6}>Rózne pary</MenuItem>
+                {couples.map(({ id, husband, wife }: any) => (
+                  <MenuItem id={id} value={id}>
+                    {`${
+                      husband.lastName +
+                      " " +
+                      husband.firstName +
+                      " " +
+                      wife.firstName
+                    }`}
+                    {/* add managing alma */}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
         </Box>
+
         <Button size="large" variant="outlined" type="submit">
           Submit
         </Button>
       </Form>
-      {/* <p>{groups()}</p> */}
     </div>
   )
 }

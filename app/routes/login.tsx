@@ -1,4 +1,3 @@
-import type { LinksFunction } from "@remix-run/cloudflare"
 import { Link, useSearchParams } from "@remix-run/react"
 
 // import stylesUrl from "./styles/login.css"

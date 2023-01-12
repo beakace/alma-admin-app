@@ -161,7 +161,7 @@ export default function Index() {
                   size="small"
                   variant="contained"
                   component={Link}
-                  to="/create2"
+                  to="/create"
                 >
                   <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
                 </Button>{" "}
