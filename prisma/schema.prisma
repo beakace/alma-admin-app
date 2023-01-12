@@ -11,19 +11,39 @@ datasource db {
 }
 
 model Couple {
-  id               String   @id
-  husband          Person   @relation("husband", fields: [husbandId], references: [id])
-  husbandId        String   @unique
-  wife             Person   @relation("wife", fields: [wifeId], references: [id])
-  wifeId           String   @unique
-  group            Group
-  city             String
-  postalCode       String
-  weddingYear      Int
-  attendanceNumber Int
-  invitedBy        Couple?  @relation("invitedBy", fields: [invitedById], references: [id])
-  invitedById      String?
-  invitedCouples   Couple[] @relation("invitedBy")
+  id                 String           @id
+  husband            Person           @relation("husband", fields: [husbandId], references: [id])
+  husbandId          String           @unique
+  wife               Person           @relation("wife", fields: [wifeId], references: [id])
+  wifeId             String           @unique
+  group              Group
+  city               String
+  postalCode         String
+  weddingYear        Int
+  attendanceNumber   Int
+  invitedBy          Couple?          @relation("invitedBy", fields: [invitedById], references: [id])
+  invitedById        String?
+  invitedCouples     Couple[]         @relation("invitedBy")
+  organizationUnitId Int
+  organizationUnit   OrganizationUnit @relation(fields: [organizationUnitId], references: [id])
+  almaEventId        String
+  almaEvent          AlmaEvent        @relation(fields: [almaEventId], references: [id])
+}
+
+model OrganizationUnit {
+  id        Int         @id()
+  name      String
+  Couple    Couple[]
+  AlmaEvent AlmaEvent[]
+}
+
+model AlmaEvent {
+  id                 String           @id() @default(uuid())
+  year               Int
+  month              Int
+  organizationUnitId Int
+  organizationUnit   OrganizationUnit @relation(fields: [organizationUnitId], references: [id])
+  Couple             Couple[]
 }
 
 enum Group {

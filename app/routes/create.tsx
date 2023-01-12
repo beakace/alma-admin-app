@@ -31,11 +31,17 @@ export const loader = async (): Promise<any> => {
       },
     },
   })
+
+  const almaEvents = await db.almaEvent.findMany()
+
+  const organizationUnits = await db.organizationUnit.findMany()
+
   return {
     // todo - change 'couples' to invitedBy or smth
     couples: couples.map(({ id, husband, wife }) => {
       return {
         id: id,
+        // TODO add organization unit
         label: `${husband.lastName} ${husband.firstName} ${wife.firstName}`,
       }
     }),
@@ -102,6 +108,8 @@ export default function Create() {
 
   // TODO use loader
   // take input data for dropdown
+
+  // TODO add dropdowns for alma event and org unit
 
   const couples = useLoaderData().couples
 
@@ -289,7 +297,6 @@ export default function Create() {
                 {couples.map(({ id, label }: any) => (
                   <MenuItem id={id} value={id}>
                     {label}
-                    {/* add managing alma */}
                   </MenuItem>
                 ))}
               </Select>
