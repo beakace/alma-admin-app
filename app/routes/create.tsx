@@ -4,7 +4,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
@@ -13,39 +12,41 @@ import { type Group } from "@prisma/client"
 import { redirect, type ActionArgs } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
-import { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 
 export const loader = async (): Promise<any> => {
-  return {
-    couples: await db.couple.findMany({
-      select: {
-        id: true,
-        husband: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
+  const couples = await db.couple.findMany({
+    select: {
+      id: true,
+      husband: {
+        select: {
+          firstName: true,
+          lastName: true,
         },
-        wife: {
-          select: {
-            firstName: true,
-          },
-        },
-        invitedBy: true,
       },
+      wife: {
+        select: {
+          firstName: true,
+        },
+      },
+    },
+  })
+  return {
+    // todo - change 'couples' to invitedBy or smth
+    couples: couples.map(({ id, husband, wife }) => {
+      return {
+        id: id,
+        label: `${husband.lastName} ${husband.firstName} ${wife.firstName}`,
+      }
     }),
   }
-}
-
-type LoaderData = {
-  couples: CoupleWithSpouses[]
 }
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
 
   const formObject = Object.fromEntries(formData.entries())
+  console.log(formObject)
 
   await db.couple.create({
     data: {
@@ -57,6 +58,11 @@ export const action = async ({ request }: ActionArgs) => {
       group: formObject.group as Group,
       postalCode: String(formObject.postalCode),
       weddingYear: Number(formObject.weddingYear),
+      invitedBy: {
+        connect: {
+          id: String(formObject.invitedBy),
+        },
+      },
       wife: {
         create: {
           // TODO: calculate ID according to our rules + suffix "-wife"
@@ -79,8 +85,6 @@ export const action = async ({ request }: ActionArgs) => {
           birthYear: Number(formObject.husbandBirthYear),
         },
       },
-      // TODO: handle invited by
-      // invitedById: String(formObject.invitedBy),
     },
   })
 
@@ -277,19 +281,14 @@ export default function Create() {
                 Zaproszeni przez
               </InputLabel>
               <Select
+                name="invitedBy"
                 labelId="invitedBy-select-label"
                 id="invitedBy-select"
                 label="Zaproszeni przez"
               >
-                {couples.map(({ id, husband, wife }: any) => (
+                {couples.map(({ id, label }: any) => (
                   <MenuItem id={id} value={id}>
-                    {`${
-                      husband.lastName +
-                      " " +
-                      husband.firstName +
-                      " " +
-                      wife.firstName
-                    }`}
+                    {label}
                     {/* add managing alma */}
                   </MenuItem>
                 ))}

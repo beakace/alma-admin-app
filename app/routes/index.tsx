@@ -19,7 +19,11 @@ import DataTable from "../components/datatable"
 export const loader = async (): Promise<LoaderData> => {
   return {
     couples: await db.couple.findMany({
-      include: { husband: true, wife: true, invitedBy: true },
+      include: {
+        husband: true,
+        wife: true,
+        invitedBy: { include: { husband: true, wife: true } },
+      },
     }),
   }
 }
