@@ -103,7 +103,9 @@ const columns: GridColDef[] = [
       return (
         <Box>
           <Typography sx={{ fontSize: "15px" }}>
-            {params.row.invitedBy?.husband.lastName}
+            {params.row.invitedBy?.husband.lastName}{" "}
+            {params.row.invitedBy?.husband.firstName}{" "}
+            {params.row.invitedBy?.wife.firstName}
           </Typography>
         </Box>
       )
@@ -206,7 +208,6 @@ export default function DataTable({ couples }: any) {
             getRowHeight={() => "auto"}
             paginationMode="client"
           />
-          <Button size="small">Add a row</Button>
         </Box>
       </ThemeProvider>
     </div>

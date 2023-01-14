@@ -7,7 +7,6 @@ import {
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
-import { randomId } from "@mui/x-data-grid-generator"
 import { type Group } from "@prisma/client"
 import { redirect, type ActionArgs } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
@@ -15,7 +14,7 @@ import { useState } from "react"
 import { db } from "~/db/db.server"
 
 export const loader = async (): Promise<any> => {
-  const couples = await db.couple.findMany({
+  const invitedByCouples = await db.couple.findMany({
     select: {
       id: true,
       husband: {
@@ -44,8 +43,7 @@ export const loader = async (): Promise<any> => {
   const organizationUnits = await db.organizationUnit.findMany()
 
   return {
-    // todo - change 'couples' to invitedBy or smth
-    invitedByCouples: couples.map(({ id, husband, wife }) => {
+    invitedByCouples: invitedByCouples.map(({ id, husband, wife }) => {
       return {
         id: id,
         // TODO add organization unit
@@ -93,7 +91,6 @@ export const action = async ({ request }: ActionArgs) => {
           id: Number(formObject.organizationUnit),
         },
       },
-      // TODO: add this to form and all hardcoded values
       attendanceNumber: Number(formObject.attendanceNumber),
       city: String(formObject.city),
       group: formObject.group as Group,
@@ -106,8 +103,17 @@ export const action = async ({ request }: ActionArgs) => {
       },
       wife: {
         create: {
-          // TODO: calculate ID according to our rules + suffix "-wife"
-          id: randomId(),
+          id:
+            String(formObject.organizationUnit) +
+            "-" +
+            almaEventForId?.organizationUnitId +
+            "-" +
+            almaEventForId?.year +
+            "." +
+            almaEventForId?.month +
+            "-" +
+            String(formObject.attendanceNumber) +
+            "-wife",
           email: String(formObject.wifeEmail),
           lastName: String(formObject.wifeLastName),
           firstName: String(formObject.wifeFirstName),
@@ -117,8 +123,17 @@ export const action = async ({ request }: ActionArgs) => {
       },
       husband: {
         create: {
-          // TODO: calculate ID according to our rules + suffix "-husband"
-          id: randomId(),
+          id:
+            String(formObject.organizationUnit) +
+            "-" +
+            almaEventForId?.organizationUnitId +
+            "-" +
+            almaEventForId?.year +
+            "." +
+            almaEventForId?.month +
+            "-" +
+            String(formObject.attendanceNumber) +
+            "-husband",
           email: String(formObject.husbandEmail),
           lastName: String(formObject.husbandLastName),
           firstName: String(formObject.husbandFirstName),

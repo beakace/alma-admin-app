@@ -264,7 +264,6 @@ export default function Index() {
               </FormControl>
             </Box>
           </Box>
-
           <DataTable couples={filteredCouples} />
         </Box>
       </div>
