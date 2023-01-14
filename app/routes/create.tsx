@@ -32,17 +32,30 @@ export const loader = async (): Promise<any> => {
     },
   })
 
-  const almaEvents = await db.almaEvent.findMany()
+  const almaEvents = await db.almaEvent.findMany({
+    select: {
+      id: true,
+      year: true,
+      month: true,
+      organizationUnitId: true,
+    },
+  })
 
   const organizationUnits = await db.organizationUnit.findMany()
 
   return {
     // todo - change 'couples' to invitedBy or smth
-    couples: couples.map(({ id, husband, wife }) => {
+    invitedByCouples: couples.map(({ id, husband, wife }) => {
       return {
         id: id,
         // TODO add organization unit
         label: `${husband.lastName} ${husband.firstName} ${wife.firstName}`,
+      }
+    }),
+    almaEvents: almaEvents.map(({ id, year, month, organizationUnitId }) => {
+      return {
+        id: id,
+        label: `${organizationUnitId}-${year}-${month}`,
       }
     }),
   }
@@ -50,14 +63,36 @@ export const loader = async (): Promise<any> => {
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
-
   const formObject = Object.fromEntries(formData.entries())
-  console.log(formObject)
+
+  const almaEventForId = await db.almaEvent.findUnique({
+    where: {
+      id: String(formObject.almaEvent),
+    },
+  })
 
   await db.couple.create({
     data: {
-      // TODO: calculate ID according to our rules
-      id: randomId(),
+      id:
+        String(formObject.organizationUnit) +
+        "-" +
+        almaEventForId?.organizationUnitId +
+        "-" +
+        almaEventForId?.year +
+        "." +
+        almaEventForId?.month +
+        "-" +
+        String(formObject.attendanceNumber),
+      almaEvent: {
+        connect: {
+          id: String(formObject.almaEvent),
+        },
+      },
+      organizationUnit: {
+        connect: {
+          id: Number(formObject.organizationUnit),
+        },
+      },
       // TODO: add this to form and all hardcoded values
       attendanceNumber: Number(formObject.attendanceNumber),
       city: String(formObject.city),
@@ -101,17 +136,10 @@ export default function Create() {
   const [group, setGroup] = useState("")
   const handleChange = (event: any) => {
     setGroup(event.target.value)
-
-    console.log("group value is:", event.target.value)
   }
-  console.log("this couples:", useLoaderData().couples)
+  const almaEvents = useLoaderData().almaEvents
 
-  // TODO use loader
-  // take input data for dropdown
-
-  // TODO add dropdowns for alma event and org unit
-
-  const couples = useLoaderData().couples
+  const invitedByCouples = useLoaderData().invitedByCouples
 
   return (
     <div>
@@ -127,6 +155,7 @@ export default function Create() {
             id="wife.firstName"
             label="Imię"
             variant="outlined"
+            defaultValue={"Anna"}
             required
           />
           <TextField
@@ -134,6 +163,7 @@ export default function Create() {
             id="wife.lastName"
             label="Nazwisko"
             variant="outlined"
+            defaultValue={"Kowalska"}
             required
           />
           <TextField
@@ -142,6 +172,7 @@ export default function Create() {
             id="wife.phoneNumber"
             label="Nr telefonu"
             variant="outlined"
+            defaultValue={"997998999"}
             required
           />
           <TextField
@@ -150,6 +181,7 @@ export default function Create() {
             id="wife.email"
             label="Email"
             variant="outlined"
+            defaultValue={"ania@wp.pl"}
           />
           <TextField
             type="number"
@@ -163,6 +195,7 @@ export default function Create() {
             id="wife.birthYear"
             label="Rok urodzenia"
             variant="outlined"
+            defaultValue={1960}
             required
           />
 
@@ -172,6 +205,7 @@ export default function Create() {
             id="husband.firstName"
             label="Imię"
             variant="outlined"
+            defaultValue={"Jan"}
             required
           />
           <TextField
@@ -179,6 +213,7 @@ export default function Create() {
             id="husband.lastName"
             label="Nazwisko"
             variant="outlined"
+            defaultValue={"Kowalski"}
             required
           />
           <TextField
@@ -187,6 +222,7 @@ export default function Create() {
             id="husband.phoneNumber"
             label="Nr telefonu"
             variant="outlined"
+            defaultValue={"001002003"}
             required
           />
           <TextField
@@ -195,6 +231,7 @@ export default function Create() {
             id="husband.email"
             label="Email"
             variant="outlined"
+            defaultValue={"jan@onet.pl"}
           />
 
           <TextField
@@ -209,6 +246,7 @@ export default function Create() {
             id="husband.birthYear"
             label="Rok urodzenia"
             variant="outlined"
+            defaultValue={"1975"}
             required
           />
           <h1>Wspólne</h1>
@@ -217,6 +255,7 @@ export default function Create() {
             id="postalCode"
             label="Kod pocztowy"
             variant="outlined"
+            defaultValue={"20201"}
             required
           />
           <TextField
@@ -232,6 +271,7 @@ export default function Create() {
             id="weddingYear"
             label="Rok ślubu"
             variant="outlined"
+            defaultValue={2000}
             required
           />
           <TextField
@@ -247,6 +287,7 @@ export default function Create() {
             id="attendanceNumber"
             label="Numer indentyfikacyjny"
             variant="outlined"
+            defaultValue={2}
           />
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
@@ -270,16 +311,43 @@ export default function Create() {
           </Box>
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-              <InputLabel id="city-label">Oddział</InputLabel>
+              <InputLabel id="organizationUnit-label">Oddział</InputLabel>
               <Select
-                name="city"
-                labelId="city-label"
-                id="city"
+                name="organizationUnit"
+                labelId="organizationUnit-label"
+                id="organizationUnit"
                 label="Oddział"
               >
-                <MenuItem value={"Wrocław"}>Wrocław</MenuItem>
-                <MenuItem value={"Warszawa"}>Warszawa</MenuItem>
-                <MenuItem value={"Białystok"}>Białystok</MenuItem>
+                <MenuItem value={1}>Wrocław</MenuItem>
+                <MenuItem value={2}>Warszawa</MenuItem>
+                <MenuItem value={3}>Olsztyn</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <TextField
+                name="city"
+                id="city"
+                label="Miejscowość"
+                defaultValue={"Kraków"}
+              ></TextField>
+            </FormControl>
+          </Box>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="almaEvent-label">Event</InputLabel>
+              <Select
+                name="almaEvent"
+                labelId="almaEvent-label"
+                id="almaEvent"
+                label="Event"
+              >
+                {almaEvents.map(({ id, label }: any) => (
+                  <MenuItem id={id} value={id}>
+                    {label}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
@@ -294,7 +362,7 @@ export default function Create() {
                 id="invitedBy-select"
                 label="Zaproszeni przez"
               >
-                {couples.map(({ id, label }: any) => (
+                {invitedByCouples.map(({ id, label }: any) => (
                   <MenuItem id={id} value={id}>
                     {label}
                   </MenuItem>

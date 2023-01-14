@@ -23,6 +23,8 @@ export const loader = async (): Promise<LoaderData> => {
         husband: true,
         wife: true,
         invitedBy: { include: { husband: true, wife: true } },
+        organizationUnit: true,
+        almaEvent: true,
       },
     }),
   }
