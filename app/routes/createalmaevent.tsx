@@ -9,7 +9,7 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { randomId } from "@mui/x-data-grid-generator"
 import { redirect, type ActionArgs } from "@remix-run/node"
-import { Form, useLoaderData } from "@remix-run/react"
+import { Form } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
 
@@ -27,7 +27,6 @@ export const action = async ({ request }: ActionArgs) => {
           id: Number(formObject.organizationUnit),
         },
       },
-      organizationUnitId: Number(formObject.organizationUnit),
     },
   })
 

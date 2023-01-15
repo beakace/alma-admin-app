@@ -1,5 +1,6 @@
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
+import EventIcon from "@mui/icons-material/Event"
 import {
   Checkbox,
   FormControl,
@@ -171,6 +172,19 @@ export default function Index() {
                 >
                   <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
                 </Button>{" "}
+                <Button
+                  style={{
+                    paddingLeft: "0.2rem",
+                  }}
+                  color="secondary"
+                  size="small"
+                  variant="contained"
+                  component={Link}
+                  to="/createalmaevent"
+                >
+                  <EventIcon sx={{ margin: "0", marginRight: "3px" }} />
+                  Dodaj nowe wydarzenie Alma
+                </Button>
                 <Button
                   size="small"
                   disabled={
