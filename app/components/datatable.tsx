@@ -31,20 +31,9 @@ const columns: GridColDef[] = [
         </Typography>
       </Box>
     ),
-
-    // valueGetter: (params) =>
-    //   params.row.wife.firstName +
-    //   " " +
-    //   params.row.wife.lastName +
-    //   " " +
-    //   "&" +
-    //   " " +
-    //   params.row.husband.firstName +
-    //   " " +
-    //   params.row.husband.lastName,
   },
   { field: "postalCode", headerName: "Kod pocztowy", minWidth: 110, flex: 1 },
-  { field: "city", headerName: "Oddział", minWidth: 130, flex: 1 },
+  { field: "city", headerName: "Miejscowość", minWidth: 130, flex: 1 },
   {
     field: "group",
     type: "string",
@@ -83,13 +72,6 @@ const columns: GridColDef[] = [
         </Typography>
       </Box>
     ),
-
-    // valueGetter: (params) =>
-    //   params.row.wife.birthYear +
-    //   " " +
-    //   "&" +
-    //   " " +
-    //   params.row.husband.birthYear,
   },
   { field: "weddingYear", headerName: "Data ślubu", minWidth: 90, flex: 1 },
   {

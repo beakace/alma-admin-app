@@ -1,12 +1,14 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node"
 import {
   Links,
-  LiveReload, Meta,
+  LiveReload,
+  Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
-} from "@remix-run/react";
-import styles from "./styles/app.css";
+  ScrollRestoration,
+} from "@remix-run/react"
+import Navbar from "./components/navbar"
+import styles from "./styles/app.css"
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }]
@@ -26,6 +28,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <Navbar />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
