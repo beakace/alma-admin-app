@@ -144,7 +144,7 @@ export const action = async ({ request }: ActionArgs) => {
     },
   })
 
-  return redirect("/")
+  return redirect("/couples")
 }
 
 export default function Create() {

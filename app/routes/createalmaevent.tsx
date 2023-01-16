@@ -30,7 +30,7 @@ export const action = async ({ request }: ActionArgs) => {
     },
   })
 
-  return redirect("/")
+  return redirect("/events")
 }
 
 export default function Create() {
