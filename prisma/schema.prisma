@@ -28,6 +28,7 @@ model Couple {
   organizationUnit   OrganizationUnit @relation(fields: [organizationUnitId], references: [id])
   almaEventId        String
   almaEvent          AlmaEvent        @relation(fields: [almaEventId], references: [id])
+  comments           String
 }
 
 model OrganizationUnit {
@@ -59,11 +60,13 @@ model Person {
   id            String  @id
   husbandCouple Couple? @relation("husband")
   wifeCouple    Couple? @relation("wife")
+  vocative      String
   email         String
   firstName     String
   lastName      String
   phoneNumber   String
   birthYear     Int
+  church        Int
 }
 
 model User {
