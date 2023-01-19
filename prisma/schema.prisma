@@ -11,7 +11,8 @@ datasource db {
 }
 
 model Couple {
-  id                 String           @id
+  id                 String           @id @default(uuid())
+  coupleId           String           @unique
   husband            Person           @relation("husband", fields: [husbandId], references: [id])
   husbandId          String           @unique
   wife               Person           @relation("wife", fields: [wifeId], references: [id])
@@ -57,7 +58,7 @@ enum Group {
 }
 
 model Person {
-  id            String  @id
+  id            String  @id @default(uuid())
   husbandCouple Couple? @relation("husband")
   wifeCouple    Couple? @relation("wife")
   vocative      String

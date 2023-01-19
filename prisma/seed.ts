@@ -35,7 +35,8 @@ async function main() {
 
   await prisma.couple.create({
     data: {
-      id: "2-1-2005.01-15",
+      coupleId: "2-1-2005.01-15",
+      comments: "",
       almaEvent: { connect: { id: alma.id } },
       organizationUnit: { connect: { id: wroclaw.id } },
       city: "Wrocław",
@@ -45,6 +46,8 @@ async function main() {
       attendanceNumber: 40,
       wife: {
         create: {
+          church: 1,
+          vocative: "Anno",
           id: randomUUID(),
           email: "email@email-wife.com",
           lastName: "Kowalska",
@@ -55,6 +58,8 @@ async function main() {
       },
       husband: {
         create: {
+          church: 1,
+          vocative: "Anno",
           id: randomUUID(),
           email: "husband@email.com",
           lastName: "Kowalski",

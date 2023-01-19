@@ -46,7 +46,7 @@ export const loader = async (): Promise<any> => {
     invitedByCouples: invitedByCouples.map(({ id, husband, wife }) => {
       return {
         id: id,
-        // TODO add organization unit
+        // TODO add organization unit so that the label will look like: Zachanowicz Paweł Beata, 2
         label: `${husband.lastName} ${husband.firstName} ${wife.firstName}`,
       }
     }),
@@ -69,9 +69,87 @@ export const action = async ({ request }: ActionArgs) => {
     },
   })
 
+  // await db.couple.update({
+  //   // TODO in edit use update with where: formData.id
+  //   where: {id: formData.id},
+  //   data: {
+  //     id: //coupleId will recalculated on edit
+  //       String(formObject.organizationUnit) +
+  //       "-" +
+  //       almaEventForId?.organizationUnitId +
+  //       "-" +
+  //       almaEventForId?.year +
+  //       "." +
+  //       almaEventForId?.month +
+  //       "-" +
+  //       String(formObject.attendanceNumber),
+  //     almaEvent: {
+  //       connect: {
+  //         id: String(formObject.almaEvent),
+  //       },
+  //     },
+  //     organizationUnit: {
+  //       connect: {
+  //         id: Number(formObject.organizationUnit),
+  //       },
+  //     },
+  //     attendanceNumber: Number(formObject.attendanceNumber),
+  //     city: String(formObject.city),
+  //     group: formObject.group as Group,
+  //     postalCode: String(formObject.postalCode),
+  //     weddingYear: Number(formObject.weddingYear),
+  //     invitedBy: {
+  //       connect: {
+  //         id: String(formObject.invitedBy),
+  //       },
+  //     },
+  //     wife: {
+  //       create: {
+  //         id:
+  //           String(formObject.organizationUnit) +
+  //           "-" +
+  //           almaEventForId?.organizationUnitId +
+  //           "-" +
+  //           almaEventForId?.year +
+  //           "." +
+  //           almaEventForId?.month +
+  //           "-" +
+  //           String(formObject.attendanceNumber) +
+  //           "-wife",
+  //         email: String(formObject.wifeEmail),
+  //         lastName: String(formObject.wifeLastName),
+  //         firstName: String(formObject.wifeFirstName),
+  //         phoneNumber: String(formObject.wifePhoneNumber),
+  //         birthYear: Number(formObject.wifeBirthYear),
+  //       },
+  //     },
+  //     husband: {
+  //       create: {
+  //         id:
+  //           String(formObject.organizationUnit) +
+  //           "-" +
+  //           almaEventForId?.organizationUnitId +
+  //           "-" +
+  //           almaEventForId?.year +
+  //           "." +
+  //           almaEventForId?.month +
+  //           "-" +
+  //           String(formObject.attendanceNumber) +
+  //           "-husband",
+  //         email: String(formObject.husbandEmail),
+  //         lastName: String(formObject.husbandLastName),
+  //         firstName: String(formObject.husbandFirstName),
+  //         phoneNumber: String(formObject.husbandPhoneNumber),
+  //         birthYear: Number(formObject.husbandBirthYear),
+  //       },
+  //     },
+  //   },
+  // })
+
   await db.couple.create({
     data: {
-      id:
+      comments: "",
+      coupleId:
         String(formObject.organizationUnit) +
         "-" +
         almaEventForId?.organizationUnitId +
@@ -103,17 +181,9 @@ export const action = async ({ request }: ActionArgs) => {
       },
       wife: {
         create: {
-          id:
-            String(formObject.organizationUnit) +
-            "-" +
-            almaEventForId?.organizationUnitId +
-            "-" +
-            almaEventForId?.year +
-            "." +
-            almaEventForId?.month +
-            "-" +
-            String(formObject.attendanceNumber) +
-            "-wife",
+          // TODO: add form for those:
+          vocative: "",
+          church: 1,
           email: String(formObject.wifeEmail),
           lastName: String(formObject.wifeLastName),
           firstName: String(formObject.wifeFirstName),
@@ -123,17 +193,8 @@ export const action = async ({ request }: ActionArgs) => {
       },
       husband: {
         create: {
-          id:
-            String(formObject.organizationUnit) +
-            "-" +
-            almaEventForId?.organizationUnitId +
-            "-" +
-            almaEventForId?.year +
-            "." +
-            almaEventForId?.month +
-            "-" +
-            String(formObject.attendanceNumber) +
-            "-husband",
+          vocative: "",
+          church: 1,
           email: String(formObject.husbandEmail),
           lastName: String(formObject.husbandLastName),
           firstName: String(formObject.husbandFirstName),
