@@ -1,16 +1,6 @@
-import AddIcon from "@mui/icons-material/Add"
-import ClearIcon from "@mui/icons-material/Clear"
 import EventIcon from "@mui/icons-material/Event"
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-} from "@mui/material"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import TextField from "@mui/material/TextField"
 import { Link, useLoaderData } from "@remix-run/react"
 import { AlmaEvents } from "~/db/almaEvents-db.server"
 import { db } from "~/db/db.server"

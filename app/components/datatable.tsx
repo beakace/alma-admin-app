@@ -2,14 +2,7 @@ import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
 import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import clsx from "clsx"
-import {
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material"
+import { Box, IconButton, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import { Edit, Delete } from "@mui/icons-material"
 import { Link } from "@remix-run/react"
@@ -180,7 +173,7 @@ export default function DataTable({ couples }: any) {
             onSelectionModelChange={(columns) => console.log(columns)}
             disableColumnFilter
             // disableColumnSelector
-            // disableColumnMenu
+            disableColumnMenu
             // disableSelectionOnClick
             rows={couples}
             columns={columns}

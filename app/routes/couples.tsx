@@ -1,6 +1,5 @@
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
-import EventIcon from "@mui/icons-material/Event"
 import {
   Checkbox,
   FormControl,
@@ -11,7 +10,6 @@ import {
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
-import { height } from "@mui/system"
 import { Link, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"

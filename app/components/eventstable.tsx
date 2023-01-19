@@ -1,18 +1,8 @@
 import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
 import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import clsx from "clsx"
-import {
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material"
+import { Box } from "@mui/material"
 import { useState } from "react"
-import { Edit, Delete } from "@mui/icons-material"
-import { Link } from "@remix-run/react"
 
 const columns: GridColDef[] = [
   { field: "month", headerName: "Miesiąc", minWidth: 110, flex: 1 },
