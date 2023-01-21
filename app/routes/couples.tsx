@@ -15,6 +15,7 @@ import { useState } from "react"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
+import { CSVLink } from "react-csv"
 
 export const loader = async (): Promise<LoaderData> => {
   return {
@@ -110,163 +111,174 @@ export default function Couples() {
       }
     })
 
-  return (
-    <Box style={{ margin: "5rem" }}>
-      <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-        <h1>Alma</h1>
-        <p></p>
+  const csvCouples = [
+    ["firstname", "lastname", "email"],
+    ["Ahmed", "Tomi", "ah@smthing.co.com"],
+    ["Raed", "Labes", "rl@smthing.co.com"],
+    ["Yezzi", "Min l3b", "ymin@cocococo.com"],
+  ]
 
+  return (
+    <Box margin={"3rem"}>
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Box
-          component="form"
-          noValidate
-          autoComplete="off"
           sx={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
           }}
         >
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            label="Szukaj..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            size="small"
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              mt: "1rem",
+              height: "3rem",
+            }}
+          />{" "}
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
+              width: "100%",
+              justifyContent: "flex-end",
             }}
           >
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              label="Szukaj..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              size="small"
-              sx={{
+            <FormControl
+              style={{
                 display: "flex",
-                alignItems: "flex-start",
-                mt: "1rem",
-                height: "3rem",
+                alignItems: "flex-end",
               }}
-            />{" "}
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "flex-end",
-              }}
+              component="fieldset"
             >
-              <FormControl
+              <FormLabel component="legend"></FormLabel>
+              <Button
                 style={{
-                  display: "flex",
-                  alignItems: "flex-end",
+                  paddingLeft: "0.2rem",
                 }}
-                component="fieldset"
+                size="small"
+                variant="contained"
+                component={Link}
+                to="/create"
               >
-                <FormLabel component="legend"></FormLabel>
-                <Button
-                  style={{
-                    paddingLeft: "0.2rem",
-                  }}
-                  size="small"
-                  variant="contained"
-                  component={Link}
-                  to="/create"
-                >
-                  <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
-                </Button>{" "}
-                <Button
-                  size="small"
-                  disabled={
-                    checkboxFilters.isCheckedA &&
-                    checkboxFilters.isCheckedB &&
-                    checkboxFilters.isCheckedC &&
-                    !checkboxFilters.isCheckedD &&
-                    !checkboxFilters.isCheckedNoMail &&
-                    !checkboxFilters.isCheckedSX
+                <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
+              </Button>{" "}
+              <Button
+                size="small"
+                disabled={
+                  checkboxFilters.isCheckedA &&
+                  checkboxFilters.isCheckedB &&
+                  checkboxFilters.isCheckedC &&
+                  !checkboxFilters.isCheckedD &&
+                  !checkboxFilters.isCheckedNoMail &&
+                  !checkboxFilters.isCheckedSX
+                }
+                onClick={handleClearClick}
+                variant="outlined"
+                startIcon={<ClearIcon />}
+              >
+                Przywróć domyślne filtry
+              </Button>
+              <FormGroup aria-label="position" row>
+                <FormControlLabel
+                  value="Bez maila"
+                  control={
+                    <Checkbox
+                      onChange={handleCheckboxFilterChange}
+                      id="isCheckedNoMail"
+                      checked={checkboxFilters.isCheckedNoMail}
+                    />
                   }
-                  onClick={handleClearClick}
-                  variant="outlined"
-                  startIcon={<ClearIcon />}
-                >
-                  Przywróć domyślne filtry
-                </Button>
-                <FormGroup aria-label="position" row>
-                  <FormControlLabel
-                    value="Bez maila"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedNoMail"
-                        checked={checkboxFilters.isCheckedNoMail}
-                      />
-                    }
-                    label="Bez maila"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="A"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedA"
-                        checked={checkboxFilters.isCheckedA}
-                      />
-                    }
-                    label="A"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="B"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedB"
-                        checked={checkboxFilters.isCheckedB}
-                      />
-                    }
-                    label="B"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="C"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedC"
-                        checked={checkboxFilters.isCheckedC}
-                      />
-                    }
-                    label="C"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="D"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedD"
-                        checked={checkboxFilters.isCheckedD}
-                      />
-                    }
-                    label="D"
-                    labelPlacement="end"
-                  />
-                  <FormControlLabel
-                    value="S/X"
-                    control={
-                      <Checkbox
-                        onChange={handleCheckboxFilterChange}
-                        id="isCheckedSX"
-                        checked={checkboxFilters.isCheckedSX}
-                      />
-                    }
-                    label="S/X"
-                    labelPlacement="end"
-                  />
-                </FormGroup>
-              </FormControl>
-            </Box>
+                  label="Bez maila"
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  value="A"
+                  control={
+                    <Checkbox
+                      onChange={handleCheckboxFilterChange}
+                      id="isCheckedA"
+                      checked={checkboxFilters.isCheckedA}
+                    />
+                  }
+                  label="A"
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  value="B"
+                  control={
+                    <Checkbox
+                      onChange={handleCheckboxFilterChange}
+                      id="isCheckedB"
+                      checked={checkboxFilters.isCheckedB}
+                    />
+                  }
+                  label="B"
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  value="C"
+                  control={
+                    <Checkbox
+                      onChange={handleCheckboxFilterChange}
+                      id="isCheckedC"
+                      checked={checkboxFilters.isCheckedC}
+                    />
+                  }
+                  label="C"
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  value="D"
+                  control={
+                    <Checkbox
+                      onChange={handleCheckboxFilterChange}
+                      id="isCheckedD"
+                      checked={checkboxFilters.isCheckedD}
+                    />
+                  }
+                  label="D"
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  value="S/X"
+                  control={
+                    <Checkbox
+                      onChange={handleCheckboxFilterChange}
+                      id="isCheckedSX"
+                      checked={checkboxFilters.isCheckedSX}
+                    />
+                  }
+                  label="S/X"
+                  labelPlacement="end"
+                />
+              </FormGroup>
+            </FormControl>
           </Box>
-          <DataTable couples={filteredCouples} />
         </Box>
-      </div>
+        <DataTable couples={filteredCouples} />
+        <CSVLink
+          data={csvCouples}
+          filename={"my-file.csv"}
+          className="btn btn-primary"
+          target="_blank"
+        >
+          Download me
+        </CSVLink>
+        ;
+      </Box>
     </Box>
   )
 }

@@ -1,5 +1,3 @@
-import Box from "@mui/material/Box"
+import { redirect } from "@remix-run/node"
 
-export default function Index() {
-  return <Box></Box>
-}
+export const loader = () => redirect("/couples")

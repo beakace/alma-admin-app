@@ -1,9 +1,9 @@
-import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
+import type { GridColDef, GridCellParams, GridRowId } from "@mui/x-data-grid"
 import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import clsx from "clsx"
 import { Box, IconButton, Tooltip, Typography } from "@mui/material"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Edit, Delete } from "@mui/icons-material"
 import { Link } from "@remix-run/react"
 
@@ -48,7 +48,7 @@ const columns: GridColDef[] = [
       })
     },
   },
-  { field: "id", headerName: "ID", minWidth: 120, flex: 1 },
+  { field: "coupleId", headerName: "ID", minWidth: 120, flex: 1 },
   {
     field: "birthYear",
     headerName: "Data urodzin",
@@ -81,6 +81,8 @@ const columns: GridColDef[] = [
             {params.row.invitedBy?.husband.lastName}{" "}
             {params.row.invitedBy?.husband.firstName}{" "}
             {params.row.invitedBy?.wife.firstName}
+            {", "}
+            {params.row.invitedBy?.organizationUnitId}
           </Typography>
         </Box>
       )
@@ -172,7 +174,7 @@ export default function DataTable({ couples }: any) {
             sx={{ fontSize: "15px" }}
             onSelectionModelChange={(columns) => console.log(columns)}
             disableColumnFilter
-            // disableColumnSelector
+            disableColumnSelector
             disableColumnMenu
             // disableSelectionOnClick
             rows={couples}

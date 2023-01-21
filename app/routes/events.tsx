@@ -2,7 +2,7 @@ import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import { Link, useLoaderData } from "@remix-run/react"
-import { AlmaEvents } from "~/db/almaEvents-db.server"
+import type { AlmaEvents } from "~/db/almaEvents-db.server"
 import { db } from "~/db/db.server"
 import EventsTable from "../components/eventstable"
 
@@ -24,42 +24,32 @@ export default function Events() {
   const almaEvents = useLoaderData().almaEvents
 
   return (
-    <Box style={{ margin: "5rem" }}>
-      <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-        <h1>Alma</h1>
-        <p></p>
-        <Button
-          style={{
-            paddingLeft: "0.2rem",
-          }}
-          color="secondary"
-          size="small"
-          variant="contained"
-          component={Link}
-          to="/createalmaevent"
-        >
-          <EventIcon sx={{ margin: "0", marginRight: "3px" }} />
-          Dodaj nowe wydarzenie Alma
-        </Button>
-        <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            <EventsTable almaEvents={almaEvents} />
-          </Box>
-        </Box>
-      </div>
+    <Box sx={{ margin: "3rem" }}>
+      <Button
+        style={{
+          paddingLeft: "0.2rem",
+          marginBottom: "0.5rem",
+        }}
+        color="secondary"
+        size="small"
+        variant="contained"
+        component={Link}
+        to="/createalmaevent"
+      >
+        <EventIcon sx={{ margin: "0", marginRight: "0.1rem" }} />
+        Dodaj nowe wydarzenie Alma
+      </Button>
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <EventsTable almaEvents={almaEvents} />
+      </Box>
     </Box>
   )
 }

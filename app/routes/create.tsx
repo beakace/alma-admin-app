@@ -17,6 +17,7 @@ export const loader = async (): Promise<any> => {
   const invitedByCouples = await db.couple.findMany({
     select: {
       id: true,
+      organizationUnitId: true,
       husband: {
         select: {
           firstName: true,
@@ -40,20 +41,32 @@ export const loader = async (): Promise<any> => {
     },
   })
 
-  const organizationUnits = await db.organizationUnit.findMany()
+  const organizationUnits = await db.organizationUnit.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  })
 
   return {
-    invitedByCouples: invitedByCouples.map(({ id, husband, wife }) => {
-      return {
-        id: id,
-        // TODO add organization unit so that the label will look like: Zachanowicz Paweł Beata, 2
-        label: `${husband.lastName} ${husband.firstName} ${wife.firstName}`,
+    invitedByCouples: invitedByCouples.map(
+      ({ id, husband, wife, organizationUnitId }) => {
+        return {
+          id: id,
+          label: `${husband.lastName} ${husband.firstName} ${wife.firstName}, ${organizationUnitId}`,
+        }
       }
-    }),
+    ),
     almaEvents: almaEvents.map(({ id, year, month, organizationUnitId }) => {
       return {
         id: id,
         label: `${organizationUnitId}-${year}-${month}`,
+      }
+    }),
+    organizationUnits: organizationUnits.map(({ id }) => {
+      return {
+        id: id,
+        label: `${id}`,
       }
     }),
   }
@@ -68,83 +81,6 @@ export const action = async ({ request }: ActionArgs) => {
       id: String(formObject.almaEvent),
     },
   })
-
-  // await db.couple.update({
-  //   // TODO in edit use update with where: formData.id
-  //   where: {id: formData.id},
-  //   data: {
-  //     id: //coupleId will recalculated on edit
-  //       String(formObject.organizationUnit) +
-  //       "-" +
-  //       almaEventForId?.organizationUnitId +
-  //       "-" +
-  //       almaEventForId?.year +
-  //       "." +
-  //       almaEventForId?.month +
-  //       "-" +
-  //       String(formObject.attendanceNumber),
-  //     almaEvent: {
-  //       connect: {
-  //         id: String(formObject.almaEvent),
-  //       },
-  //     },
-  //     organizationUnit: {
-  //       connect: {
-  //         id: Number(formObject.organizationUnit),
-  //       },
-  //     },
-  //     attendanceNumber: Number(formObject.attendanceNumber),
-  //     city: String(formObject.city),
-  //     group: formObject.group as Group,
-  //     postalCode: String(formObject.postalCode),
-  //     weddingYear: Number(formObject.weddingYear),
-  //     invitedBy: {
-  //       connect: {
-  //         id: String(formObject.invitedBy),
-  //       },
-  //     },
-  //     wife: {
-  //       create: {
-  //         id:
-  //           String(formObject.organizationUnit) +
-  //           "-" +
-  //           almaEventForId?.organizationUnitId +
-  //           "-" +
-  //           almaEventForId?.year +
-  //           "." +
-  //           almaEventForId?.month +
-  //           "-" +
-  //           String(formObject.attendanceNumber) +
-  //           "-wife",
-  //         email: String(formObject.wifeEmail),
-  //         lastName: String(formObject.wifeLastName),
-  //         firstName: String(formObject.wifeFirstName),
-  //         phoneNumber: String(formObject.wifePhoneNumber),
-  //         birthYear: Number(formObject.wifeBirthYear),
-  //       },
-  //     },
-  //     husband: {
-  //       create: {
-  //         id:
-  //           String(formObject.organizationUnit) +
-  //           "-" +
-  //           almaEventForId?.organizationUnitId +
-  //           "-" +
-  //           almaEventForId?.year +
-  //           "." +
-  //           almaEventForId?.month +
-  //           "-" +
-  //           String(formObject.attendanceNumber) +
-  //           "-husband",
-  //         email: String(formObject.husbandEmail),
-  //         lastName: String(formObject.husbandLastName),
-  //         firstName: String(formObject.husbandFirstName),
-  //         phoneNumber: String(formObject.husbandPhoneNumber),
-  //         birthYear: Number(formObject.husbandBirthYear),
-  //       },
-  //     },
-  //   },
-  // })
 
   await db.couple.create({
     data: {
@@ -181,9 +117,8 @@ export const action = async ({ request }: ActionArgs) => {
       },
       wife: {
         create: {
-          // TODO: add form for those:
-          vocative: "",
-          church: 1,
+          vocative: String(formObject.wifeVocative),
+          church: Number(formObject.wifeChurch),
           email: String(formObject.wifeEmail),
           lastName: String(formObject.wifeLastName),
           firstName: String(formObject.wifeFirstName),
@@ -193,8 +128,8 @@ export const action = async ({ request }: ActionArgs) => {
       },
       husband: {
         create: {
-          vocative: "",
-          church: 1,
+          vocative: String(formObject.husbandVocative),
+          church: Number(formObject.husbandChurch),
           email: String(formObject.husbandEmail),
           lastName: String(formObject.husbandLastName),
           firstName: String(formObject.husbandFirstName),
@@ -232,6 +167,14 @@ export default function Create() {
             label="Imię"
             variant="outlined"
             defaultValue={"Anna"}
+            required
+          />
+          <TextField
+            name="wifeVocative"
+            id="wife.vocative"
+            label="Wołacz"
+            variant="outlined"
+            defaultValue={"Anno"}
             required
           />
           <TextField
@@ -274,6 +217,15 @@ export default function Create() {
             defaultValue={1960}
             required
           />
+          <TextField
+            type="number"
+            name="wifeChurch"
+            id="wife.church"
+            label="Kościół"
+            variant="outlined"
+            defaultValue={1}
+            required
+          />
 
           <h1>Mąż</h1>
           <TextField
@@ -282,6 +234,14 @@ export default function Create() {
             label="Imię"
             variant="outlined"
             defaultValue={"Jan"}
+            required
+          />
+          <TextField
+            name="husbandVocative"
+            id="husband.vocative"
+            label="Wołacz"
+            variant="outlined"
+            defaultValue={"Janie"}
             required
           />
           <TextField
@@ -325,6 +285,15 @@ export default function Create() {
             defaultValue={"1975"}
             required
           />
+          <TextField
+            type="number"
+            name="husbandChurch"
+            id="husband.church"
+            label="Kościół"
+            variant="outlined"
+            defaultValue={1}
+            required
+          />
           <h1>Wspólne</h1>
           <TextField
             name="postalCode"
@@ -338,7 +307,6 @@ export default function Create() {
             type="number"
             InputProps={{
               inputProps: {
-                maxLength: 4, //not working on type number
                 max: 2100,
                 min: 1920,
               },
@@ -352,13 +320,6 @@ export default function Create() {
           />
           <TextField
             type="number"
-            // InputProps={{
-            //   inputProps: {
-            //     maxLength: 4, //not working on type number
-            //     max: 1,
-            //     min: 100,
-            //   },
-            // }}
             name="attendanceNumber"
             id="attendanceNumber"
             label="Numer indentyfikacyjny"
@@ -446,6 +407,14 @@ export default function Create() {
               </Select>
             </FormControl>
           </Box>
+          <TextField
+            name="comments"
+            id="comments"
+            label="Uwagi"
+            multiline
+            rows={4}
+            defaultValue="Default Value"
+          />
         </Box>
 
         <Button size="large" variant="outlined" type="submit">

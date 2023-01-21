@@ -42,8 +42,8 @@ export default function EventsTable({ almaEvents }: any) {
               pageSize={pageSize}
               onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
               rowsPerPageOptions={[5, 15, 25, 50, 100]}
-              // rowHeight={25}
-              getRowHeight={() => "auto"}
+              rowHeight={50}
+              // getRowHeight={() => "auto"}
               paginationMode="client"
             />
           </ThemeProvider>
