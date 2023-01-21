@@ -15,7 +15,7 @@ export default function ButtonAppBar() {
           <IconButton
             size="large"
             edge="start"
-            color="inherit"
+            color="primary"
             disabled
             aria-label="menu"
             sx={{ mr: 2 }}

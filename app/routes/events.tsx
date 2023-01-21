@@ -25,20 +25,30 @@ export default function Events() {
 
   return (
     <Box sx={{ margin: "3rem" }}>
-      <Button
-        style={{
-          paddingLeft: "0.2rem",
-          marginBottom: "0.5rem",
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
         }}
-        color="secondary"
-        size="small"
-        variant="contained"
-        component={Link}
-        to="/createalmaevent"
       >
-        <EventIcon sx={{ margin: "0", marginRight: "0.1rem" }} />
-        Dodaj nowe wydarzenie Alma
-      </Button>
+        <Button
+          sx={{
+            paddingLeft: "0.2rem",
+            marginBottom: "0.5rem",
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+          color="secondary"
+          size="small"
+          variant="contained"
+          component={Link}
+          to="/createalmaevent"
+        >
+          <EventIcon sx={{ margin: "0", marginRight: "0.1rem" }} />
+          Dodaj nowe wydarzenie Alma
+        </Button>
+      </Box>
+
       <Box
         component="form"
         noValidate

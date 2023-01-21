@@ -47,6 +47,7 @@
     "react-hook-form": "^7.39.4",
     "remix": "^1.7.0",
     "remix-forms": "^1.1.0",
+    "remix-utils": "^6.0.0",
     "serve": "^14.0.1",
     "yup": "^0.32.11",
     "zod": "^3.19.1"

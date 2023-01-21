@@ -73,8 +73,6 @@ const columns: GridColDef[] = [
     minWidth: 120,
     flex: 1,
     renderCell: (params) => {
-      console.log(params.row.invitedBy)
-
       return (
         <Box>
           <Typography sx={{ fontSize: "15px" }}>

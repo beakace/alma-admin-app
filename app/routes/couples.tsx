@@ -16,6 +16,8 @@ import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
 import { CSVLink } from "react-csv"
+import Component from "~/components/csvexporter"
+import CSVExporter from "~/components/csvexporter"
 
 export const loader = async (): Promise<LoaderData> => {
   return {
@@ -165,17 +167,30 @@ export default function Couples() {
             >
               <FormLabel component="legend"></FormLabel>
               <Button
-                style={{
-                  paddingLeft: "0.2rem",
+                sx={{
+                  paddingLeft: "0",
+                  width: "15rem",
                 }}
                 size="small"
                 variant="contained"
                 component={Link}
                 to="/create"
               >
-                <AddIcon sx={{ margin: "0" }} /> Dodaj nowe małżeństwo
+                <AddIcon
+                  sx={{
+                    margin: "0",
+                    paddingRight: "0.1rem",
+                    marginRight: "1.1rem",
+                    marginLeft: "0.15rem",
+                  }}
+                />{" "}
+                Dodaj nowe małżeństwo
               </Button>{" "}
               <Button
+                sx={{
+                  paddingLeft: "0.2rem",
+                  width: "15rem",
+                }}
                 size="small"
                 disabled={
                   checkboxFilters.isCheckedA &&
@@ -269,16 +284,8 @@ export default function Couples() {
           </Box>
         </Box>
         <DataTable couples={filteredCouples} />
-        <CSVLink
-          data={csvCouples}
-          filename={"my-file.csv"}
-          className="btn btn-primary"
-          target="_blank"
-        >
-          Download me
-        </CSVLink>
-        ;
       </Box>
+      <CSVExporter data={filteredCouples} />
     </Box>
   )
 }

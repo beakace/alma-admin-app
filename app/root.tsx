@@ -7,8 +7,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react"
+import { CSVLink } from "react-csv"
+import CSVExporter from "./components/csvexporter"
 import Navbar from "./components/navbar"
 import styles from "./styles/app.css"
+import Component from "./components/csvexporter"
+import Fakecomponent from "./components/dummycomponent"
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }]
