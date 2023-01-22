@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton"
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount"
 import { NavLink } from "@remix-run/react"
 
-export default function ButtonAppBar() {
+export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

@@ -25,13 +25,25 @@ const columns: GridColDef[] = [
       </Box>
     ),
   },
-  { field: "postalCode", headerName: "Kod pocztowy", minWidth: 110, flex: 1 },
+  {
+    field: "postalCode",
+    headerName: "Kod pocztowy",
+    minWidth: 85,
+    flex: 1,
+    renderHeader: () => (
+      <Box>
+        <Typography sx={{ fontSize: "15px" }}>Kod</Typography>
+
+        <Typography sx={{ fontSize: "15px" }}>pocztowy</Typography>
+      </Box>
+    ),
+  },
   { field: "city", headerName: "Miejscowość", minWidth: 130, flex: 1 },
   {
     field: "group",
     type: "string",
     headerName: "Grupa",
-    minWidth: 60,
+    minWidth: 65,
     flex: 1,
     align: "center",
     cellClassName: (params: GridCellParams<string>) => {
@@ -48,12 +60,13 @@ const columns: GridColDef[] = [
       })
     },
   },
-  { field: "coupleId", headerName: "ID", minWidth: 120, flex: 1 },
+  { field: "coupleId", headerName: "ID", minWidth: 125, flex: 1 },
   {
     field: "birthYear",
     headerName: "Data urodzin",
-    minWidth: 100,
+    minWidth: 85,
     flex: 1,
+    align: "center",
     renderCell: (params) => (
       <Box>
         <Typography sx={{ fontSize: "15px" }}>
@@ -65,12 +78,30 @@ const columns: GridColDef[] = [
         </Typography>
       </Box>
     ),
+    renderHeader: () => (
+      <Box>
+        <Typography sx={{ fontSize: "15px" }}>Data</Typography>
+        <Typography sx={{ fontSize: "15px" }}>urodzenia</Typography>
+      </Box>
+    ),
   },
-  { field: "weddingYear", headerName: "Data ślubu", minWidth: 90, flex: 1 },
+  {
+    field: "weddingYear",
+    headerName: "Data ślubu",
+    minWidth: 85,
+    flex: 1,
+    align: "center",
+    renderHeader: () => (
+      <Box>
+        <Typography sx={{ fontSize: "15px" }}>Data</Typography>
+        <Typography sx={{ fontSize: "15px" }}>ślubu</Typography>
+      </Box>
+    ),
+  },
   {
     field: "invitedBy",
     headerName: "Zaproszeni przez",
-    minWidth: 120,
+    minWidth: 140,
     flex: 1,
     renderCell: (params) => {
       return (
@@ -85,6 +116,12 @@ const columns: GridColDef[] = [
         </Box>
       )
     },
+    renderHeader: () => (
+      <Box>
+        <Typography sx={{ fontSize: "15px" }}>Zaproszeni</Typography>
+        <Typography sx={{ fontSize: "15px" }}>przez</Typography>
+      </Box>
+    ),
   },
   {
     field: "email",

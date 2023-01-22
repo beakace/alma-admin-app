@@ -1,9 +1,11 @@
 import {
   Button,
   FormControl,
+  GlobalStyles,
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
@@ -154,13 +156,19 @@ export default function Create() {
 
   return (
     <div>
+      <GlobalStyles styles={{ h4: { color: "black" } }} />
       <Form method="post">
         <Box
+          //box around whole form
           sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
+            border: "3px solid #1876d1",
+            borderRadius: "1rem",
+            "& > :not(style)": { m: 1, width: "12rem" },
+            margin: "3rem",
+            padding: "1rem",
           }}
         >
-          <h1>Żona</h1>
+          <Typography variant="h4">ŻONA</Typography>
           <TextField
             name="wifeFirstName"
             id="wife.firstName"
@@ -226,8 +234,9 @@ export default function Create() {
             defaultValue={1}
             required
           />
-
-          <h1>Mąż</h1>
+          <Typography paddingTop={4} variant="h4">
+            MĄŻ
+          </Typography>
           <TextField
             name="husbandFirstName"
             id="husband.firstName"
@@ -294,7 +303,9 @@ export default function Create() {
             defaultValue={1}
             required
           />
-          <h1>Wspólne</h1>
+          <Typography paddingTop={4} variant="h4">
+            WSPÓLNE
+          </Typography>
           <TextField
             name="postalCode"
             id="postalCode"
@@ -326,87 +337,77 @@ export default function Create() {
             variant="outlined"
             defaultValue={2}
           />
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="group">Grupa</InputLabel>
-              <Select
-                name="group"
-                labelId="group-label"
-                id="group"
-                label="Grupa"
-                onChange={handleChange}
-                value={group}
-              >
-                <MenuItem value={"A"}>A</MenuItem>
-                <MenuItem value={"B"}>B</MenuItem>
-                <MenuItem value={"C"}>C</MenuItem>
-                <MenuItem value={"D"}>D</MenuItem>
-                <MenuItem value={"S"}>S</MenuItem>
-                <MenuItem value={"X"}>X</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="organizationUnit-label">Oddział</InputLabel>
-              <Select
-                name="organizationUnit"
-                labelId="organizationUnit-label"
-                id="organizationUnit"
-                label="Oddział"
-              >
-                <MenuItem value={1}>Wrocław</MenuItem>
-                <MenuItem value={2}>Warszawa</MenuItem>
-                <MenuItem value={3}>Olsztyn</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <TextField
-                name="city"
-                id="city"
-                label="Miejscowość"
-                defaultValue={"Kraków"}
-              ></TextField>
-            </FormControl>
-          </Box>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="almaEvent-label">Event</InputLabel>
-              <Select
-                name="almaEvent"
-                labelId="almaEvent-label"
-                id="almaEvent"
-                label="Event"
-              >
-                {almaEvents.map(({ id, label }: any) => (
-                  <MenuItem id={id} value={id}>
-                    {label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="invitedBy-select-label">
-                Zaproszeni przez
-              </InputLabel>
-              <Select
-                name="invitedBy"
-                labelId="invitedBy-select-label"
-                id="invitedBy-select"
-                label="Zaproszeni przez"
-              >
-                {invitedByCouples.map(({ id, label }: any) => (
-                  <MenuItem id={id} value={id}>
-                    {label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+          <FormControl fullWidth>
+            <InputLabel id="group">Grupa</InputLabel>
+            <Select
+              name="group"
+              labelId="group-label"
+              id="group"
+              label="Grupa"
+              onChange={handleChange}
+              value={group}
+            >
+              <MenuItem value={"A"}>A</MenuItem>
+              <MenuItem value={"B"}>B</MenuItem>
+              <MenuItem value={"C"}>C</MenuItem>
+              <MenuItem value={"D"}>D</MenuItem>
+              <MenuItem value={"S"}>S</MenuItem>
+              <MenuItem value={"X"}>X</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="organizationUnit-label">Oddział</InputLabel>
+            <Select
+              name="organizationUnit"
+              labelId="organizationUnit-label"
+              id="organizationUnit"
+              label="Oddział"
+            >
+              <MenuItem value={1}>Wrocław</MenuItem>
+              <MenuItem value={2}>Warszawa</MenuItem>
+              <MenuItem value={3}>Olsztyn</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <TextField
+              name="city"
+              id="city"
+              label="Miejscowość"
+              defaultValue={"Kraków"}
+            ></TextField>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="almaEvent-label">Event</InputLabel>
+            <Select
+              name="almaEvent"
+              labelId="almaEvent-label"
+              id="almaEvent"
+              label="Event"
+            >
+              {almaEvents.map(({ id, label }: any) => (
+                <MenuItem id={id} value={id}>
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="invitedBy-select-label">
+              Zaproszeni przez
+            </InputLabel>
+            <Select
+              name="invitedBy"
+              labelId="invitedBy-select-label"
+              id="invitedBy-select"
+              label="Zaproszeni przez"
+            >
+              {invitedByCouples.map(({ id, label }: any) => (
+                <MenuItem id={id} value={id}>
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             name="comments"
             id="comments"
@@ -416,10 +417,15 @@ export default function Create() {
             defaultValue="Default Value"
           />
         </Box>
-
-        <Button size="large" variant="outlined" type="submit">
-          Submit
-        </Button>
+        <Box
+          sx={{
+            margin: "3rem",
+          }}
+        >
+          <Button size="large" variant="contained" type="submit">
+            Dodaj małżeństwo do bazy
+          </Button>
+        </Box>
       </Form>
     </div>
   )
