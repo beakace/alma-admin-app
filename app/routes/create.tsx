@@ -1,10 +1,14 @@
 import {
   Button,
+  Container,
+  createTheme,
+  CssBaseline,
   FormControl,
   GlobalStyles,
   InputLabel,
   MenuItem,
   Select,
+  ThemeProvider,
   Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -14,6 +18,9 @@ import { redirect, type ActionArgs } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
+import ManIcon from "@mui/icons-material/Man"
+import WomanIcon from "@mui/icons-material/Woman"
+import WcIcon from "@mui/icons-material/Wc"
 
 export const loader = async (): Promise<any> => {
   const invitedByCouples = await db.couple.findMany({
@@ -146,6 +153,7 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function Create() {
+  const theme = createTheme()
   const [group, setGroup] = useState("")
   const handleChange = (event: any) => {
     setGroup(event.target.value)
@@ -155,278 +163,368 @@ export default function Create() {
   const invitedByCouples = useLoaderData().invitedByCouples
 
   return (
-    <div>
-      <GlobalStyles styles={{ h4: { color: "black" } }} />
-      <Form method="post">
-        <Box
-          //box around whole form
-          sx={{
-            border: "3px solid #1876d1",
-            borderRadius: "1rem",
-            "& > :not(style)": { m: 1, width: "12rem" },
-            margin: "3rem",
-            padding: "1rem",
-          }}
+    <Form method="post">
+      <ThemeProvider theme={theme}>
+        <Container
+          component="main"
+          // maxWidth=""
+          sx={
+            {
+              // border: "3px solid red",
+            }
+          }
         >
-          <Typography variant="h4">ŻONA</Typography>
-          <TextField
-            name="wifeFirstName"
-            id="wife.firstName"
-            label="Imię"
-            variant="outlined"
-            defaultValue={"Anna"}
-            required
-          />
-          <TextField
-            name="wifeVocative"
-            id="wife.vocative"
-            label="Wołacz"
-            variant="outlined"
-            defaultValue={"Anno"}
-            required
-          />
-          <TextField
-            name="wifeLastName"
-            id="wife.lastName"
-            label="Nazwisko"
-            variant="outlined"
-            defaultValue={"Kowalska"}
-            required
-          />
-          <TextField
-            name="wifePhoneNumber"
-            type="tel"
-            id="wife.phoneNumber"
-            label="Nr telefonu"
-            variant="outlined"
-            defaultValue={"997998999"}
-            required
-          />
-          <TextField
-            name="wifeEmail"
-            type="email"
-            id="wife.email"
-            label="Email"
-            variant="outlined"
-            defaultValue={"ania@wp.pl"}
-          />
-          <TextField
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 2010,
-                min: 1920,
-              },
-            }}
-            name="wifeBirthYear"
-            id="wife.birthYear"
-            label="Rok urodzenia"
-            variant="outlined"
-            defaultValue={1960}
-            required
-          />
-          <TextField
-            type="number"
-            name="wifeChurch"
-            id="wife.church"
-            label="Kościół"
-            variant="outlined"
-            defaultValue={1}
-            required
-          />
-          <Typography paddingTop={4} variant="h4">
-            MĄŻ
-          </Typography>
-          <TextField
-            name="husbandFirstName"
-            id="husband.firstName"
-            label="Imię"
-            variant="outlined"
-            defaultValue={"Jan"}
-            required
-          />
-          <TextField
-            name="husbandVocative"
-            id="husband.vocative"
-            label="Wołacz"
-            variant="outlined"
-            defaultValue={"Janie"}
-            required
-          />
-          <TextField
-            name="husbandLastName"
-            id="husband.lastName"
-            label="Nazwisko"
-            variant="outlined"
-            defaultValue={"Kowalski"}
-            required
-          />
-          <TextField
-            name="husbandPhoneNumber"
-            type="tel"
-            id="husband.phoneNumber"
-            label="Nr telefonu"
-            variant="outlined"
-            defaultValue={"001002003"}
-            required
-          />
-          <TextField
-            name="husbandEmail"
-            type="email"
-            id="husband.email"
-            label="Email"
-            variant="outlined"
-            defaultValue={"jan@onet.pl"}
-          />
+          <CssBaseline />
 
-          <TextField
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 2010,
-                min: 1920,
-              },
+          <GlobalStyles styles={{ h4: { color: "black" } }} />
+          <Box
+            //box around whole form
+            sx={{
+              // border: "3px solid green",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-            name="husbandBirthYear"
-            id="husband.birthYear"
-            label="Rok urodzenia"
-            variant="outlined"
-            defaultValue={"1975"}
-            required
-          />
-          <TextField
-            type="number"
-            name="husbandChurch"
-            id="husband.church"
-            label="Kościół"
-            variant="outlined"
-            defaultValue={1}
-            required
-          />
-          <Typography paddingTop={4} variant="h4">
-            WSPÓLNE
-          </Typography>
-          <TextField
-            name="postalCode"
-            id="postalCode"
-            label="Kod pocztowy"
-            variant="outlined"
-            defaultValue={"20201"}
-            required
-          />
-          <TextField
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 2100,
-                min: 1920,
-              },
-            }}
-            name="weddingYear"
-            id="weddingYear"
-            label="Rok ślubu"
-            variant="outlined"
-            defaultValue={2000}
-            required
-          />
-          <TextField
-            type="number"
-            name="attendanceNumber"
-            id="attendanceNumber"
-            label="Numer indentyfikacyjny"
-            variant="outlined"
-            defaultValue={2}
-          />
-          <FormControl fullWidth>
-            <InputLabel id="group">Grupa</InputLabel>
-            <Select
-              name="group"
-              labelId="group-label"
-              id="group"
-              label="Grupa"
-              onChange={handleChange}
-              value={group}
+          >
+            <Box
+              sx={{
+                // border: "3px solid blue",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              <MenuItem value={"A"}>A</MenuItem>
-              <MenuItem value={"B"}>B</MenuItem>
-              <MenuItem value={"C"}>C</MenuItem>
-              <MenuItem value={"D"}>D</MenuItem>
-              <MenuItem value={"S"}>S</MenuItem>
-              <MenuItem value={"X"}>X</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="organizationUnit-label">Oddział</InputLabel>
-            <Select
-              name="organizationUnit"
-              labelId="organizationUnit-label"
-              id="organizationUnit"
-              label="Oddział"
-            >
-              <MenuItem value={1}>Wrocław</MenuItem>
-              <MenuItem value={2}>Warszawa</MenuItem>
-              <MenuItem value={3}>Olsztyn</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <TextField
-              name="city"
-              id="city"
-              label="Miejscowość"
-              defaultValue={"Kraków"}
-            ></TextField>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="almaEvent-label">Event</InputLabel>
-            <Select
-              name="almaEvent"
-              labelId="almaEvent-label"
-              id="almaEvent"
-              label="Event"
-            >
-              {almaEvents.map(({ id, label }: any) => (
-                <MenuItem id={id} value={id}>
-                  {label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="invitedBy-select-label">
-              Zaproszeni przez
-            </InputLabel>
-            <Select
-              name="invitedBy"
-              labelId="invitedBy-select-label"
-              id="invitedBy-select"
-              label="Zaproszeni przez"
-            >
-              {invitedByCouples.map(({ id, label }: any) => (
-                <MenuItem id={id} value={id}>
-                  {label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            name="comments"
-            id="comments"
-            label="Uwagi"
-            multiline
-            rows={4}
-            defaultValue="Default Value"
-          />
-        </Box>
-        <Box
-          sx={{
-            margin: "3rem",
-          }}
-        >
-          <Button size="large" variant="contained" type="submit">
-            Dodaj małżeństwo do bazy
-          </Button>
-        </Box>
-      </Form>
-    </div>
+              <Box
+                sx={{
+                  // border: "3px solid yellow",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "18rem" },
+
+                    margin: "3rem",
+                    padding: "1rem",
+                    marginTop: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    // border: "3px solid rgba(144,202,249,0.5)",
+                    backgroundColor: "rgba(227,242,253,0.1)",
+                    boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
+                  }}
+                >
+                  <WomanIcon fontSize="large" />
+                  <Typography
+                    align="center"
+                    fontWeight="bold"
+                    component="h1"
+                    variant="h5"
+                  >
+                    ŻONA
+                  </Typography>
+                  <TextField
+                    name="wifeFirstName"
+                    id="wife.firstName"
+                    label="Imię"
+                    variant="outlined"
+                    defaultValue={"Anna"}
+                    required
+                  />
+                  <TextField
+                    name="wifeVocative"
+                    id="wife.vocative"
+                    label="Wołacz"
+                    variant="outlined"
+                    defaultValue={"Anno"}
+                    required
+                  />
+                  <TextField
+                    name="wifeLastName"
+                    id="wife.lastName"
+                    label="Nazwisko"
+                    variant="outlined"
+                    defaultValue={"Kowalska"}
+                    required
+                  />
+                  <TextField
+                    name="wifePhoneNumber"
+                    type="tel"
+                    id="wife.phoneNumber"
+                    label="Nr telefonu"
+                    variant="outlined"
+                    defaultValue={"997998999"}
+                    required
+                  />
+                  <TextField
+                    name="wifeEmail"
+                    type="email"
+                    id="wife.email"
+                    label="Email"
+                    variant="outlined"
+                    defaultValue={"ania@wp.pl"}
+                  />
+                  <TextField
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        max: 2010,
+                        min: 1920,
+                      },
+                    }}
+                    name="wifeBirthYear"
+                    id="wife.birthYear"
+                    label="Rok urodzenia"
+                    variant="outlined"
+                    defaultValue={1960}
+                    required
+                  />
+                  <TextField
+                    type="number"
+                    name="wifeChurch"
+                    id="wife.church"
+                    label="Kościół"
+                    variant="outlined"
+                    defaultValue={1}
+                    required
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "18rem" },
+                    margin: "3rem",
+                    padding: "1rem",
+                    marginTop: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    // border: "3px solid orange",
+                    backgroundColor: "rgba(227,242,253,0.1)",
+                    boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
+                  }}
+                >
+                  <ManIcon fontSize="large" />
+                  <Typography
+                    align="center"
+                    fontWeight="bold"
+                    component="h1"
+                    variant="h5"
+                  >
+                    MĄŻ
+                  </Typography>
+                  <TextField
+                    name="husbandFirstName"
+                    id="husband.firstName"
+                    label="Imię"
+                    variant="outlined"
+                    defaultValue={"Jan"}
+                    required
+                  />
+                  <TextField
+                    name="husbandVocative"
+                    id="husband.vocative"
+                    label="Wołacz"
+                    variant="outlined"
+                    defaultValue={"Janie"}
+                    required
+                  />
+                  <TextField
+                    name="husbandLastName"
+                    id="husband.lastName"
+                    label="Nazwisko"
+                    variant="outlined"
+                    defaultValue={"Kowalski"}
+                    required
+                  />
+                  <TextField
+                    name="husbandPhoneNumber"
+                    type="tel"
+                    id="husband.phoneNumber"
+                    label="Nr telefonu"
+                    variant="outlined"
+                    defaultValue={"001002003"}
+                    required
+                  />
+                  <TextField
+                    name="husbandEmail"
+                    type="email"
+                    id="husband.email"
+                    label="Email"
+                    variant="outlined"
+                    defaultValue={"jan@onet.pl"}
+                  />
+
+                  <TextField
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        max: 2010,
+                        min: 1920,
+                      },
+                    }}
+                    name="husbandBirthYear"
+                    id="husband.birthYear"
+                    label="Rok urodzenia"
+                    variant="outlined"
+                    defaultValue={"1975"}
+                    required
+                  />
+                  <TextField
+                    type="number"
+                    name="husbandChurch"
+                    id="husband.church"
+                    label="Kościół"
+                    variant="outlined"
+                    defaultValue={1}
+                    required
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  "& > :not(style)": { m: 1, width: "18rem" },
+                  margin: "3rem",
+                  padding: "1rem",
+                  marginTop: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  backgroundColor: "rgba(227,242,253,0.1)",
+                  boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
+                }}
+              >
+                {" "}
+                <WcIcon fontSize="large" />
+                <Typography
+                  align="center"
+                  fontWeight="bold"
+                  component="h1"
+                  variant="h5"
+                >
+                  WSPÓLNE
+                </Typography>
+                <TextField
+                  name="postalCode"
+                  id="postalCode"
+                  label="Kod pocztowy"
+                  variant="outlined"
+                  defaultValue={"20201"}
+                  required
+                />
+                <TextField
+                  type="number"
+                  InputProps={{
+                    inputProps: {
+                      max: 2100,
+                      min: 1920,
+                    },
+                  }}
+                  name="weddingYear"
+                  id="weddingYear"
+                  label="Rok ślubu"
+                  variant="outlined"
+                  defaultValue={2000}
+                  required
+                />
+                <TextField
+                  type="number"
+                  name="attendanceNumber"
+                  id="attendanceNumber"
+                  label="Numer indentyfikacyjny"
+                  variant="outlined"
+                  defaultValue={2}
+                />
+                <FormControl fullWidth>
+                  <InputLabel id="group">Grupa</InputLabel>
+                  <Select
+                    name="group"
+                    labelId="group-label"
+                    id="group"
+                    label="Grupa"
+                    onChange={handleChange}
+                    value={group}
+                  >
+                    <MenuItem value={"A"}>A</MenuItem>
+                    <MenuItem value={"B"}>B</MenuItem>
+                    <MenuItem value={"C"}>C</MenuItem>
+                    <MenuItem value={"D"}>D</MenuItem>
+                    <MenuItem value={"S"}>S</MenuItem>
+                    <MenuItem value={"X"}>X</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="organizationUnit-label">Oddział</InputLabel>
+                  <Select
+                    name="organizationUnit"
+                    labelId="organizationUnit-label"
+                    id="organizationUnit"
+                    label="Oddział"
+                  >
+                    <MenuItem value={1}>Wrocław</MenuItem>
+                    <MenuItem value={2}>Warszawa</MenuItem>
+                    <MenuItem value={3}>Olsztyn</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <TextField
+                    name="city"
+                    id="city"
+                    label="Miejscowość"
+                    defaultValue={"Kraków"}
+                  ></TextField>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="almaEvent-label">Event</InputLabel>
+                  <Select
+                    name="almaEvent"
+                    labelId="almaEvent-label"
+                    id="almaEvent"
+                    label="Event"
+                  >
+                    {almaEvents.map(({ id, label }: any) => (
+                      <MenuItem id={id} value={id}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="invitedBy-select-label">
+                    Zaproszeni przez
+                  </InputLabel>
+                  <Select
+                    name="invitedBy"
+                    labelId="invitedBy-select-label"
+                    id="invitedBy-select"
+                    label="Zaproszeni przez"
+                  >
+                    {invitedByCouples.map(({ id, label }: any) => (
+                      <MenuItem id={id} value={id}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <TextField
+                  name="comments"
+                  id="comments"
+                  label="Uwagi"
+                  multiline
+                  rows={4}
+                  defaultValue="Default Value"
+                />
+              </Box>
+            </Box>
+            <Box sx={{ margin: "1rem" }}>
+              <Button size="large" variant="contained" type="submit">
+                Dodaj małżeństwo do bazy
+              </Button>
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+    </Form>
   )
 }

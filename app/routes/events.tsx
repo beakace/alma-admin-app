@@ -24,7 +24,7 @@ export default function Events() {
   const almaEvents = useLoaderData().almaEvents
 
   return (
-    <Box sx={{ margin: "3rem" }}>
+    <Box sx={{ margin: "3rem", marginLeft: "20rem", marginRight: "20rem" }}>
       <Box
         sx={{
           display: "flex",
@@ -48,7 +48,6 @@ export default function Events() {
           Dodaj nowe wydarzenie Alma
         </Button>
       </Box>
-
       <Box
         component="form"
         noValidate

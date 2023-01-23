@@ -15,8 +15,6 @@ import { useState } from "react"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
-import { CSVLink } from "react-csv"
-import Component from "~/components/csvexporter"
 import CSVExporter from "~/components/csvexporter"
 
 export const loader = async (): Promise<LoaderData> => {
