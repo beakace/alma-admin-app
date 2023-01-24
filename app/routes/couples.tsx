@@ -111,13 +111,6 @@ export default function Couples() {
       }
     })
 
-  const csvCouples = [
-    ["firstname", "lastname", "email"],
-    ["Ahmed", "Tomi", "ah@smthing.co.com"],
-    ["Raed", "Labes", "rl@smthing.co.com"],
-    ["Yezzi", "Min l3b", "ymin@cocococo.com"],
-  ]
-
   return (
     <Box margin={"3rem"}>
       <Box
@@ -283,7 +276,7 @@ export default function Couples() {
         </Box>
         <DataTable couples={filteredCouples} />
       </Box>
-      <CSVExporter data={filteredCouples} />
+      <CSVExporter filteredCouples={filteredCouples} />
     </Box>
   )
 }
