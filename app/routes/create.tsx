@@ -93,7 +93,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   await db.couple.create({
     data: {
-      comments: "",
+      comments: String(formObject.comments),
       coupleId:
         String(formObject.organizationUnit) +
         "-" +

@@ -17,18 +17,26 @@ export default function CSVExporter({ filteredCouples }: any) {
       attendanceNumberCore: c.attendanceNumber,
       invitedByIdCore: c.invitedById,
       organizationUnitIdCore: c.organizationUnitId,
-      almaEventIdCore: c.almaEventId,
+      almaEventIdCore: c.almaEvent.organizationUnitId,
       commentsCore: c.comments,
       husbandCore: c.husband,
       wifeCore: c.wife,
-      ...c.invitedBy,
+      ...(c.invitedBy ? c.invitedBy : {}),
       organizationUnitCore: c.organizationUnit,
       almaEventCore: c.almaEvent,
+      almaEventWhen: `${c.almaEvent.year}.${c.almaEvent.month}`,
+      invitedByFullName: c.invitedBy
+        ? `${c.invitedBy.husband.lastName} ${c.invitedBy.husband.firstName} ${c.invitedBy.wife.firstName}`
+        : "",
+      invitedByOrganizationUnitId: c.invitedBy
+        ? c.invitedBy.organizationUnitId
+        : "",
     }
     return flattenedItem
   })
 
   console.log("flattened:", flattened)
+
   const headers = [
     { label: "nazwisko męża", key: "husbandCore.lastName" },
     { label: "imię mąż", key: "husbandCore.firstName" },
@@ -41,33 +49,20 @@ export default function CSVExporter({ filteredCouples }: any) {
     { label: "Kod Pocztowy", key: "postalCodeCore" },
     { label: "Miejscowość", key: "cityCore" },
     { label: "Grupa", key: "groupCore" },
-    {
-      label: "zapraszający",
-      key: "husband.firstName" + "." + "husband.lastName",
-    },
-    { label: "zapraszający nr bazy", key: "husband.lastName" },
+    { label: "zapraszający", key: "invitedByFullName" },
+    { label: "zapraszający nr bazy", key: "invitedByOrganizationUnitId" },
     { label: "nr bazy", key: "organizationUnitIdCore" },
     { label: "nr Almy", key: "almaEventIdCore" },
-    { label: "rok urodzenia mąż", key: "husbandCore.birthYear" },
-    { label: "rok urodzenia żona", key: "wifeCore.birthYear" },
+    { label: "kiedy na Almie", key: "almaEventWhen" },
+    { label: "nr", key: "attendanceNumberCore" },
+    { label: "rok ur mąż", key: "husbandCore.birthYear" },
+    { label: "rok ur żona", key: "wifeCore.birthYear" },
     { label: "rok ślubu", key: "weddingYearCore" },
     { label: "mail mąż", key: "husbandCore.email" },
     { label: "mail żona", key: "wifeCore.email" },
-    { label: "kościół mąż - nazwa", key: "husbandCore" },
     { label: "kościół mąż", key: "husbandCore.church" },
-    { label: "kościół żona - nazwa", key: "wifeCore" },
     { label: "kościół żona", key: "wifeCore.church" },
     { label: "UWAGI", key: "commentsCore" },
-    // { label: "ID", key: "id" },
-    // { label: "Numer identyfikacyjny", key: "attendanceNumber" },
-    // { label: "ID Pary", key: "coupleId" },
-    // { label: "ID meza", key: "husbandId" },
-    // { label: "ID zony", key: "wifeId" },
-    // { label: "Mąz", key: "husband.firstName" },
-    // { label: "Zona", key: "wife.firstName" },
-    // { label: "Zaproszeni przez", key: "invitedBy" },
-    // { label: "Oddział", key: "organizationUnit" },
-    // { label: "Event", key: "almaEvent" },
   ]
 
   return (
