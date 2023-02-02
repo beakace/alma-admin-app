@@ -1,3 +1,4 @@
+import { CenterFocusStrong } from "@mui/icons-material"
 import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -24,7 +25,13 @@ export default function Events() {
   const almaEvents = useLoaderData().almaEvents
 
   return (
-    <Box sx={{ margin: "3rem", marginLeft: "20rem", marginRight: "20rem" }}>
+    <Box
+      sx={{
+        margin: "3rem",
+        marginLeft: "25%",
+        marginRight: "25%",
+      }}
+    >
       <Box
         sx={{
           display: "flex",

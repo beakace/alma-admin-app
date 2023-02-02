@@ -21,7 +21,6 @@ export default function CSVExporter({ filteredCouples }: any) {
       comments: c.comments,
       husband: c.husband,
       wife: c.wife,
-      // ...(c.invitedBy ? c.invitedBy : {}),
       organizationUnit: c.organizationUnit,
       almaEvent: c.almaEvent,
       almaEventWhen: `${c.almaEvent.year}.${c.almaEvent.month}`,

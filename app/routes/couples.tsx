@@ -6,6 +6,8 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Input,
+  Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -16,6 +18,7 @@ import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
 import CSVExporter from "~/components/csvexporter"
+import UploadRoute from "./csvimporter"
 
 export const loader = async (): Promise<LoaderData> => {
   return {
@@ -276,7 +279,14 @@ export default function Couples() {
         </Box>
         <DataTable couples={filteredCouples} />
       </Box>
-      <CSVExporter filteredCouples={filteredCouples} />
+      <Box
+        sx={{
+          display: "flexbox",
+          direction: "column",
+        }}
+      >
+        <CSVExporter filteredCouples={filteredCouples} />
+      </Box>
     </Box>
   )
 }

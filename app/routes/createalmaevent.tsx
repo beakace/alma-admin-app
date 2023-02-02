@@ -48,7 +48,7 @@ export default function Create() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
         <CssBaseline />
         <Box
           sx={{
@@ -65,6 +65,8 @@ export default function Create() {
               sx={{
                 "& > :not(style)": { m: 0.5, width: "18rem" },
                 margin: "3rem",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <EventIcon fontSize="large" />
