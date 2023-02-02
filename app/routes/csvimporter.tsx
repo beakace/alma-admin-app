@@ -5,6 +5,7 @@ import {
   redirect,
   unstable_composeUploadHandlers,
   unstable_createFileUploadHandler,
+  unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/node"
 import { Form } from "@remix-run/react"
@@ -13,16 +14,19 @@ import Papa from "papaparse"
 
 export const action = async ({ request }: ActionArgs) => {
   const uploadHandler = unstable_composeUploadHandlers(
-    unstable_createFileUploadHandler({
-      maxPartSize: 5_000_000,
-      file: ({ filename }) => filename,
-    })
+    unstable_createMemoryUploadHandler()
   )
+
   const formData = await unstable_parseMultipartFormData(request, uploadHandler)
+
   const filename = formData.get("upload")
-  const parsedData = () => {
-    Papa.parse(filename)
-  }
+  if (!filename) return null
+  const text = await (filename as Blob).text()
+
+  const parsedData: any = Papa.parse(text, { header: true })
+
+  // console.log(parsedData)
+  console.log(parsedData.data[0]["nazwisko męża"])
 
   await db.couple.create({
     data: {

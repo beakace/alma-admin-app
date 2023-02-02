@@ -18,7 +18,6 @@ import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
 import CSVExporter from "~/components/csvexporter"
-import UploadRoute from "./csvimporter"
 
 export const loader = async (): Promise<LoaderData> => {
   return {
