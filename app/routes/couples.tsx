@@ -12,7 +12,7 @@ import {
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, NavLink, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
@@ -286,6 +286,9 @@ export default function Couples() {
       >
         <CSVExporter filteredCouples={filteredCouples} />
       </Box>
+      <Button component={NavLink} to="/csvimporter" color="primary">
+        Importuj dane z csv
+      </Button>
     </Box>
   )
 }
