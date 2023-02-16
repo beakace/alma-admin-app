@@ -170,7 +170,7 @@ export default function Create() {
           // maxWidth=""
           sx={
             {
-              // border: "3px solid red",
+              // brder: "3px solid red",
             }
           }
         >
@@ -484,7 +484,7 @@ export default function Create() {
                     label="Event"
                   >
                     {almaEvents.map(({ id, label }: any) => (
-                      <MenuItem id={id} value={id}>
+                      <MenuItem key={id} id={id} value={id}>
                         {label}
                       </MenuItem>
                     ))}
@@ -501,7 +501,7 @@ export default function Create() {
                     label="Zaproszeni przez"
                   >
                     {invitedByCouples.map(({ id, label }: any) => (
-                      <MenuItem id={id} value={id}>
+                      <MenuItem key={id} id={id} value={id}>
                         {label}
                       </MenuItem>
                     ))}
