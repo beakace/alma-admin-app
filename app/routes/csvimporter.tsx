@@ -12,6 +12,8 @@ import { db } from "~/db/db.server"
 import { Container } from "@mui/system"
 import { ThemeProvider } from "@emotion/react"
 import { useState } from "react"
+import UploadIcon from "@mui/icons-material/Upload"
+import AddIcon from "@mui/icons-material/Add"
 
 // zod/yup sprawdzajacy zgodnosc obiektu, loguje error jak sie nie zgadza i idzie dalej do pozostalych obiektow w petli
 
@@ -209,6 +211,14 @@ export default function UploadRoute() {
                   margin: "2rem",
                 }}
               >
+                <UploadIcon
+                  sx={{
+                    margin: "0",
+                    paddingRight: "0.1rem",
+                    marginRight: "0.8rem",
+                    marginLeft: "0.15rem",
+                  }}
+                />
                 {fileName ? `Wybrany plik: ${fileName}` : "Wybierz plik"}
               </Button>
             </label>
@@ -219,6 +229,14 @@ export default function UploadRoute() {
               color="success"
               disabled={!fileName}
             >
+              <AddIcon
+                sx={{
+                  margin: "0",
+                  paddingRight: "0.1rem",
+                  marginRight: "0.8rem",
+                  marginLeft: "0.15rem",
+                }}
+              />
               importuj dane z wybranego pliku
             </Button>
           </Box>
