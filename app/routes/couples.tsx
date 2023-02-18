@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add"
+import UploadIcon from "@mui/icons-material/Upload"
 import ClearIcon from "@mui/icons-material/Clear"
 import {
   Checkbox,
@@ -6,8 +7,6 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
-  Input,
-  Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -159,46 +158,78 @@ export default function Couples() {
               component="fieldset"
             >
               <FormLabel component="legend"></FormLabel>
-              <Button
+              <Box
                 sx={{
-                  paddingLeft: "0",
-                  width: "15rem",
+                  display: "flexbox",
+                  direction: "row",
                 }}
-                size="small"
-                variant="contained"
-                component={Link}
-                to="/create"
               >
-                <AddIcon
+                <CSVExporter filteredCouples={filteredCouples} />
+                <Button
+                  sx={{
+                    marginLeft: "0.8rem",
+                    paddingRight: "1rem",
+                  }}
+                  size="small"
+                  variant="contained"
+                  component={NavLink}
+                  to="/csvimporter"
+                  color="primary"
+                >
+                  <UploadIcon
+                    sx={{
+                      margin: "0",
+                      paddingRight: "0.1rem",
+                      marginRight: "0.8rem",
+                      marginLeft: "0.15rem",
+                    }}
+                  />
+                  Import
+                </Button>
+                <Button
+                  sx={{
+                    marginLeft: "0.8rem",
+                    marginRight: "0.6rem",
+                    paddingRight: "1rem",
+                  }}
+                  color="secondary"
+                  size="small"
+                  variant="contained"
+                  component={Link}
+                  to="/create"
+                >
+                  <AddIcon
+                    sx={{
+                      margin: "0",
+                      paddingRight: "0.1rem",
+                      marginRight: "0.8rem",
+                      marginLeft: "0.15rem",
+                    }}
+                  />{" "}
+                  małżeństwo
+                </Button>{" "}
+                <Button
                   sx={{
                     margin: "0",
-                    paddingRight: "0.1rem",
-                    marginRight: "1.1rem",
-                    marginLeft: "0.15rem",
+                    paddingRight: "1rem",
                   }}
-                />{" "}
-                Dodaj nowe małżeństwo
-              </Button>{" "}
-              <Button
-                sx={{
-                  paddingLeft: "0.2rem",
-                  width: "15rem",
-                }}
-                size="small"
-                disabled={
-                  checkboxFilters.isCheckedA &&
-                  checkboxFilters.isCheckedB &&
-                  checkboxFilters.isCheckedC &&
-                  !checkboxFilters.isCheckedD &&
-                  !checkboxFilters.isCheckedNoMail &&
-                  !checkboxFilters.isCheckedSX
-                }
-                onClick={handleClearClick}
-                variant="outlined"
-                startIcon={<ClearIcon />}
-              >
-                Przywróć domyślne filtry
-              </Button>
+                  size="small"
+                  disabled={
+                    checkboxFilters.isCheckedA &&
+                    checkboxFilters.isCheckedB &&
+                    checkboxFilters.isCheckedC &&
+                    !checkboxFilters.isCheckedD &&
+                    !checkboxFilters.isCheckedNoMail &&
+                    !checkboxFilters.isCheckedSX
+                  }
+                  onClick={handleClearClick}
+                  variant="contained"
+                  color="error"
+                  startIcon={<ClearIcon />}
+                >
+                  filtry
+                </Button>
+              </Box>
               <FormGroup aria-label="position" row>
                 <FormControlLabel
                   value="Bez maila"
@@ -278,17 +309,6 @@ export default function Couples() {
         </Box>
         <DataTable couples={filteredCouples} />
       </Box>
-      <Box
-        sx={{
-          display: "flexbox",
-          direction: "column",
-        }}
-      >
-        <CSVExporter filteredCouples={filteredCouples} />
-      </Box>
-      <Button component={NavLink} to="/csvimporter" color="primary">
-        Importuj dane z csv
-      </Button>
     </Box>
   )
 }

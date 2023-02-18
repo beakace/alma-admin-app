@@ -84,14 +84,12 @@ export default function Create() {
                 type="number"
                 InputProps={{
                   inputProps: {
-                    maxLength: 4, //not working on type number
                     max: 2100,
                     min: 1920,
                   },
                 }}
                 name="year"
                 id="year"
-                // label="Rok"
                 variant="outlined"
                 required
               />
@@ -127,13 +125,7 @@ export default function Create() {
                 <MenuItem value={2}>Warszawa</MenuItem>
                 <MenuItem value={3}>Olsztyn</MenuItem>
               </Select>
-              <Button
-                size="large"
-                variant="contained"
-                type="submit"
-                fullWidth
-                // sx={{ mt: 3, mb: 2 }}
-              >
+              <Button size="large" variant="contained" type="submit" fullWidth>
                 DODAJ WYDARZENIE
               </Button>
             </Box>

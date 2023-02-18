@@ -1,4 +1,4 @@
-import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
+import type { GridColDef } from "@mui/x-data-grid"
 import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { Box, Typography } from "@mui/material"

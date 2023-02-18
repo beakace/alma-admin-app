@@ -165,22 +165,13 @@ export default function Create() {
   return (
     <Form method="post">
       <ThemeProvider theme={theme}>
-        <Container
-          component="main"
-          // maxWidth=""
-          sx={
-            {
-              // brder: "3px solid red",
-            }
-          }
-        >
+        <Container component="main">
           <CssBaseline />
 
           <GlobalStyles styles={{ h4: { color: "black" } }} />
           <Box
             //box around whole form
             sx={{
-              // border: "3px solid green",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -188,14 +179,12 @@ export default function Create() {
           >
             <Box
               sx={{
-                // border: "3px solid blue",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
               <Box
                 sx={{
-                  // border: "3px solid yellow",
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "center",
@@ -211,7 +200,6 @@ export default function Create() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    // border: "3px solid rgba(144,202,249,0.5)",
                     backgroundColor: "rgba(227,242,253,0.1)",
                     boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
                   }}
@@ -300,7 +288,6 @@ export default function Create() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    // border: "3px solid orange",
                     backgroundColor: "rgba(227,242,253,0.1)",
                     boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
                   }}

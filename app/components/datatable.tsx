@@ -1,9 +1,9 @@
-import type { GridColDef, GridCellParams, GridRowId } from "@mui/x-data-grid"
+import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
 import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import clsx from "clsx"
 import { Box, IconButton, Tooltip, Typography } from "@mui/material"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { Edit, Delete } from "@mui/icons-material"
 import { Link } from "@remix-run/react"
 
@@ -139,8 +139,6 @@ const columns: GridColDef[] = [
         </Typography>
       </Box>
     ),
-    // valueGetter: (params) =>
-    //   params.row.wife.email + " " + "&" + " " + params.row.husband.email,
   },
   {
     field: "actions",
@@ -183,8 +181,6 @@ export default function DataTable({ couples }: any) {
           sx={{
             height: "100%",
             width: "100%",
-            // color: "#1a3e72",
-            // fontWeight: "600", nie działa to, do przeniesienia w odpowiednie miejsce jak ogarnę gdzie :)
             "& .alma-app.A": {
               backgroundColor: "#FFB0B2",
             },
@@ -211,7 +207,6 @@ export default function DataTable({ couples }: any) {
             disableColumnFilter
             disableColumnSelector
             disableColumnMenu
-            // disableSelectionOnClick
             rows={couples}
             columns={columns}
             pageSize={pageSize}

@@ -1,4 +1,3 @@
-import { CenterFocusStrong } from "@mui/icons-material"
 import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"

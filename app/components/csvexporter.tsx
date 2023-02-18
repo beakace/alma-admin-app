@@ -2,6 +2,7 @@ import { Button } from "@mui/material"
 import { CSVLink } from "react-csv"
 import { ClientOnly } from "remix-utils"
 import DummyComponent from "./dummycomponent"
+import DownloadIcon from "@mui/icons-material/Download"
 
 export default function CSVExporter({ filteredCouples }: any) {
   const flattened = filteredCouples.map((c: any) => {
@@ -34,8 +35,6 @@ export default function CSVExporter({ filteredCouples }: any) {
     return flattenedItem
   })
 
-  console.log("flattened:", flattened)
-
   const headers = [
     { label: "nazwisko męża", key: "husband.lastName" },
     { label: "imię mąż", key: "husband.firstName" },
@@ -67,15 +66,27 @@ export default function CSVExporter({ filteredCouples }: any) {
   return (
     <ClientOnly fallback={<DummyComponent />}>
       {() => (
-        <Button>
-          {" "}
+        <Button
+          variant="contained"
+          size="small"
+          color="success"
+          sx={{ paddingRight: "1rem" }}
+        >
+          <DownloadIcon
+            sx={{
+              margin: "0",
+              paddingRight: "0.1rem",
+              marginRight: "0.8rem",
+              marginLeft: "0.15rem",
+            }}
+          />{" "}
           <CSVLink
             data={flattened}
             headers={headers}
             filename={"alma-filteredcouples.csv"}
             target="_blank"
           >
-            Eksportuj jako CSV
+            Eksport
           </CSVLink>
         </Button>
       )}
