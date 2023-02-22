@@ -15,6 +15,7 @@ import { useState } from "react"
 import UploadIcon from "@mui/icons-material/Upload"
 import AddIcon from "@mui/icons-material/Add"
 import * as z from "zod"
+import type { Group } from "@prisma/client"
 
 const theme = createTheme()
 
@@ -138,7 +139,7 @@ export const action = async ({ request }: ActionArgs) => {
             String(couple["nr"]),
           postalCode: String(couple["Kod Pocztowy"]),
           city: String(couple["Miejscowość"]),
-          group: couple["Grupa"],
+          group: couple["Grupa"] as Group,
           invitedById: invitedBy?.id,
           attendanceNumber: Number(couple["nr"]),
           weddingYear: Number(couple["rok ślubu"]),
