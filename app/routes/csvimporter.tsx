@@ -14,10 +14,41 @@ import { ThemeProvider } from "@emotion/react"
 import { useState } from "react"
 import UploadIcon from "@mui/icons-material/Upload"
 import AddIcon from "@mui/icons-material/Add"
-
-// zod/yup sprawdzajacy zgodnosc obiektu, loguje error jak sie nie zgadza i idzie dalej do pozostalych obiektow w petli
+import * as z from "zod"
 
 const theme = createTheme()
+
+const parsedDataSchema = z.object({
+  data: z.array(
+    z.object({
+      "kiedy na Almie": z.string(),
+      "nr bazy": z.string().transform(Number),
+      "nr Almy": z.string(),
+      "zapraszający nr bazy": z.string().transform(Number),
+      zapraszający: z.string(),
+      "wołacz mąż": z.string(),
+      "mail mąż": z.string().optional(),
+      "imię mąż": z.string(),
+      "nazwisko męża": z.string(),
+      "telefon mąż": z.string().optional(),
+      "rok ur mąż": z.string().transform(Number),
+      "kościół mąż": z.string().transform(Number),
+      "wołacz żona": z.string(),
+      "mail żona": z.string().optional(),
+      "imię żona": z.string(),
+      "nazwisko żony": z.string(),
+      "telefon żona": z.string().optional(),
+      "rok ur żona": z.string().transform(Number),
+      "kościół żona": z.string().transform(Number),
+      nr: z.string().transform(Number),
+      "Kod Pocztowy": z.string(),
+      Miejscowość: z.string(),
+      Grupa: z.string(),
+      "rok ślubu": z.string().optional().transform(Number),
+      UWAGI: z.string().optional(),
+    })
+  ),
+})
 
 export const action = async ({ request }: ActionArgs) => {
   const uploadHandler = unstable_composeUploadHandlers(
@@ -30,23 +61,29 @@ export const action = async ({ request }: ActionArgs) => {
   if (!filename) return null
   const text = await (filename as Blob).text()
 
-  const parsedData: any = Papa.parse(text, { header: true })
+  let parsedData
+  try {
+    parsedData = parsedDataSchema.parse(Papa.parse(text, { header: true }))
+  } catch (error) {
+    console.log(`Invalid data format: ${(error as z.ZodError).message}`)
+    return null
+  }
 
   try {
     for (const couple of parsedData.data) {
       let almaEvent = await db.almaEvent.findFirst({
         where: {
-          year: parseInt(couple["kiedy na Almie"].split(".")[0]),
-          month: parseInt(couple["kiedy na Almie"].split(".")[1]),
+          year: Number(couple["kiedy na Almie"].split(".")[0]),
+          month: Number(couple["kiedy na Almie"].split(".")[1]),
         },
       })
 
       if (!almaEvent) {
         almaEvent = await db.almaEvent.create({
           data: {
-            year: parseInt(couple["kiedy na Almie"].split(".")[0]),
-            month: parseInt(couple["kiedy na Almie"].split(".")[1]),
-            organizationUnitId: parseInt(couple["nr bazy"]),
+            year: Number(couple["kiedy na Almie"].split(".")[0]),
+            month: Number(couple["kiedy na Almie"].split(".")[1]),
+            organizationUnitId: Number(couple["nr bazy"]),
           },
         })
       }
@@ -113,60 +150,10 @@ export const action = async ({ request }: ActionArgs) => {
     }
   } catch (error) {
     console.log(
-      parsedData.data,
-      "pojawił się problem z dodaniem niektórych par"
+      `There was an error creating an object: ${(error as Error).message}`
     )
   }
 
-  // await db.couple.create({
-  //   data: {
-  //     comments: String(formData.get("Grupa")),
-  //     coupleId: randomId(),
-  //     almaEvent: {
-  //       connect: {
-  //         id: "030b2a79-bd49-41af-9081-837d8e817e9d",
-  //       },
-  //     },
-  //     organizationUnit: {
-  //       connect: {
-  //         id: 1,
-  //       },
-  //     },
-  //     attendanceNumber: 17,
-  //     city: "data.miejscowość",
-  //     group: "A",
-  //     postalCode: "data.kodpocztowy",
-  //     weddingYear: 2002,
-  //     invitedBy: {
-  //       connect: {
-  //         id: "5a926019-9202-461e-9fd1-934db1f19051",
-  //       },
-  //     },
-  //     wife: {
-  //       create: {
-  //         vocative: "data.wołaczmąż",
-  //         church: 2,
-  //         email: "data.mailmąż",
-  //         lastName: "data.nazwiskomęża",
-  //         firstName: String(data),
-  //         phoneNumber: "data.telefonmąż",
-  //         birthYear: 2001,
-  //       },
-  //     },
-  //     husband: {
-  //       create: {
-  //         vocative: "data.wołaczżona",
-  //         church: 3,
-  //         email: "data.mailżona",
-  //         lastName: "data.nazwiskożony",
-  //         firstName: "data.imiężona",
-  //         phoneNumber: "data.telefonżona",
-  //         birthYear: 1999,
-  //       },
-  //     },
-  //   },
-  // })
-  //
   return redirect("/couples")
 }
 
