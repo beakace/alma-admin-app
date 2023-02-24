@@ -121,6 +121,9 @@ export default function Create() {
                 labelId="organizationUnit-label"
                 id="organizationUnit"
               >
+                {/* TODO to powinno być ładowane z bazy danych. Wprawdzie prawie na pewno będzie to długo niezmienne ale mimo wszystko. 
+                P.S. Warszawa to 1 Wrocław to 2 ;) 
+                  */}
                 <MenuItem value={1}>Wrocław</MenuItem>
                 <MenuItem value={2}>Warszawa</MenuItem>
                 <MenuItem value={3}>Olsztyn</MenuItem>

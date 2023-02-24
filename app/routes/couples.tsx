@@ -18,6 +18,18 @@ import { db } from "~/db/db.server"
 import DataTable from "../components/datatable"
 import CSVExporter from "~/components/csvexporter"
 
+/*
+ * TODO
+ * napisze to tutaj bo nie wiem gdzie
+ * poukladajmy jeszcze troche routing na cos takiego
+ * /couples - list par
+ * /couples/add - dodawanie nowej pary
+ * /couples/$id/edit - edycja pary (tego nie ma)
+ * /events - lista eventow
+ * /events/add nowy event
+ *
+ */
+
 export const loader = async (): Promise<LoaderData> => {
   return {
     couples: await db.couple.findMany({
