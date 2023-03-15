@@ -15,14 +15,12 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { type Group } from "@prisma/client"
 import { redirect, type ActionArgs } from "@remix-run/node"
-import { Form, useLoaderData } from "@remix-run/react"
+import { Form, useLoaderData, useParams } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
 import ManIcon from "@mui/icons-material/Man"
 import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
-
-// edit -> edit/$coupleId.ts
 
 export const loader = async (): Promise<any> => {
   const invitedByCouples = await db.couple.findMany({
@@ -83,7 +81,10 @@ export const loader = async (): Promise<any> => {
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({
+  request,
+  params,
+}: ActionArgs & { params: { selectionModel: string } }) => {
   const formData = await request.formData()
   const formObject = Object.fromEntries(formData.entries())
 
@@ -93,7 +94,10 @@ export const action = async ({ request }: ActionArgs) => {
     },
   })
 
-  await db.couple.create({
+  await db.couple.update({
+    where: {
+      id: String(formObject.id),
+    },
     data: {
       comments: String(formObject.comments),
       coupleId:
@@ -154,9 +158,10 @@ export const action = async ({ request }: ActionArgs) => {
   return redirect("/couples")
 }
 
-export default function Create() {
+export default function Edit() {
   const theme = createTheme()
   const [group, setGroup] = useState("")
+  const { currentId } = useParams() // get the currentId from the URL
   const handleChange = (event: any) => {
     setGroup(event.target.value)
   }
@@ -167,37 +172,27 @@ export default function Create() {
   return (
     <Form method="post">
       <ThemeProvider theme={theme}>
-        <Container
-          component="main"
-          // maxWidth=""
-          sx={
-            {
-              // border: "3px solid red",
-            }
-          }
-        >
+        <Container component="main">
           <CssBaseline />
 
           <GlobalStyles styles={{ h4: { color: "black" } }} />
           <Box
             //box around whole form
             sx={{
-              // border: "3px solid green",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
+            <input type="hidden" name="id" value={currentId} />
             <Box
               sx={{
-                // border: "3px solid blue",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
               <Box
                 sx={{
-                  // border: "3px solid yellow",
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "center",
@@ -213,7 +208,6 @@ export default function Create() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    // border: "3px solid rgba(144,202,249,0.5)",
                     backgroundColor: "rgba(227,242,253,0.1)",
                     boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
                   }}
@@ -302,7 +296,6 @@ export default function Create() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    // border: "3px solid orange",
                     backgroundColor: "rgba(227,242,253,0.1)",
                     boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
                   }}
