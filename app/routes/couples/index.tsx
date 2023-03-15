@@ -15,7 +15,7 @@ import { Link, NavLink, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
-import DataTable from "../components/datatable"
+import DataTable from "../../components/datatable"
 import CSVExporter from "~/components/csvexporter"
 
 export const loader = async (): Promise<LoaderData> => {
@@ -142,7 +142,7 @@ export default function Couples() {
               mt: "1rem",
               height: "3rem",
             }}
-          />{" "}
+          />
           <Box
             sx={{
               display: "flex",
@@ -196,7 +196,7 @@ export default function Couples() {
                   size="small"
                   variant="contained"
                   component={Link}
-                  to="/create"
+                  to="/couples/add"
                 >
                   <AddIcon
                     sx={{
@@ -205,9 +205,9 @@ export default function Couples() {
                       marginRight: "0.8rem",
                       marginLeft: "0.15rem",
                     }}
-                  />{" "}
+                  />
                   małżeństwo
-                </Button>{" "}
+                </Button>
                 <Button
                   sx={{
                     margin: "0",

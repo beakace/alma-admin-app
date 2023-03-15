@@ -88,6 +88,7 @@ export const action = async ({ request }: ActionArgs) => {
           },
         })
       }
+      // TODO mam takie odczucie ze latwiej sie to wszystko czyta jak są przerwy pomiędzy blokami :)
       const invitedBy = await db.couple.findFirst({
         where: {
           organizationUnitId: Number(couple["zapraszający nr bazy"]),
@@ -229,7 +230,7 @@ export default function UploadRoute() {
             </Button>
           </Box>
         </Container>
-      </ThemeProvider>{" "}
+      </ThemeProvider>
     </Form>
   )
 }

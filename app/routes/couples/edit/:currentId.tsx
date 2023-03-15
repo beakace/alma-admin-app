@@ -81,10 +81,7 @@ export const loader = async (): Promise<any> => {
   }
 }
 
-export const action = async ({
-  request,
-  params,
-}: ActionArgs & { params: { selectionModel: string } }) => {
+export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
   const formObject = Object.fromEntries(formData.entries())
 
@@ -514,7 +511,7 @@ export default function Edit() {
             </Box>
             <Box sx={{ margin: "1rem" }}>
               <Button size="large" variant="contained" type="submit">
-                Dodaj małżeństwo do bazy
+                Zaktualizuj dane małżeństwa
               </Button>
             </Box>
           </Box>

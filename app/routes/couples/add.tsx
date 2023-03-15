@@ -382,7 +382,6 @@ export default function Create() {
                   boxShadow: "5px 5px 5px 5px rgba(144,202,249,0.2)",
                 }}
               >
-                {" "}
                 <WcIcon fontSize="large" />
                 <Typography
                   align="center"

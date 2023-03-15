@@ -11,17 +11,8 @@ export default function DataTable({ couples }: any) {
   const [pageSize, setPageSize] = useState<number>(25)
   const [selectionModel, setSelectionModel] = useState<string[]>([])
 
-  // const [buttonClicked, setButtonClicked] = useState(false)
-
-  // useEffect(() => {
-  //   if (buttonClicked && (!selectionModel || selectionModel.length === 0)) {
-  //     console.error("Selection model is undefined")
-  //   }
-  // }, [buttonClicked, selectionModel])
-
   const handleSelectionModelChange = (newSelectionModel: any) => {
     setSelectionModel(newSelectionModel)
-    // setButtonClicked(true)
   }
   const columns: GridColDef[] = [
     {
@@ -173,7 +164,7 @@ export default function DataTable({ couples }: any) {
                 <IconButton
                   onClick={handleSelectionModelChange}
                   component={Link}
-                  to={`../edit/${selectionModel[0]}`}
+                  to={`../couples/edit/${selectionModel[0]}`}
                 >
                   <Edit />
                 </IconButton>
@@ -200,7 +191,7 @@ export default function DataTable({ couples }: any) {
   )
 
   return (
-    <div style={{ height: 800, width: "100%" }}>
+    <div style={{ height: 1000, width: "100%" }}>
       <ThemeProvider theme={theme}>
         <Box
           sx={{

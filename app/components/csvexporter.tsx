@@ -79,7 +79,7 @@ export default function CSVExporter({ filteredCouples }: any) {
               marginRight: "0.8rem",
               marginLeft: "0.15rem",
             }}
-          />{" "}
+          />
           <CSVLink
             data={flattened}
             headers={headers}

@@ -4,7 +4,7 @@ import Button from "@mui/material/Button"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { AlmaEvents } from "~/db/almaEvents-db.server"
 import { db } from "~/db/db.server"
-import EventsTable from "../components/eventstable"
+import EventsTable from "../../components/eventstable"
 
 export const loader = async (): Promise<LoaderData> => {
   return {
@@ -48,7 +48,7 @@ export default function Events() {
           size="small"
           variant="contained"
           component={Link}
-          to="/createalmaevent"
+          to="/events/add"
         >
           <EventIcon sx={{ margin: "0", marginRight: "0.1rem" }} />
           Dodaj nowe wydarzenie Alma
