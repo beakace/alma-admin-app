@@ -170,7 +170,11 @@ export default function DataTable({ couples }: any) {
                 </IconButton>
               </Tooltip>
               <Tooltip title="usuń">
-                <IconButton onClick={() => {}}>
+                <IconButton
+                  onClick={handleSelectionModelChange}
+                  component={Link}
+                  to={`../couples/delete/${selectionModel[0]}`}
+                >
                   <Delete />
                 </IconButton>
               </Tooltip>

@@ -152,7 +152,7 @@ export const action = async ({ request }: ActionArgs) => {
   return redirect("/couples")
 }
 
-export default function Create() {
+export default function AddCouple() {
   const theme = createTheme()
   const [group, setGroup] = useState("")
   const handleChange = (event: any) => {
@@ -169,6 +169,15 @@ export default function Create() {
           <CssBaseline />
 
           <GlobalStyles styles={{ h4: { color: "black" } }} />
+          <Typography
+            sx={{ margin: "1rem" }}
+            align="center"
+            fontWeight="bold"
+            component="h1"
+            fontSize={35}
+          >
+            DODAWANIE PARY
+          </Typography>
           <Box
             //box around whole form
             sx={{
@@ -218,7 +227,6 @@ export default function Create() {
                     id="wife.firstName"
                     label="Imię"
                     variant="outlined"
-                    defaultValue={"Anna"}
                     required
                   />
                   <TextField
@@ -226,7 +234,6 @@ export default function Create() {
                     id="wife.vocative"
                     label="Wołacz"
                     variant="outlined"
-                    defaultValue={"Anno"}
                     required
                   />
                   <TextField
@@ -234,7 +241,6 @@ export default function Create() {
                     id="wife.lastName"
                     label="Nazwisko"
                     variant="outlined"
-                    defaultValue={"Kowalska"}
                     required
                   />
                   <TextField
@@ -243,7 +249,6 @@ export default function Create() {
                     id="wife.phoneNumber"
                     label="Nr telefonu"
                     variant="outlined"
-                    defaultValue={"997998999"}
                     required
                   />
                   <TextField
@@ -252,7 +257,6 @@ export default function Create() {
                     id="wife.email"
                     label="Email"
                     variant="outlined"
-                    defaultValue={"ania@wp.pl"}
                   />
                   <TextField
                     type="number"
@@ -266,7 +270,6 @@ export default function Create() {
                     id="wife.birthYear"
                     label="Rok urodzenia"
                     variant="outlined"
-                    defaultValue={1960}
                     required
                   />
                   <TextField
@@ -275,7 +278,6 @@ export default function Create() {
                     id="wife.church"
                     label="Kościół"
                     variant="outlined"
-                    defaultValue={1}
                     required
                   />
                 </Box>
@@ -306,7 +308,6 @@ export default function Create() {
                     id="husband.firstName"
                     label="Imię"
                     variant="outlined"
-                    defaultValue={"Jan"}
                     required
                   />
                   <TextField
@@ -314,7 +315,6 @@ export default function Create() {
                     id="husband.vocative"
                     label="Wołacz"
                     variant="outlined"
-                    defaultValue={"Janie"}
                     required
                   />
                   <TextField
@@ -322,7 +322,6 @@ export default function Create() {
                     id="husband.lastName"
                     label="Nazwisko"
                     variant="outlined"
-                    defaultValue={"Kowalski"}
                     required
                   />
                   <TextField
@@ -331,7 +330,6 @@ export default function Create() {
                     id="husband.phoneNumber"
                     label="Nr telefonu"
                     variant="outlined"
-                    defaultValue={"001002003"}
                     required
                   />
                   <TextField
@@ -340,7 +338,6 @@ export default function Create() {
                     id="husband.email"
                     label="Email"
                     variant="outlined"
-                    defaultValue={"jan@onet.pl"}
                   />
 
                   <TextField
@@ -355,7 +352,6 @@ export default function Create() {
                     id="husband.birthYear"
                     label="Rok urodzenia"
                     variant="outlined"
-                    defaultValue={"1975"}
                     required
                   />
                   <TextField
@@ -364,7 +360,6 @@ export default function Create() {
                     id="husband.church"
                     label="Kościół"
                     variant="outlined"
-                    defaultValue={1}
                     required
                   />
                 </Box>
@@ -396,7 +391,6 @@ export default function Create() {
                   id="postalCode"
                   label="Kod pocztowy"
                   variant="outlined"
-                  defaultValue={"20201"}
                   required
                 />
                 <TextField
@@ -411,7 +405,6 @@ export default function Create() {
                   id="weddingYear"
                   label="Rok ślubu"
                   variant="outlined"
-                  defaultValue={2000}
                   required
                 />
                 <TextField
@@ -420,7 +413,6 @@ export default function Create() {
                   id="attendanceNumber"
                   label="Numer indentyfikacyjny"
                   variant="outlined"
-                  defaultValue={2}
                 />
                 <FormControl fullWidth>
                   <InputLabel id="group">Grupa</InputLabel>
@@ -458,7 +450,6 @@ export default function Create() {
                     name="city"
                     id="city"
                     label="Miejscowość"
-                    defaultValue={"Kraków"}
                   ></TextField>
                 </FormControl>
                 <FormControl fullWidth>
@@ -499,7 +490,6 @@ export default function Create() {
                   label="Uwagi"
                   multiline
                   rows={4}
-                  defaultValue="Default Value"
                 />
               </Box>
             </Box>

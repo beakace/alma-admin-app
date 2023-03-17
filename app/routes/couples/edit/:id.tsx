@@ -175,7 +175,7 @@ export const action = async ({ request }: ActionArgs) => {
   return redirect("/couples")
 }
 
-export default function Edit() {
+export default function EditCouple() {
   const theme = createTheme()
   const couple = useLoaderData().couple
   const almaEvents = useLoaderData().almaEvents
@@ -193,6 +193,15 @@ export default function Edit() {
         <Container component="main">
           <CssBaseline />
           <GlobalStyles styles={{ h4: { color: "black" } }} />
+          <Typography
+            sx={{ margin: "1rem" }}
+            align="center"
+            fontWeight="bold"
+            component="h1"
+            variant="h4"
+          >
+            EDYCJA PARY
+          </Typography>
           <Box
             //box around whole form
             sx={{

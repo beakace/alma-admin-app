@@ -206,7 +206,7 @@ export default function Couples() {
                       marginLeft: "0.15rem",
                     }}
                   />
-                  małżeństwo
+                  dodaj małżeństwo
                 </Button>
                 <Button
                   sx={{
