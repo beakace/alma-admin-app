@@ -109,7 +109,7 @@ export default function DataTable({ couples }: any) {
       field: "invitedBy",
       headerName: "Zaproszeni przez",
       minWidth: 140,
-      flex: 1,
+      flex: 2,
       renderCell: (params) => {
         if (!params.row.invitedBy) {
           return ""
@@ -138,7 +138,7 @@ export default function DataTable({ couples }: any) {
       field: "email",
       headerName: "Email",
       minWidth: 120,
-      flex: 2.5,
+      flex: 2,
       renderCell: (params) => (
         <Box>
           <Typography sx={{ fontSize: "15px" }}>
@@ -155,7 +155,7 @@ export default function DataTable({ couples }: any) {
       field: "actions",
       headerName: "Akcje",
       minWidth: 120,
-      flex: 2.5,
+      flex: 1,
       renderCell: (params) => (
         <Box>
           {selectionModel && selectionModel.includes(params.row.id) && (
