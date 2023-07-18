@@ -5,11 +5,12 @@ import clsx from "clsx"
 import { Box, IconButton, Tooltip, Typography } from "@mui/material"
 import { useState } from "react"
 import { Edit, Delete } from "@mui/icons-material"
-import { Link } from "@remix-run/react"
+import { Link, useParams } from "@remix-run/react"
 
 export default function DataTable({ couples }: any) {
   const [pageSize, setPageSize] = useState<number>(25)
   const [selectionModel, setSelectionModel] = useState<string[]>([])
+  const params = useParams()
 
   const handleSelectionModelChange = (newSelectionModel: any) => {
     setSelectionModel(newSelectionModel)
@@ -160,20 +161,20 @@ export default function DataTable({ couples }: any) {
         <Box>
           {selectionModel && selectionModel.includes(params.row.id) && (
             <>
-              <Tooltip title="edytuj">
+              <Tooltip title="Edytuj">
                 <IconButton
                   onClick={handleSelectionModelChange}
                   component={Link}
-                  to={`../couples/edit/${selectionModel[0]}`}
+                  to={`/couples/${params.id}/edit`}
                 >
                   <Edit />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="usuń">
+              <Tooltip title="Usuń">
                 <IconButton
                   onClick={handleSelectionModelChange}
                   component={Link}
-                  to={`../couples/delete/${selectionModel[0]}`}
+                  to={`/couples/${params.id}/delete`}
                 >
                   <Delete />
                 </IconButton>

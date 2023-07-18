@@ -411,7 +411,7 @@ export default function AddCouple() {
                   type="number"
                   name="attendanceNumber"
                   id="attendanceNumber"
-                  label="Numer indentyfikacyjny"
+                  label="Numer identyfikacyjny"
                   variant="outlined"
                 />
                 <FormControl fullWidth>

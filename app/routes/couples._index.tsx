@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add"
-import UploadIcon from "@mui/icons-material/Upload"
 import ClearIcon from "@mui/icons-material/Clear"
+import UploadIcon from "@mui/icons-material/Upload"
 import {
   Checkbox,
   FormControl,
@@ -13,10 +13,10 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import { Link, NavLink, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
+import CSVExporter from "~/components/csvexporter"
+import DataTable from "~/components/datatable"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
-import DataTable from "../../components/datatable"
-import CSVExporter from "~/components/csvexporter"
 
 export const loader = async (): Promise<LoaderData> => {
   return {

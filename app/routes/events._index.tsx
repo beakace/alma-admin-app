@@ -2,9 +2,9 @@ import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import { Link, useLoaderData } from "@remix-run/react"
+import EventsTable from "~/components/eventstable"
 import type { AlmaEvents } from "~/db/almaEvents-db.server"
 import { db } from "~/db/db.server"
-import EventsTable from "../../components/eventstable"
 
 export const loader = async (): Promise<LoaderData> => {
   return {

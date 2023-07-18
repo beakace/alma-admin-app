@@ -11,6 +11,7 @@
     "start": "remix-serve build",
     "typecheck": "tsc -b",
     "db": "docker compose up -d",
+    "db:seed": "ts-node prisma/seed.ts",
     "db:generate": "prisma generate",
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
