@@ -1,16 +1,15 @@
-import type { GridColDef, GridCellParams } from "@mui/x-data-grid"
-import { DataGrid, plPL } from "@mui/x-data-grid"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import clsx from "clsx"
+import { Delete, Edit } from "@mui/icons-material"
 import { Box, IconButton, Tooltip, Typography } from "@mui/material"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import type { GridCellParams, GridColDef } from "@mui/x-data-grid"
+import { DataGrid, plPL } from "@mui/x-data-grid"
+import { Link } from "@remix-run/react"
+import clsx from "clsx"
 import { useState } from "react"
-import { Edit, Delete } from "@mui/icons-material"
-import { Link, useParams } from "@remix-run/react"
 
 export default function DataTable({ couples }: any) {
   const [pageSize, setPageSize] = useState<number>(25)
   const [selectionModel, setSelectionModel] = useState<string[]>([])
-  const params = useParams()
 
   const handleSelectionModelChange = (newSelectionModel: any) => {
     setSelectionModel(newSelectionModel)

@@ -14,7 +14,8 @@ import {
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { type Group } from "@prisma/client"
-import { redirect, type ActionArgs } from "@remix-run/node"
+import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import { redirect, json } from "@remix-run/node"
 import { Form, useLoaderData, useParams } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
@@ -22,7 +23,7 @@ import ManIcon from "@mui/icons-material/Man"
 import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
 
-export const loader = async ({ params }: any): Promise<any> => {
+export const loader = async ({ params }: LoaderArgs) => {
   const id = params.id
   const invitedByCouples = await db.couple.findMany({
     select: {
@@ -78,7 +79,7 @@ export const loader = async ({ params }: any): Promise<any> => {
     },
   })
 
-  return {
+  return json({
     invitedByCouples: invitedByCouples.map(
       ({ id, husband, wife, organizationUnitId }) => {
         return {
@@ -93,18 +94,15 @@ export const loader = async ({ params }: any): Promise<any> => {
         label: `${organizationUnitId}-${year}-${month}`,
       }
     }),
-    organizationUnits: organizationUnits.map(({ id }) => {
-      return { id: id, label: `${id}` }
-    }),
-
+    organizationUnits,
     couple,
-  }
+  })
 }
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
   const formObject = Object.fromEntries(formData.entries())
-
+  console.log(formObject)
   const almaEventForId = await db.almaEvent.findUnique({
     where: {
       id: String(formObject.almaEvent),
@@ -142,13 +140,15 @@ export const action = async ({ request }: ActionArgs) => {
       group: formObject.group as Group,
       postalCode: String(formObject.postalCode),
       weddingYear: Number(formObject.weddingYear),
-      invitedBy: {
-        connect: {
-          id: String(formObject.invitedBy),
-        },
-      },
+      invitedBy: formObject.invitedBy
+        ? {
+            connect: {
+              id: String(formObject.invitedBy),
+            },
+          }
+        : undefined,
       wife: {
-        create: {
+        update: {
           vocative: String(formObject.wifeVocative),
           church: Number(formObject.wifeChurch),
           email: String(formObject.wifeEmail),
@@ -159,7 +159,7 @@ export const action = async ({ request }: ActionArgs) => {
         },
       },
       husband: {
-        create: {
+        update: {
           vocative: String(formObject.husbandVocative),
           church: Number(formObject.husbandChurch),
           email: String(formObject.husbandEmail),
@@ -177,12 +177,13 @@ export const action = async ({ request }: ActionArgs) => {
 
 export default function EditCouple() {
   const theme = createTheme()
-  const couple = useLoaderData().couple
-  const almaEvents = useLoaderData().almaEvents
-  const invitedByCouples = useLoaderData().invitedByCouples
+  const { almaEvents, couple, invitedByCouples, organizationUnits } =
+    useLoaderData<typeof loader>()
   const { id } = useParams()
 
-  const [group, setGroup] = useState(couple.group)
+  const [group, setGroup] = useState<
+    "A" | "B" | "C" | "D" | "S" | "X" | undefined
+  >(couple?.group)
   const handleChange = (event: any) => {
     setGroup(event.target.value)
   }
@@ -252,7 +253,7 @@ export default function EditCouple() {
                     id="wife.firstName"
                     label="Imię"
                     variant="outlined"
-                    defaultValue={couple.wife.firstName}
+                    defaultValue={couple?.wife.firstName}
                     required
                   />
                   <TextField
@@ -260,7 +261,7 @@ export default function EditCouple() {
                     id="wife.vocative"
                     label="Wołacz"
                     variant="outlined"
-                    defaultValue={couple.wife.vocative}
+                    defaultValue={couple?.wife.vocative}
                     required
                   />
                   <TextField
@@ -268,7 +269,7 @@ export default function EditCouple() {
                     id="wife.lastName"
                     label="Nazwisko"
                     variant="outlined"
-                    defaultValue={couple.wife.lastName}
+                    defaultValue={couple?.wife.lastName}
                     required
                   />
                   <TextField
@@ -277,7 +278,7 @@ export default function EditCouple() {
                     id="wife.phoneNumber"
                     label="Nr telefonu"
                     variant="outlined"
-                    defaultValue={couple.wife.phoneNumber}
+                    defaultValue={couple?.wife.phoneNumber}
                     required
                   />
                   <TextField
@@ -286,7 +287,7 @@ export default function EditCouple() {
                     id="wife.email"
                     label="Email"
                     variant="outlined"
-                    defaultValue={couple.wife.email}
+                    defaultValue={couple?.wife.email}
                   />
                   <TextField
                     type="number"
@@ -300,7 +301,7 @@ export default function EditCouple() {
                     id="wife.birthYear"
                     label="Rok urodzenia"
                     variant="outlined"
-                    defaultValue={couple.wife.birthYear}
+                    defaultValue={couple?.wife.birthYear}
                     required
                   />
                   <TextField
@@ -309,7 +310,7 @@ export default function EditCouple() {
                     id="wife.church"
                     label="Kościół"
                     variant="outlined"
-                    defaultValue={couple.wife.church}
+                    defaultValue={couple?.wife.church}
                     required
                   />
                 </Box>
@@ -340,7 +341,7 @@ export default function EditCouple() {
                     id="husband.firstName"
                     label="Imię"
                     variant="outlined"
-                    defaultValue={couple.husband.firstName}
+                    defaultValue={couple?.husband.firstName}
                     required
                   />
                   <TextField
@@ -348,7 +349,7 @@ export default function EditCouple() {
                     id="husband.vocative"
                     label="Wołacz"
                     variant="outlined"
-                    defaultValue={couple.husband.vocative}
+                    defaultValue={couple?.husband.vocative}
                     required
                   />
                   <TextField
@@ -356,7 +357,7 @@ export default function EditCouple() {
                     id="husband.lastName"
                     label="Nazwisko"
                     variant="outlined"
-                    defaultValue={couple.husband.lastName}
+                    defaultValue={couple?.husband.lastName}
                     required
                   />
                   <TextField
@@ -365,7 +366,7 @@ export default function EditCouple() {
                     id="husband.phoneNumber"
                     label="Nr telefonu"
                     variant="outlined"
-                    defaultValue={couple.husband.phoneNumber}
+                    defaultValue={couple?.husband.phoneNumber}
                     required
                   />
                   <TextField
@@ -374,7 +375,7 @@ export default function EditCouple() {
                     id="husband.email"
                     label="Email"
                     variant="outlined"
-                    defaultValue={couple.husband.email}
+                    defaultValue={couple?.husband.email}
                   />
 
                   <TextField
@@ -389,7 +390,7 @@ export default function EditCouple() {
                     id="husband.birthYear"
                     label="Rok urodzenia"
                     variant="outlined"
-                    defaultValue={couple.husband.birthYear}
+                    defaultValue={couple?.husband.birthYear}
                     required
                   />
                   <TextField
@@ -398,7 +399,7 @@ export default function EditCouple() {
                     id="husband.church"
                     label="Kościół"
                     variant="outlined"
-                    defaultValue={couple.husband.church}
+                    defaultValue={couple?.husband.church}
                     required
                   />
                 </Box>
@@ -430,7 +431,7 @@ export default function EditCouple() {
                   id="postalCode"
                   label="Kod pocztowy"
                   variant="outlined"
-                  defaultValue={couple.postalCode}
+                  defaultValue={couple?.postalCode}
                   required
                 />
                 <TextField
@@ -445,7 +446,7 @@ export default function EditCouple() {
                   id="weddingYear"
                   label="Rok ślubu"
                   variant="outlined"
-                  defaultValue={couple.weddingYear}
+                  defaultValue={couple?.weddingYear}
                   required
                 />
                 <TextField
@@ -454,7 +455,7 @@ export default function EditCouple() {
                   id="attendanceNumber"
                   label="Numer indentyfikacyjny"
                   variant="outlined"
-                  defaultValue={couple.attendanceNumber}
+                  defaultValue={couple?.attendanceNumber}
                 />
                 <FormControl fullWidth>
                   <InputLabel id="group">Grupa</InputLabel>
@@ -465,7 +466,7 @@ export default function EditCouple() {
                     label="Grupa"
                     onChange={handleChange}
                     value={group}
-                    defaultValue={couple.group}
+                    defaultValue={couple?.group}
                   >
                     <MenuItem value={"A"}>A</MenuItem>
                     <MenuItem value={"B"}>B</MenuItem>
@@ -482,11 +483,13 @@ export default function EditCouple() {
                     labelId="organizationUnit-label"
                     id="organizationUnit"
                     label="Oddział"
-                    defaultValue={couple.organizationUnitId}
+                    defaultValue={couple?.organizationUnitId}
                   >
-                    <MenuItem value={1}>Wrocław</MenuItem>
-                    <MenuItem value={2}>Warszawa</MenuItem>
-                    <MenuItem value={3}>Olsztyn</MenuItem>
+                    {organizationUnits.map((orgUnit) => (
+                      <MenuItem key={orgUnit.id} value={orgUnit.id}>
+                        {orgUnit.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
@@ -494,7 +497,7 @@ export default function EditCouple() {
                     name="city"
                     id="city"
                     label="Miejscowość"
-                    defaultValue={couple.city}
+                    defaultValue={couple?.city}
                   ></TextField>
                 </FormControl>
                 <FormControl fullWidth>
@@ -504,7 +507,7 @@ export default function EditCouple() {
                     labelId="almaEvent-label"
                     id="almaEvent"
                     label="Event"
-                    defaultValue={couple.almaEventId}
+                    defaultValue={couple?.almaEventId}
                   >
                     {almaEvents.map(({ id, label }: any) => (
                       <MenuItem key={id} id={id} value={id}>
@@ -522,7 +525,7 @@ export default function EditCouple() {
                     labelId="invitedBy-select-label"
                     id="invitedBy-select"
                     label="Zaproszeni przez"
-                    defaultValue={couple.invitedById}
+                    defaultValue={couple?.invitedById}
                   >
                     {invitedByCouples.map(({ id, label }: any) => (
                       <MenuItem key={id} id={id} value={id}>
@@ -537,7 +540,7 @@ export default function EditCouple() {
                   label="Uwagi"
                   multiline
                   rows={4}
-                  defaultValue={couple.comments}
+                  defaultValue={couple?.comments}
                 />
               </Box>
             </Box>

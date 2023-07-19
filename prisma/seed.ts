@@ -1,9 +1,14 @@
 import { PrismaClient } from "@prisma/client"
 import { randomUUID } from "crypto"
+import { hash } from "../app/db/hash.server"
 
 const prisma = new PrismaClient()
 
 async function main() {
+  await prisma.user.create({
+    data: { username: "Admin", passwordHash: await hash("Admin12!", 10) },
+  })
+
   await prisma.organizationUnit.create({
     data: {
       id: 1,

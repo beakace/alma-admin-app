@@ -8,62 +8,30 @@ import {
   Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
-import { redirect, type ActionArgs } from "@remix-run/node"
+import { Person } from "@prisma/client"
+import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import { Form, useLoaderData, useParams } from "@remix-run/react"
 import { db } from "~/db/db.server"
 
-export const loader = async ({ params }: any): Promise<any> => {
-  const id = params.id
-
-  const almaEvents = await db.almaEvent.findMany({
-    select: {
-      id: true,
-      year: true,
-      month: true,
-      organizationUnitId: true,
-    },
-  })
-
-  const organizationUnits = await db.organizationUnit.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  })
+export const loader = async ({ params }: LoaderArgs) => {
+  const coupleId = params.id
 
   const couple = await db.couple.findUnique({
     where: {
-      id: id,
+      id: coupleId,
     },
     select: {
-      id: true,
-      organizationUnitId: true,
       husband: true,
       wife: true,
-      city: true,
-      group: true,
-      postalCode: true,
-      weddingYear: true,
-      comments: true,
+      organizationUnitId: true,
       attendanceNumber: true,
-      almaEventId: true,
-      invitedById: true,
     },
   })
 
-  return {
-    almaEvents: almaEvents.map(({ id, year, month, organizationUnitId }) => {
-      return {
-        id: id,
-        label: `${organizationUnitId}-${year}-${month}`,
-      }
-    }),
-    organizationUnits: organizationUnits.map(({ id }) => {
-      return { id: id, label: `${id}` }
-    }),
-
+  return json({
     couple,
-  }
+  })
 }
 
 export const action = async ({ request }: ActionArgs) => {
@@ -80,8 +48,8 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function DeleteCouple() {
+  const { couple } = useLoaderData<typeof loader>()
   const theme = createTheme()
-  const couple = useLoaderData().couple
   const { id } = useParams()
 
   return (
@@ -106,13 +74,7 @@ export default function DeleteCouple() {
                 CZY NA PEWNO CHCESZ USUNĄĆ TO MAŁŻEŃSTWO Z BAZY?
               </Typography>
               <Typography sx={{ margin: "1rem" }}>
-                {" "}
-                {couple.husband.lastName} {couple.husband.firstName}{" "}
-                {couple.wife.firstName}
-                {", nr almy "}
-                {couple.organizationUnitId}
-                {", nr pary "}
-                {couple.attendanceNumber}
+                {buildDeleteCoupleMessage(couple)}
               </Typography>
               <Button
                 sx={{ margin: "1rem" }}
@@ -128,5 +90,26 @@ export default function DeleteCouple() {
         </Container>
       </ThemeProvider>
     </Form>
+  )
+}
+
+const buildDeleteCoupleMessage = (
+  couple: {
+    husband: Person
+    wife: Person
+    organizationUnitId: number
+    attendanceNumber: number
+  } | null
+) => {
+  return (
+    [
+      couple?.husband.lastName,
+      couple?.husband.firstName,
+      couple?.wife.firstName,
+    ].join(" ") +
+    ", nr almy " +
+    couple?.organizationUnitId +
+    ", nr pary " +
+    couple?.attendanceNumber
   )
 }
