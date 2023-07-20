@@ -525,7 +525,7 @@ export default function EditCouple() {
                     labelId="invitedBy-select-label"
                     id="invitedBy-select"
                     label="Zaproszeni przez"
-                    defaultValue={couple?.invitedById}
+                    defaultValue={couple?.invitedById ?? undefined}
                   >
                     {invitedByCouples.map(({ id, label }: any) => (
                       <MenuItem key={id} id={id} value={id}>

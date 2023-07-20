@@ -2,7 +2,7 @@ import { Button } from "@mui/material"
 import { CSVLink } from "react-csv"
 import { ClientOnly } from "remix-utils"
 import DummyComponent from "./dummycomponent"
-import DownloadIcon from "@mui/icons-material/Download"
+import UploadIcon from "@mui/icons-material/Upload"
 
 export default function CSVExporter({ filteredCouples }: any) {
   const flattened = filteredCouples.map((c: any) => {
@@ -72,7 +72,7 @@ export default function CSVExporter({ filteredCouples }: any) {
           color="success"
           sx={{ paddingRight: "1rem" }}
         >
-          <DownloadIcon
+          <UploadIcon
             sx={{
               margin: "0",
               paddingRight: "0.1rem",

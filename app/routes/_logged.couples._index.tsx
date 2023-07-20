@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
-import UploadIcon from "@mui/icons-material/Upload"
+import DownloadIcon from "@mui/icons-material/Download"
 import {
   Checkbox,
   FormControl,
@@ -176,7 +176,7 @@ export default function Couples() {
                   to="/csvimporter"
                   color="primary"
                 >
-                  <UploadIcon
+                  <DownloadIcon
                     sx={{
                       margin: "0",
                       paddingRight: "0.1rem",

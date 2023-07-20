@@ -76,11 +76,11 @@ export default function DataTable({ couples }: any) {
       align: "center",
       renderCell: (params) => (
         <Box>
-          <Typography sx={{ fontSize: "15px" }}>
+          <Typography sx={{ fontSize: "15px", textAlign: "center" }}>
             {params.row.wife.birthYear}
           </Typography>
 
-          <Typography sx={{ fontSize: "15px" }}>
+          <Typography sx={{ fontSize: "15px", textAlign: "center" }}>
             {params.row.husband.birthYear}
           </Typography>
         </Box>
