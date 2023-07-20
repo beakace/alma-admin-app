@@ -16,7 +16,7 @@ import UploadIcon from "@mui/icons-material/Upload"
 import AddIcon from "@mui/icons-material/Add"
 import { z } from "zod"
 import { Group } from "@prisma/client"
-
+import { decode } from "iconv-lite"
 const theme = createTheme()
 const groupSchema = zodEnumFromObjKeys(Group)
 
@@ -60,12 +60,16 @@ export const action = async ({ request }: ActionArgs) => {
 
   const filename = formData.get("upload")
   if (!filename) return null
-  const text = await (filename as Blob).text()
+  const blob = await (filename as Blob)
+
+  const arrayBuffer = await blob.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+  const d = decode(buffer, "win1250")
 
   let parsedData
   try {
     parsedData = parsedDataSchema.parse(
-      parse(text, { header: true, skipEmptyLines: true })
+      parse(d, { header: true, skipEmptyLines: true })
     )
   } catch (error) {
     console.log(`Invalid data format: ${(error as z.ZodError).message}`)

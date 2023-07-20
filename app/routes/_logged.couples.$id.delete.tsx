@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material"
 import Box from "@mui/material/Box"
-import { Person } from "@prisma/client"
+import type { Person } from "@prisma/client"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
 import { Form, useLoaderData, useParams } from "@remix-run/react"
@@ -28,6 +28,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       attendanceNumber: true,
     },
   })
+  if (!couple) return redirect("/couples")
 
   return json({
     couple,

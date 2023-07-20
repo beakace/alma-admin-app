@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Container,
   createTheme,
@@ -8,11 +9,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   ThemeProvider,
   Typography,
 } from "@mui/material"
-import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
 import { type Group } from "@prisma/client"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { redirect, json } from "@remix-run/node"
@@ -24,7 +24,18 @@ import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
 
 export const loader = async ({ params }: LoaderArgs) => {
-  const id = params.id
+  const coupleId = params.id
+  const couple = await db.couple.findUnique({
+    where: {
+      id: coupleId,
+    },
+    include: {
+      husband: true,
+      wife: true,
+    },
+  })
+  if (!couple) return redirect("/couples")
+
   const invitedByCouples = await db.couple.findMany({
     select: {
       id: true,
@@ -43,41 +54,9 @@ export const loader = async ({ params }: LoaderArgs) => {
     },
   })
 
-  const almaEvents = await db.almaEvent.findMany({
-    select: {
-      id: true,
-      year: true,
-      month: true,
-      organizationUnitId: true,
-    },
-  })
+  const almaEvents = await db.almaEvent.findMany()
 
-  const organizationUnits = await db.organizationUnit.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  })
-
-  const couple = await db.couple.findUnique({
-    where: {
-      id: id,
-    },
-    select: {
-      id: true,
-      organizationUnitId: true,
-      husband: true,
-      wife: true,
-      city: true,
-      group: true,
-      postalCode: true,
-      weddingYear: true,
-      comments: true,
-      attendanceNumber: true,
-      almaEventId: true,
-      invitedById: true,
-    },
-  })
+  const organizationUnits = await db.organizationUnit.findMany()
 
   return json({
     invitedByCouples: invitedByCouples.map(
@@ -102,7 +81,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
   const formObject = Object.fromEntries(formData.entries())
-  console.log(formObject)
+
   const almaEventForId = await db.almaEvent.findUnique({
     where: {
       id: String(formObject.almaEvent),
