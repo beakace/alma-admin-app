@@ -1,4 +1,9 @@
+import { ThemeProvider } from "@emotion/react"
+import AddIcon from "@mui/icons-material/Add"
+import UploadIcon from "@mui/icons-material/Upload"
 import { Box, Button, createTheme, CssBaseline } from "@mui/material"
+import { Container } from "@mui/system"
+import { Group } from "@prisma/client"
 import type { ActionArgs } from "@remix-run/node"
 import {
   redirect,
@@ -7,16 +12,12 @@ import {
   unstable_parseMultipartFormData,
 } from "@remix-run/node"
 import { Form } from "@remix-run/react"
-import { parse } from "papaparse"
-import { db } from "~/db/db.server"
-import { Container } from "@mui/system"
-import { ThemeProvider } from "@emotion/react"
-import { useState } from "react"
-import UploadIcon from "@mui/icons-material/Upload"
-import AddIcon from "@mui/icons-material/Add"
-import { z } from "zod"
-import { Group } from "@prisma/client"
 import { decode } from "iconv-lite"
+import { detect } from "jschardet"
+import { parse } from "papaparse"
+import { useState } from "react"
+import { z } from "zod"
+import { db } from "~/db/db.server"
 const theme = createTheme()
 const groupSchema = zodEnumFromObjKeys(Group)
 
@@ -61,15 +62,12 @@ export const action = async ({ request }: ActionArgs) => {
   const filename = formData.get("upload")
   if (!filename) return null
   const blob = await (filename as Blob)
-
-  const arrayBuffer = await blob.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-  const d = decode(buffer, "win1250")
+  const decodedFile = await decodeFile(blob)
 
   let parsedData
   try {
     parsedData = parsedDataSchema.parse(
-      parse(d, { header: true, skipEmptyLines: true })
+      parse(decodedFile, { header: true, skipEmptyLines: true })
     )
   } catch (error) {
     console.log(`Invalid data format: ${(error as z.ZodError).message}`)
@@ -94,13 +92,15 @@ export const action = async ({ request }: ActionArgs) => {
           },
         })
       }
-      // TODO mam takie odczucie ze latwiej sie to wszystko czyta jak są przerwy pomiędzy blokami :)
+
       const clearedInviters = removeTextInParentheses(couple["zapraszający"])
       const invitedBy = await db.couple.findFirst({
         where: {
-          organizationUnitId: clearedInviters
-            ? Number(clearedInviters?.split(" ")[3])
-            : 0,
+          organizationUnitId:
+            clearedInviters &&
+            Number.isInteger(Number(clearedInviters?.split(" ")[3]))
+              ? Number(clearedInviters?.split(" ")[3])
+              : 0,
           husband: {
             firstName: clearedInviters ? clearedInviters?.split(" ")[1] : "-",
             lastName: clearedInviters ? clearedInviters?.split(" ")[0] : "-",
@@ -274,4 +274,15 @@ function removeTextInParentheses(input: string | null): string | null {
   const cleanedText = input.replace(regex, " ")
 
   return cleanedText.trim()
+}
+
+async function decodeFile(blob: Blob) {
+  const arrayBuffer = await blob.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+  const encoding = detect(buffer)
+
+  if (encoding.encoding === "windows-1252") {
+    return decode(buffer, "win1250")
+  }
+  return await blob.text()
 }
