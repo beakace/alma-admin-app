@@ -40,7 +40,7 @@ async function main() {
 
   await prisma.couple.create({
     data: {
-      coupleId: "2-1-2005.01-15",
+      coupleId: "2-1-2022.03-40",
       comments: "",
       almaEvent: { connect: { id: alma.id } },
       organizationUnit: { connect: { id: wroclaw.id } },

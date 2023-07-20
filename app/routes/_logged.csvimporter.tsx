@@ -7,45 +7,45 @@ import {
   unstable_parseMultipartFormData,
 } from "@remix-run/node"
 import { Form } from "@remix-run/react"
-import Papa from "papaparse"
+import { parse } from "papaparse"
 import { db } from "~/db/db.server"
 import { Container } from "@mui/system"
 import { ThemeProvider } from "@emotion/react"
 import { useState } from "react"
 import UploadIcon from "@mui/icons-material/Upload"
 import AddIcon from "@mui/icons-material/Add"
-import * as z from "zod"
-import type { Group } from "@prisma/client"
+import { z } from "zod"
+import { Group } from "@prisma/client"
 
 const theme = createTheme()
+const groupSchema = zodEnumFromObjKeys(Group)
 
 const parsedDataSchema = z.object({
   data: z.array(
     z.object({
-      "kiedy na Almie": z.string(),
-      "nr bazy": z.string().transform(Number),
-      "nr Almy": z.string(),
-      "zapraszający nr bazy": z.string().transform(Number),
-      zapraszający: z.string(),
-      "wołacz mąż": z.string(),
-      "mail mąż": z.string().optional(),
-      "imię mąż": z.string(),
       "nazwisko męża": z.string(),
-      "telefon mąż": z.string().optional(),
-      "rok ur mąż": z.string().transform(Number),
-      "kościół mąż": z.string().transform(Number),
-      "wołacz żona": z.string(),
-      "mail żona": z.string().optional(),
-      "imię żona": z.string(),
+      "imię męża": z.string(),
+      "wołacz mąż": z.string().nullable(), //wiele pustych
       "nazwisko żony": z.string(),
+      "imię żony": z.string(),
+      "wołacz żona": z.string().nullable(), //wiele pustych
+      "telefon mąż": z.string().optional(),
       "telefon żona": z.string().optional(),
-      "rok ur żona": z.string().transform(Number),
-      "kościół żona": z.string().transform(Number),
-      nr: z.string().transform(Number),
-      "Kod Pocztowy": z.string(),
-      Miejscowość: z.string(),
-      Grupa: z.string(),
-      "rok ślubu": z.string().optional().transform(Number),
+      "kod pocztowy": z.string(), //kilka pustych
+      "miejsce zamieszkania": z.string().nullable(), //2 puste rekodry
+      Grupa: groupSchema,
+      zapraszający: z.string().nullable(), //wiele pustych
+      "nr bazy": z.coerce.number(),
+      "nr Almy": z.string(),
+      "kiedy na Almie": z.string(),
+      nr: z.coerce.number(),
+      "data ur mąż": z.string(), //kilka "Invalid date"
+      "data ur żona": z.string(), //kilka "Invalid date"
+      "data ślubu": z.string(), //kilka "Invalid date"
+      "mail mąż": z.string().optional(), //wiele pustych
+      "mail żona": z.string().optional(), //wiele pustych
+      "kościół mąż": z.coerce.number().nullable(), //1 pusty rekord - Alma
+      "kościół żona": z.coerce.number().nullable(), //1 pusty rekord - Alma
       UWAGI: z.string().optional(),
     })
   ),
@@ -64,7 +64,9 @@ export const action = async ({ request }: ActionArgs) => {
 
   let parsedData
   try {
-    parsedData = parsedDataSchema.parse(Papa.parse(text, { header: true }))
+    parsedData = parsedDataSchema.parse(
+      parse(text, { header: true, skipEmptyLines: true })
+    )
   } catch (error) {
     console.log(`Invalid data format: ${(error as z.ZodError).message}`)
     return null
@@ -84,43 +86,47 @@ export const action = async ({ request }: ActionArgs) => {
           data: {
             year: Number(couple["kiedy na Almie"].split(".")[0]),
             month: Number(couple["kiedy na Almie"].split(".")[1]),
-            organizationUnitId: Number(couple["nr bazy"]),
+            organizationUnitId: couple["nr bazy"],
           },
         })
       }
       // TODO mam takie odczucie ze latwiej sie to wszystko czyta jak są przerwy pomiędzy blokami :)
+      const clearedInviters = removeTextInParentheses(couple["zapraszający"])
       const invitedBy = await db.couple.findFirst({
         where: {
-          organizationUnitId: Number(couple["zapraszający nr bazy"]),
+          organizationUnitId: clearedInviters
+            ? Number(clearedInviters?.split(" ")[3])
+            : 0,
           husband: {
-            firstName: couple["zapraszający"].split(" ")[1],
-            lastName: couple["zapraszający"].split(" ")[0],
+            firstName: clearedInviters ? clearedInviters?.split(" ")[1] : "-",
+            lastName: clearedInviters ? clearedInviters?.split(" ")[0] : "-",
           },
           wife: {
-            firstName: couple["zapraszający"].split(" ")[2],
+            firstName: clearedInviters ? clearedInviters.split(" ")[2] : "-",
           },
         },
       })
+
       const husband = await db.person.create({
         data: {
-          vocative: String(couple["wołacz mąż"]),
-          email: String(couple["mail mąż"]),
-          firstName: String(couple["imię mąż"]),
-          lastName: String(couple["nazwisko męża"]),
-          phoneNumber: String(couple["telefon mąż"]),
-          birthYear: Number(couple["rok ur mąż"]),
-          church: Number(couple["kościół mąż"]),
+          vocative: couple["wołacz mąż"] ?? "-",
+          email: couple["mail mąż"] ?? "-",
+          firstName: couple["imię męża"],
+          lastName: couple["nazwisko męża"],
+          phoneNumber: couple["telefon mąż"] ?? "-",
+          birthYear: extractFullYearFromString(couple["data ur mąż"]),
+          church: couple["kościół mąż"] ?? 0,
         },
       })
       const wife = await db.person.create({
         data: {
-          vocative: String(couple["wołacz żona"]),
-          email: String(couple["mail żona"]),
-          firstName: String(couple["imię żona"]),
-          lastName: String(couple["nazwisko żony"]),
-          phoneNumber: String(couple["telefon żona"]),
-          birthYear: Number(couple["rok ur żona"]),
-          church: Number(couple["kościół żona"]),
+          vocative: couple["wołacz żona"] ?? "-",
+          email: couple["mail żona"] ?? "-",
+          firstName: couple["imię żony"],
+          lastName: couple["nazwisko żony"],
+          phoneNumber: couple["telefon żona"] ?? "-",
+          birthYear: extractFullYearFromString(couple["data ur żona"]),
+          church: couple["kościół żona"] ?? 0,
         },
       })
 
@@ -129,7 +135,7 @@ export const action = async ({ request }: ActionArgs) => {
           husbandId: husband.id,
           wifeId: wife.id,
           coupleId:
-            String(couple["nr Almy"]) +
+            couple["nr Almy"] +
             "-" +
             almaEvent.organizationUnitId +
             "-" +
@@ -138,15 +144,20 @@ export const action = async ({ request }: ActionArgs) => {
             almaEvent.month +
             "-" +
             String(couple["nr"]),
-          postalCode: String(couple["Kod Pocztowy"]),
-          city: String(couple["Miejscowość"]),
-          group: couple["Grupa"] as Group,
+          postalCode: couple["kod pocztowy"],
+          city: couple["miejsce zamieszkania"] ?? "-",
+          group: couple["Grupa"],
           invitedById: invitedBy?.id,
-          attendanceNumber: Number(couple["nr"]),
-          weddingYear: Number(couple["rok ślubu"]),
+          attendanceNumber: couple["nr"],
+          weddingYear: extractFullYearFromString(couple["data ślubu"]),
           organizationUnitId: almaEvent.organizationUnitId,
           almaEventId: almaEvent.id,
-          comments: String(couple["UWAGI"]),
+          comments:
+            (!invitedBy
+              ? couple["zapraszający"]
+                ? "Zaproszeni przez: " + couple["zapraszający"] + "/"
+                : ""
+              : "") + couple["UWAGI"],
         },
       })
     }
@@ -233,4 +244,30 @@ export default function UploadRoute() {
       </ThemeProvider>
     </Form>
   )
+}
+
+function zodEnumFromObjKeys<K extends string>(
+  obj: Record<K, any>
+): z.ZodEnum<[K, ...K[]]> {
+  const [firstKey, ...otherKeys] = Object.keys(obj) as K[]
+  return z.enum([firstKey, ...otherKeys])
+}
+
+function extractFullYearFromString(dateStr: string): number {
+  const dateObj = new Date(dateStr)
+
+  if (!isNaN(dateObj.getTime())) {
+    return dateObj.getFullYear()
+  }
+
+  return 0
+}
+
+function removeTextInParentheses(input: string | null): string | null {
+  if (!input) return null
+  const regex = /\([^)]+\)|\s{2,}/g
+
+  const cleanedText = input.replace(regex, " ")
+
+  return cleanedText.trim()
 }
