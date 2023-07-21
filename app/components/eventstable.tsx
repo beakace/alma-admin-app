@@ -3,7 +3,7 @@ import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { Box, Typography } from "@mui/material"
 import { useState } from "react"
-import { AlmaEvent, OrganizationUnit } from "@prisma/client"
+import type { AlmaEvent, OrganizationUnit } from "@prisma/client"
 
 const columns: GridColDef<
   AlmaEvent & {
