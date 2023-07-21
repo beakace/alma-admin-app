@@ -1,8 +1,8 @@
+import UploadIcon from "@mui/icons-material/Upload"
 import { Button } from "@mui/material"
 import { CSVLink } from "react-csv"
 import { ClientOnly } from "remix-utils"
-import DummyComponent from "./dummycomponent"
-import UploadIcon from "@mui/icons-material/Upload"
+import FallbackComponent from "./fallbackcomponent"
 
 export default function CSVExporter({ filteredCouples }: any) {
   const flattened = filteredCouples.map((c: any) => {
@@ -64,7 +64,7 @@ export default function CSVExporter({ filteredCouples }: any) {
   ]
 
   return (
-    <ClientOnly fallback={<DummyComponent />}>
+    <ClientOnly fallback={<FallbackComponent />}>
       {() => (
         <Button
           variant="contained"

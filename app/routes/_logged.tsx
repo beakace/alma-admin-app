@@ -1,4 +1,5 @@
-import { LoaderArgs, json } from "@remix-run/node"
+import type { LoaderArgs} from "@remix-run/node";
+import { json } from "@remix-run/node"
 import { Outlet, useLoaderData, useNavigation } from "@remix-run/react"
 import { LoadingScreen } from "~/components/loadingscreen"
 import Navbar from "~/components/navbar"

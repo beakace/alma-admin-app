@@ -16,7 +16,6 @@ const columns: GridColDef[] = [
       </Box>
     ),
   },
-
   { field: "year", headerName: "Rok", minWidth: 130, flex: 1 },
   {
     field: "organizationUnitId",

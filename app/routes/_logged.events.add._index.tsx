@@ -1,3 +1,4 @@
+import EventIcon from "@mui/icons-material/Event"
 import {
   Button,
   Container,
@@ -9,16 +10,21 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material"
-import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { randomId } from "@mui/x-data-grid-generator"
-import { redirect, type ActionArgs } from "@remix-run/node"
-import { Form } from "@remix-run/react"
+import { json, redirect, type ActionArgs } from "@remix-run/node"
+import { Form, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
 
 const theme = createTheme()
+
+export const loader = async () => {
+  const organizationUnits = await db.organizationUnit.findMany()
+
+  return json({ organizationUnits })
+}
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
@@ -41,6 +47,7 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function Create() {
+  const { organizationUnits } = useLoaderData<typeof loader>()
   const [month, setMonth] = useState("")
   const handleChange = (event: any) => {
     setMonth(event.target.value)
@@ -121,12 +128,11 @@ export default function Create() {
                 labelId="organizationUnit-label"
                 id="organizationUnit"
               >
-                {/* TODO to powinno być ładowane z bazy danych. Wprawdzie prawie na pewno będzie to długo niezmienne ale mimo wszystko. 
-                P.S. Warszawa to 1 Wrocław to 2 ;) 
-                  */}
-                <MenuItem value={1}>Warszawa</MenuItem>
-                <MenuItem value={2}>Wrocław</MenuItem>
-                <MenuItem value={3}>Olsztyn</MenuItem>
+                {organizationUnits.map((orgUnit) => (
+                  <MenuItem key={orgUnit.id} value={orgUnit.id}>
+                    {orgUnit.name}
+                  </MenuItem>
+                ))}
               </Select>
               <Button size="large" variant="contained" type="submit" fullWidth>
                 DODAJ WYDARZENIE

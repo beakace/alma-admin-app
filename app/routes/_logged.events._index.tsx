@@ -3,10 +3,9 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import { Link, useLoaderData } from "@remix-run/react"
 import EventsTable from "~/components/eventstable"
-import type { AlmaEvents } from "~/db/almaEvents-db.server"
 import { db } from "~/db/db.server"
 
-export const loader = async (): Promise<LoaderData> => {
+export const loader = async () => {
   return {
     almaEvents: await db.almaEvent.findMany({
       include: {
@@ -16,12 +15,8 @@ export const loader = async (): Promise<LoaderData> => {
   }
 }
 
-type LoaderData = {
-  almaEvents: AlmaEvents[]
-}
-
 export default function Events() {
-  const almaEvents = useLoaderData().almaEvents
+  const { almaEvents } = useLoaderData<typeof loader>()
 
   return (
     <Box

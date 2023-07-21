@@ -14,7 +14,7 @@ import {
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { type Group } from "@prisma/client"
-import { redirect, type ActionArgs } from "@remix-run/node"
+import { redirect, type ActionArgs, json } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
@@ -22,7 +22,7 @@ import ManIcon from "@mui/icons-material/Man"
 import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
 
-export const loader = async (): Promise<any> => {
+export const loader = async () => {
   const invitedByCouples = await db.couple.findMany({
     select: {
       id: true,
@@ -50,14 +50,7 @@ export const loader = async (): Promise<any> => {
     },
   })
 
-  const organizationUnits = await db.organizationUnit.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-  })
-
-  return {
+  return json({
     invitedByCouples: invitedByCouples.map(
       ({ id, husband, wife, organizationUnitId }) => {
         return {
@@ -72,13 +65,7 @@ export const loader = async (): Promise<any> => {
         label: `${organizationUnitId}-${year}-${month}`,
       }
     }),
-    organizationUnits: organizationUnits.map(({ id }) => {
-      return {
-        id: id,
-        label: `${id}`,
-      }
-    }),
-  }
+  })
 }
 
 export const action = async ({ request }: ActionArgs) => {
@@ -153,21 +140,18 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function AddCouple() {
+  const { almaEvents, invitedByCouples } = useLoaderData<typeof loader>()
   const theme = createTheme()
   const [group, setGroup] = useState("")
   const handleChange = (event: any) => {
     setGroup(event.target.value)
   }
-  const almaEvents = useLoaderData().almaEvents
-
-  const invitedByCouples = useLoaderData().invitedByCouples
 
   return (
     <Form method="post">
       <ThemeProvider theme={theme}>
         <Container component="main">
           <CssBaseline />
-
           <GlobalStyles styles={{ h4: { color: "black" } }} />
           <Typography
             sx={{ margin: "1rem" }}
@@ -179,7 +163,6 @@ export default function AddCouple() {
             DODAWANIE PARY
           </Typography>
           <Box
-            //box around whole form
             sx={{
               display: "flex",
               flexDirection: "column",

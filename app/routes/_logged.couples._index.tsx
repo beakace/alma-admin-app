@@ -18,7 +18,7 @@ import DataTable from "~/components/datatable"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
 
-export const loader = async (): Promise<LoaderData> => {
+export const loader = async () => {
   return {
     couples: await db.couple.findMany({
       include: {
@@ -32,11 +32,8 @@ export const loader = async (): Promise<LoaderData> => {
   }
 }
 
-type LoaderData = {
-  couples: CoupleWithSpouses[]
-}
-
 export default function Couples() {
+  const { couples } = useLoaderData<typeof loader>()
   const [search, setSearch] = useState<string>("")
   const [checkboxFilters, setCheckboxFilters] = useState({
     isCheckedA: true,
@@ -53,7 +50,6 @@ export default function Couples() {
       [e.target.id]: e.target.checked,
     }))
   }
-  const couples = useLoaderData().couples
 
   const handleClearClick = () => {
     setCheckboxFilters({
@@ -113,7 +109,7 @@ export default function Couples() {
     })
 
   return (
-    <Box margin={"3rem"}>
+    <Box margin="3rem">
       <Box
         component="form"
         noValidate
