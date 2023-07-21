@@ -3,8 +3,13 @@ import { DataGrid, plPL } from "@mui/x-data-grid"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { Box, Typography } from "@mui/material"
 import { useState } from "react"
+import { AlmaEvent, OrganizationUnit } from "@prisma/client"
 
-const columns: GridColDef[] = [
+const columns: GridColDef<
+  AlmaEvent & {
+    organizationUnit: OrganizationUnit
+  }
+>[] = [
   {
     field: "month",
     headerName: "Miesiąc",
@@ -34,7 +39,13 @@ const theme = createTheme(
   plPL
 )
 
-export default function EventsTable({ almaEvents }: any) {
+type EventsTableProps = {
+  almaEvents: (AlmaEvent & {
+    organizationUnit: OrganizationUnit
+  })[]
+}
+
+export default function EventsTable({ almaEvents }: EventsTableProps) {
   const [pageSize, setPageSize] = useState<number>(25)
 
   return (

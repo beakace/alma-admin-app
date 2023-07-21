@@ -11,14 +11,17 @@ import {
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
+import type { LoaderArgs } from "@remix-run/node"
 import { Link, NavLink, useLoaderData } from "@remix-run/react"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import CSVExporter from "~/components/csvexporter"
 import DataTable from "~/components/datatable"
 import type { CoupleWithSpouses } from "~/db/couples-db.server"
 import { db } from "~/db/db.server"
+import { requireUser } from "~/db/session.server"
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderArgs) => {
+  const { organizationUnitId } = await requireUser(request)
   return {
     couples: await db.couple.findMany({
       include: {
@@ -29,11 +32,12 @@ export const loader = async () => {
         almaEvent: true,
       },
     }),
+    userOrganizationUnitId: organizationUnitId,
   }
 }
 
 export default function Couples() {
-  const { couples } = useLoaderData<typeof loader>()
+  const { couples, userOrganizationUnitId } = useLoaderData<typeof loader>()
   const [search, setSearch] = useState<string>("")
   const [checkboxFilters, setCheckboxFilters] = useState({
     isCheckedA: true,
@@ -44,7 +48,7 @@ export default function Couples() {
     isCheckedNoMail: false,
   })
 
-  const handleCheckboxFilterChange = (e: any) => {
+  const handleCheckboxFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCheckboxFilters((checkboxFilters) => ({
       ...checkboxFilters,
       [e.target.id]: e.target.checked,
@@ -303,7 +307,10 @@ export default function Couples() {
             </FormControl>
           </Box>
         </Box>
-        <DataTable couples={filteredCouples} />
+        <DataTable
+          couples={filteredCouples}
+          userOrganizationUnitId={userOrganizationUnitId}
+        />
       </Box>
     </Box>
   )

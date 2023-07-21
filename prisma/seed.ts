@@ -5,10 +5,6 @@ import { hash } from "../app/db/hash.server"
 const prisma = new PrismaClient()
 
 async function main() {
-  await prisma.user.create({
-    data: { username: "Admin", passwordHash: await hash("Admin12!", 10) },
-  })
-
   await prisma.organizationUnit.create({
     data: {
       id: 1,
@@ -27,6 +23,14 @@ async function main() {
     data: {
       id: 3,
       name: "Olsztyn",
+    },
+  })
+
+  await prisma.user.create({
+    data: {
+      username: "Admin",
+      passwordHash: await hash("Admin12!", 10),
+      organizationUnitId: 1,
     },
   })
 

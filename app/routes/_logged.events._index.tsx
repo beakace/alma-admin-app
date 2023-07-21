@@ -1,18 +1,19 @@
 import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
+import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import EventsTable from "~/components/eventstable"
 import { db } from "~/db/db.server"
 
 export const loader = async () => {
-  return {
+  return json({
     almaEvents: await db.almaEvent.findMany({
       include: {
         organizationUnit: true,
       },
     }),
-  }
+  })
 }
 
 export default function Events() {

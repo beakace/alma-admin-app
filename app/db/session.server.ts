@@ -7,6 +7,7 @@ const sessionSecret = process.env.SESSION_SECRET ?? "SECRET_123!secret"
 export type SessionUser = {
   id: string
   username: string
+  organizationUnitId: number
 }
 
 const { getSession, commitSession, destroySession } =
@@ -47,6 +48,7 @@ export async function login(
     {
       id: user.id,
       username: user.username,
+      organizationUnitId: user.organizationUnitId,
     },
     redirectTo
   )

@@ -1,4 +1,5 @@
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount"
+import { Stack } from "@mui/material"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -30,7 +31,7 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
             <Link to="/">Alma Admin</Link>
           </Typography>
           {isAuthenticated ? (
-            <>
+            <Stack spacing={1} direction="row">
               <Button component={NavLink} to="/couples" color="inherit">
                 Małżeństwa
               </Button>
@@ -40,14 +41,15 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
               <form method="POST" action="/?index">
                 <Button
                   type="submit"
-                  color="inherit"
+                  color="error"
                   name="sign-out"
                   value="sign-out"
+                  variant="contained"
                 >
                   Wyloguj się
                 </Button>
               </form>
-            </>
+            </Stack>
           ) : null}
         </Toolbar>
       </AppBar>

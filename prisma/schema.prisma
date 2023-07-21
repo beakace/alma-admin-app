@@ -33,10 +33,11 @@ model Couple {
 }
 
 model OrganizationUnit {
-  id        Int         @id()
-  name      String
-  Couple    Couple[]
-  AlmaEvent AlmaEvent[]
+  id         Int         @id()
+  name       String
+  couples    Couple[]
+  almaEvents AlmaEvent[]
+  users      User[]
 }
 
 model AlmaEvent {
@@ -45,7 +46,7 @@ model AlmaEvent {
   month              Int
   organizationUnitId Int
   organizationUnit   OrganizationUnit @relation(fields: [organizationUnitId], references: [id])
-  Couple             Couple[]
+  couples            Couple[]
 }
 
 enum Group {
@@ -71,9 +72,11 @@ model Person {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  username     String   @unique
-  passwordHash String
+  id                 String           @id @default(uuid())
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  username           String           @unique
+  passwordHash       String
+  organizationUnitId Int
+  organizationUnit   OrganizationUnit @relation(fields: [organizationUnitId], references: [id])
 }

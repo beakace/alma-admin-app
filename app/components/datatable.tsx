@@ -3,18 +3,45 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/material"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import type { GridCellParams, GridColDef } from "@mui/x-data-grid"
 import { DataGrid, plPL } from "@mui/x-data-grid"
+import type {
+  AlmaEvent,
+  Couple,
+  OrganizationUnit,
+  Person,
+} from "@prisma/client"
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
 import { useState } from "react"
 
-export default function DataTable({ couples }: any) {
+type FilteredCouple = Couple & {
+  organizationUnit: OrganizationUnit
+  husband: Person
+  wife: Person
+  invitedBy:
+    | (Couple & {
+        husband: Person
+        wife: Person
+      })
+    | null
+  almaEvent: AlmaEvent
+}
+
+type DataTableProps = {
+  couples: FilteredCouple[]
+  userOrganizationUnitId: number
+}
+
+export default function DataTable({
+  couples,
+  userOrganizationUnitId,
+}: DataTableProps) {
   const [pageSize, setPageSize] = useState<number>(25)
   const [selectionModel, setSelectionModel] = useState<string[]>([])
 
   const handleSelectionModelChange = (newSelectionModel: any) => {
     setSelectionModel(newSelectionModel)
   }
-  const columns: GridColDef[] = [
+  const columns: GridColDef<FilteredCouple>[] = [
     {
       field: "para",
       headerName: "Małżeństwo",
@@ -126,7 +153,6 @@ export default function DataTable({ couples }: any) {
           </Box>
         )
       },
-
       renderHeader: () => (
         <Box>
           <Typography sx={{ fontSize: "15px" }}>Zaproszeni</Typography>
@@ -158,28 +184,30 @@ export default function DataTable({ couples }: any) {
       flex: 1,
       renderCell: (params) => (
         <Box>
-          {selectionModel && selectionModel.includes(params.row.id) && (
-            <>
-              <Tooltip title="Edytuj">
-                <IconButton
-                  onClick={handleSelectionModelChange}
-                  component={Link}
-                  to={`/couples/${params.id}/edit`}
-                >
-                  <Edit />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Usuń">
-                <IconButton
-                  onClick={handleSelectionModelChange}
-                  component={Link}
-                  to={`/couples/${params.id}/delete`}
-                >
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            </>
-          )}
+          {selectionModel &&
+            selectionModel.includes(params.row.id) &&
+            userOrganizationUnitId === params.row.organizationUnitId && (
+              <>
+                <Tooltip title="Edytuj">
+                  <IconButton
+                    onClick={handleSelectionModelChange}
+                    component={Link}
+                    to={`/couples/${params.id}/edit`}
+                  >
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Usuń">
+                  <IconButton
+                    onClick={handleSelectionModelChange}
+                    component={Link}
+                    to={`/couples/${params.id}/delete`}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
         </Box>
       ),
     },

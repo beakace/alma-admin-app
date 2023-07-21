@@ -1,3 +1,4 @@
+import type { SelectChangeEvent } from "@mui/material"
 import {
   Box,
   Button,
@@ -160,11 +161,9 @@ export default function EditCouple() {
     useLoaderData<typeof loader>()
   const { id } = useParams()
 
-  const [group, setGroup] = useState<
-    "A" | "B" | "C" | "D" | "S" | "X" | undefined
-  >(couple?.group)
-  const handleChange = (event: any) => {
-    setGroup(event.target.value)
+  const [group, setGroup] = useState<Group>(couple?.group)
+  const handleChange = (event: SelectChangeEvent<Group>) => {
+    setGroup(event.target.value as Group)
   }
 
   return (
@@ -183,7 +182,6 @@ export default function EditCouple() {
             EDYCJA PARY
           </Typography>
           <Box
-            //box around whole form
             sx={{
               display: "flex",
               flexDirection: "column",
