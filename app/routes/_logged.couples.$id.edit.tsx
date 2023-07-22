@@ -23,8 +23,10 @@ import { db } from "~/db/db.server"
 import ManIcon from "@mui/icons-material/Man"
 import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
+import { requireUser } from "~/db/session.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const user = await requireUser(request)
   const coupleId = params.id
   const couple = await db.couple.findUnique({
     where: {
@@ -35,7 +37,9 @@ export const loader = async ({ params }: LoaderArgs) => {
       wife: true,
     },
   })
-  if (!couple) return redirect("/couples")
+  if (!couple || user.organizationUnitId !== couple.organizationUnitId) {
+    return redirect("/couples")
+  }
 
   const invitedByCouples = await db.couple.findMany({
     select: {

@@ -13,8 +13,10 @@ import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
 import { Form, useLoaderData, useParams } from "@remix-run/react"
 import { db } from "~/db/db.server"
+import { requireUser } from "~/db/session.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const user = await requireUser(request)
   const coupleId = params.id
 
   const couple = await db.couple.findUnique({
@@ -28,7 +30,9 @@ export const loader = async ({ params }: LoaderArgs) => {
       attendanceNumber: true,
     },
   })
-  if (!couple) return redirect("/couples")
+  if (!couple || user.organizationUnitId !== couple.organizationUnitId) {
+    return redirect("/couples")
+  }
 
   return json({
     couple,

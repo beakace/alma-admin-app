@@ -50,6 +50,8 @@ export const loader = async () => {
     },
   })
 
+  const organizationUnits = await db.organizationUnit.findMany()
+
   return json({
     invitedByCouples: invitedByCouples.map(
       ({ id, husband, wife, organizationUnitId }) => {
@@ -65,6 +67,7 @@ export const loader = async () => {
         label: `${organizationUnitId}-${year}-${month}`,
       }
     }),
+    organizationUnits,
   })
 }
 
@@ -140,7 +143,8 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function AddCouple() {
-  const { almaEvents, invitedByCouples } = useLoaderData<typeof loader>()
+  const { almaEvents, invitedByCouples, organizationUnits } =
+    useLoaderData<typeof loader>()
   const theme = createTheme()
   const [group, setGroup] = useState("")
   const handleChange = (event: any) => {
@@ -423,9 +427,11 @@ export default function AddCouple() {
                     id="organizationUnit"
                     label="Oddział"
                   >
-                    <MenuItem value={1}>Wrocław</MenuItem>
-                    <MenuItem value={2}>Warszawa</MenuItem>
-                    <MenuItem value={3}>Olsztyn</MenuItem>
+                    {organizationUnits.map((orgUnit) => (
+                      <MenuItem key={orgUnit.id} value={orgUnit.id}>
+                        {orgUnit.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
