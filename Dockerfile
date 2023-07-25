@@ -41,6 +41,10 @@ RUN --mount=type=secret,id=DATABASE_URL \
     DATABASE_URL="$(cat /run/secrets/DATABASE_URL)" \
         npx prisma migrate deploy
 
+RUN --mount=type=secret,id=DATABASE_URL \
+    DATABASE_URL="$(cat /run/secrets/DATABASE_URL)" \
+        npm run init:script
+
 # Build application
 RUN yarn run build
 
