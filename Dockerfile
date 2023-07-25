@@ -30,10 +30,18 @@ RUN npx prisma generate
 # Copy application code
 COPY --link . .
 
-# Build application
+# Make the entrypoint script executable
+RUN chmod +x ./docker-entrypoint.sh
+
+# Set the entrypoint for the container
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+# Run prisma commands
 RUN --mount=type=secret,id=DATABASE_URL \
     DATABASE_URL="$(cat /run/secrets/DATABASE_URL)" \
         npx prisma migrate deploy
+
+# Build application
 RUN yarn run build
 
 # Remove development dependencies
