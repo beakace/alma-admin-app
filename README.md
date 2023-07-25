@@ -21,11 +21,12 @@ To start the app
 yarn
 yarn dev
 ```
+
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
 
-## Fly Setup
+# Fly Setup
 
 1. [Install `flyctl`](https://fly.io/docs/getting-started/installing-flyctl/)
 
@@ -41,22 +42,24 @@ flyctl auth signup
 flyctl launch
 ```
 
-## Development
-
-From your terminal:
+## PostgreSQL database creation
 
 ```sh
-npm run dev
+fly postgres create
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+## Database secret setup
+
+```sh
+fly secrets set DATABASE_URL=postgres://{username}:{password}@{hostname}:{port}/{database}?sslmode=disable
+```
 
 ## Deployment
 
 If you've followed the setup instructions already, all you need to do is run this:
 
 ```sh
-npm run deploy
+fly deploy     --build-secret DATABASE_URL=postgres://{username}:{password}@{hostname}:{port}/{database}?sslmode=disable
 ```
 
 You can run `flyctl info` to get the url and ip address of your server.
