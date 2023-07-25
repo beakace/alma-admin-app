@@ -56,6 +56,8 @@ fly secrets set DATABASE_URL=postgres://{username}:{password}@{hostname}:{port}/
 
 ## Deployment
 
+Before deploying app you should edit `docker-entrypoint.sh` file to include additional commands run during deployment phase.
+
 If you've followed the setup instructions already, all you need to do is run this:
 
 ```sh
