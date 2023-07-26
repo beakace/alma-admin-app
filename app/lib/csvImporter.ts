@@ -19,15 +19,6 @@ export function extractFullYearFromString(dateStr: string): number {
   return 0
 }
 
-export function removeTextInParentheses(input: string | null): string | null {
-  if (!input) return null
-  const regex = /\([^)]+\)|\s{2,}/g
-
-  const cleanedText = input.replace(regex, " ")
-
-  return cleanedText.trim()
-}
-
 export async function decodeFile(blob: Blob) {
   const arrayBuffer = await blob.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)

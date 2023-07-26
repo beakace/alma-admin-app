@@ -13,7 +13,7 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import type { LoaderArgs } from "@remix-run/node"
 import { Link, NavLink, useLoaderData } from "@remix-run/react"
-import type { ChangeEvent} from "react";
+import type { ChangeEvent } from "react"
 import { useState } from "react"
 import CSVExporter from "~/components/csvexporter"
 import DataTable from "~/components/datatable"
@@ -28,7 +28,6 @@ export const loader = async ({ request }: LoaderArgs) => {
       include: {
         husband: true,
         wife: true,
-        invitedBy: { include: { husband: true, wife: true } },
         organizationUnit: true,
         almaEvent: true,
       },

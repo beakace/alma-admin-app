@@ -3,37 +3,43 @@ import { Button } from "@mui/material"
 import { CSVLink } from "react-csv"
 import { ClientOnly } from "remix-utils"
 import FallbackComponent from "./fallbackcomponent"
+import type {
+  AlmaEvent,
+  Couple,
+  OrganizationUnit,
+  Person,
+} from "@prisma/client"
 
-export default function CSVExporter({ filteredCouples }: any) {
-  const flattened = filteredCouples.map((c: any) => {
-    const flattenedItem = {
-      id: c.id,
-      coupleId: c.coupleId,
-      husbandId: c.husbandId,
-      wifeId: c.wifeId,
-      group: c.group,
-      city: c.city,
-      postalCode: c.postalCode,
-      weddingYear: c.weddingYear,
-      attendanceNumber: c.attendanceNumber,
-      invitedById: c.invitedById,
-      organizationUnitId: c.organizationUnitId,
-      almaEventId: c.almaEvent.organizationUnitId,
-      comments: c.comments,
-      husband: c.husband,
-      wife: c.wife,
-      organizationUnit: c.organizationUnit,
-      almaEvent: c.almaEvent,
-      almaEventWhen: `${c.almaEvent.year}.${c.almaEvent.month}`,
-      invitedByFullName: c.invitedBy
-        ? `${c.invitedBy.husband.lastName} ${c.invitedBy.husband.firstName} ${c.invitedBy.wife.firstName}`
-        : "",
-      invitedByOrganizationUnitId: c.invitedBy
-        ? c.invitedBy.organizationUnitId
-        : "",
-    }
-    return flattenedItem
-  })
+type CSVExporterProps = {
+  filteredCouples: (Couple & {
+    husband: Person
+    wife: Person
+    organizationUnit: OrganizationUnit
+    almaEvent: AlmaEvent
+  })[]
+}
+
+export default function CSVExporter({ filteredCouples }: CSVExporterProps) {
+  const flattened = filteredCouples.map((c) => ({
+    id: c.id,
+    coupleId: c.coupleId,
+    husbandId: c.husbandId,
+    wifeId: c.wifeId,
+    group: c.group,
+    city: c.city,
+    postalCode: c.postalCode,
+    weddingYear: c.weddingYear,
+    attendanceNumber: c.attendanceNumber,
+    invitedBy: c.invitedBy,
+    organizationUnitId: c.organizationUnitId,
+    almaEventId: c.almaEvent.organizationUnitId,
+    comments: c.comments,
+    husband: c.husband,
+    wife: c.wife,
+    organizationUnit: c.organizationUnit,
+    almaEvent: c.almaEvent,
+    almaEventWhen: `${c.almaEvent.year}.${c.almaEvent.month}`,
+  }))
 
   const headers = [
     { label: "nazwisko męża", key: "husband.lastName" },
@@ -47,8 +53,7 @@ export default function CSVExporter({ filteredCouples }: any) {
     { label: "Kod Pocztowy", key: "postalCode" },
     { label: "Miejscowość", key: "city" },
     { label: "Grupa", key: "group" },
-    { label: "zapraszający", key: "invitedByFullName" },
-    { label: "zapraszający nr bazy", key: "invitedByOrganizationUnitId" },
+    { label: "zapraszający", key: "invitedBy" },
     { label: "nr bazy", key: "organizationUnitId" },
     { label: "nr Almy", key: "almaEventId" },
     { label: "kiedy na Almie", key: "almaEventWhen" },
@@ -83,7 +88,7 @@ export default function CSVExporter({ filteredCouples }: any) {
           <CSVLink
             data={flattened}
             headers={headers}
-            filename={"alma-filteredcouples.csv"}
+            filename="alma-filteredcouples.csv"
             target="_blank"
           >
             Eksport

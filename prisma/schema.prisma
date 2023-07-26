@@ -22,14 +22,12 @@ model Couple {
   postalCode         String
   weddingYear        Int
   attendanceNumber   Int
-  invitedBy          Couple?          @relation("invitedBy", fields: [invitedById], references: [id])
-  invitedById        String?
-  invitedCouples     Couple[]         @relation("invitedBy")
+  invitedBy          String?
   organizationUnitId Int
   organizationUnit   OrganizationUnit @relation(fields: [organizationUnitId], references: [id])
   almaEventId        String
   almaEvent          AlmaEvent        @relation(fields: [almaEventId], references: [id])
-  comments           String
+  comments           String?
 }
 
 model OrganizationUnit {

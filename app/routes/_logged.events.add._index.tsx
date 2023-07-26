@@ -1,3 +1,4 @@
+import type { SelectChangeEvent } from "@material-ui/core"
 import EventIcon from "@mui/icons-material/Event"
 import {
   Button,
@@ -49,7 +50,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function Create() {
   const { organizationUnits } = useLoaderData<typeof loader>()
   const [month, setMonth] = useState("")
-  const handleChange = (event: any) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     setMonth(event.target.value)
   }
 

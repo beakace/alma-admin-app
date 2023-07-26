@@ -17,12 +17,6 @@ type FilteredCouple = Couple & {
   organizationUnit: OrganizationUnit
   husband: Person
   wife: Person
-  invitedBy:
-    | (Couple & {
-        husband: Person
-        wife: Person
-      })
-    | null
   almaEvent: AlmaEvent
 }
 
@@ -144,11 +138,7 @@ export default function DataTable({
         return (
           <Box>
             <Typography sx={{ fontSize: "15px" }}>
-              {params.row.invitedBy.husband.lastName}{" "}
-              {params.row.invitedBy.husband.firstName}{" "}
-              {params.row.invitedBy.wife.firstName}
-              {", "}
-              {params.row.invitedBy.organizationUnitId}
+              {params.row.invitedBy}
             </Typography>
           </Box>
         )

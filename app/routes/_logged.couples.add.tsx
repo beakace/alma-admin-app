@@ -23,24 +23,6 @@ import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
 
 export const loader = async () => {
-  const invitedByCouples = await db.couple.findMany({
-    select: {
-      id: true,
-      organizationUnitId: true,
-      husband: {
-        select: {
-          firstName: true,
-          lastName: true,
-        },
-      },
-      wife: {
-        select: {
-          firstName: true,
-        },
-      },
-    },
-  })
-
   const almaEvents = await db.almaEvent.findMany({
     select: {
       id: true,
@@ -53,14 +35,6 @@ export const loader = async () => {
   const organizationUnits = await db.organizationUnit.findMany()
 
   return json({
-    invitedByCouples: invitedByCouples.map(
-      ({ id, husband, wife, organizationUnitId }) => {
-        return {
-          id: id,
-          label: `${husband.lastName} ${husband.firstName} ${wife.firstName}, ${organizationUnitId}`,
-        }
-      }
-    ),
     almaEvents: almaEvents.map(({ id, year, month, organizationUnitId }) => {
       return {
         id: id,
@@ -109,11 +83,7 @@ export const action = async ({ request }: ActionArgs) => {
       group: formObject.group as Group,
       postalCode: String(formObject.postalCode),
       weddingYear: Number(formObject.weddingYear),
-      invitedBy: {
-        connect: {
-          id: String(formObject.invitedBy),
-        },
-      },
+      invitedBy: String(formObject.invitedBy),
       wife: {
         create: {
           vocative: String(formObject.wifeVocative),
@@ -143,8 +113,7 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function AddCouple() {
-  const { almaEvents, invitedByCouples, organizationUnits } =
-    useLoaderData<typeof loader>()
+  const { almaEvents, organizationUnits } = useLoaderData<typeof loader>()
   const theme = createTheme()
   const [group, setGroup] = useState("")
   const handleChange = (event: any) => {
@@ -457,21 +426,11 @@ export default function AddCouple() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
-                  <InputLabel id="invitedBy-select-label">
-                    Zaproszeni przez
-                  </InputLabel>
-                  <Select
+                  <TextField
                     name="invitedBy"
-                    labelId="invitedBy-select-label"
                     id="invitedBy-select"
                     label="Zaproszeni przez"
-                  >
-                    {invitedByCouples.map(({ id, label }: any) => (
-                      <MenuItem key={id} id={id} value={id}>
-                        {label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  />
                 </FormControl>
                 <TextField
                   name="comments"

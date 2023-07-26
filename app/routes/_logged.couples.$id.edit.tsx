@@ -41,37 +41,11 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     return redirect("/couples")
   }
 
-  const invitedByCouples = await db.couple.findMany({
-    select: {
-      id: true,
-      organizationUnitId: true,
-      husband: {
-        select: {
-          firstName: true,
-          lastName: true,
-        },
-      },
-      wife: {
-        select: {
-          firstName: true,
-        },
-      },
-    },
-  })
-
   const almaEvents = await db.almaEvent.findMany()
 
   const organizationUnits = await db.organizationUnit.findMany()
 
   return json({
-    invitedByCouples: invitedByCouples.map(
-      ({ id, husband, wife, organizationUnitId }) => {
-        return {
-          id: id,
-          label: `${husband.lastName} ${husband.firstName} ${wife.firstName}, ${organizationUnitId}`,
-        }
-      }
-    ),
     almaEvents: almaEvents.map(({ id, year, month, organizationUnitId }) => {
       return {
         id: id,
@@ -124,13 +98,7 @@ export const action = async ({ request }: ActionArgs) => {
       group: formObject.group as Group,
       postalCode: String(formObject.postalCode),
       weddingYear: Number(formObject.weddingYear),
-      invitedBy: formObject.invitedBy
-        ? {
-            connect: {
-              id: String(formObject.invitedBy),
-            },
-          }
-        : undefined,
+      invitedBy: String(formObject.invitedBy),
       wife: {
         update: {
           vocative: String(formObject.wifeVocative),
@@ -161,7 +129,7 @@ export const action = async ({ request }: ActionArgs) => {
 
 export default function EditCouple() {
   const theme = createTheme()
-  const { almaEvents, couple, invitedByCouples, organizationUnits } =
+  const { almaEvents, couple, organizationUnits } =
     useLoaderData<typeof loader>()
   const { id } = useParams()
 
@@ -275,7 +243,7 @@ export default function EditCouple() {
                     InputProps={{
                       inputProps: {
                         max: 2010,
-                        min: 1920,
+                        min: 0,
                       },
                     }}
                     name="wifeBirthYear"
@@ -364,7 +332,7 @@ export default function EditCouple() {
                     InputProps={{
                       inputProps: {
                         max: 2010,
-                        min: 1920,
+                        min: 0,
                       },
                     }}
                     name="husbandBirthYear"
@@ -420,7 +388,7 @@ export default function EditCouple() {
                   InputProps={{
                     inputProps: {
                       max: 2100,
-                      min: 1920,
+                      min: 0,
                     },
                   }}
                   name="weddingYear"
@@ -490,7 +458,7 @@ export default function EditCouple() {
                     label="Event"
                     defaultValue={couple?.almaEventId}
                   >
-                    {almaEvents.map(({ id, label }: any) => (
+                    {almaEvents.map(({ id, label }) => (
                       <MenuItem key={id} id={id} value={id}>
                         {label}
                       </MenuItem>
@@ -498,22 +466,12 @@ export default function EditCouple() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
-                  <InputLabel id="invitedBy-select-label">
-                    Zaproszeni przez
-                  </InputLabel>
-                  <Select
+                  <TextField
                     name="invitedBy"
-                    labelId="invitedBy-select-label"
                     id="invitedBy-select"
                     label="Zaproszeni przez"
-                    defaultValue={couple?.invitedById ?? undefined}
-                  >
-                    {invitedByCouples.map(({ id, label }: any) => (
-                      <MenuItem key={id} id={id} value={id}>
-                        {label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    defaultValue={couple?.invitedBy ?? undefined}
+                  />
                 </FormControl>
                 <TextField
                   name="comments"

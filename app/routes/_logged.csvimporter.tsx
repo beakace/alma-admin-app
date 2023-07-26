@@ -13,13 +13,13 @@ import {
 } from "@remix-run/node"
 import { Form } from "@remix-run/react"
 import { parse } from "papaparse"
+import type { ChangeEvent} from "react";
 import { useState } from "react"
 import { z } from "zod"
 import { db } from "~/db/db.server"
 import {
   decodeFile,
   extractFullYearFromString,
-  removeTextInParentheses,
   zodEnumFromObjKeys,
 } from "~/lib/csvImporter"
 const theme = createTheme()
@@ -30,27 +30,27 @@ const parsedDataSchema = z.object({
     z.object({
       "nazwisko męża": z.string(),
       "imię męża": z.string(),
-      "wołacz mąż": z.string().nullable(), //wiele pustych
+      "wołacz mąż": z.string().nullable(),
       "nazwisko żony": z.string(),
       "imię żony": z.string(),
-      "wołacz żona": z.string().nullable(), //wiele pustych
+      "wołacz żona": z.string().nullable(),
       "telefon mąż": z.string().optional(),
       "telefon żona": z.string().optional(),
-      "kod pocztowy": z.string(), //kilka pustych
-      "miejsce zamieszkania": z.string().nullable(), //2 puste rekodry
+      "kod pocztowy": z.string(),
+      "miejsce zamieszkania": z.string().nullable(),
       Grupa: groupSchema,
-      zapraszający: z.string().nullable(), //wiele pustych
+      zapraszający: z.string().nullable(),
       "nr bazy": z.coerce.number(),
       "nr Almy": z.string(),
       "kiedy na Almie": z.string(),
       nr: z.coerce.number(),
-      "data ur mąż": z.string(), //kilka "Invalid date"
-      "data ur żona": z.string(), //kilka "Invalid date"
-      "data ślubu": z.string(), //kilka "Invalid date"
-      "mail mąż": z.string().optional(), //wiele pustych
-      "mail żona": z.string().optional(), //wiele pustych
-      "kościół mąż": z.coerce.number().nullable(), //1 pusty rekord - Alma
-      "kościół żona": z.coerce.number().nullable(), //1 pusty rekord - Alma
+      "data ur mąż": z.string(),
+      "data ur żona": z.string(),
+      "data ślubu": z.string(),
+      "mail mąż": z.string().optional(),
+      "mail żona": z.string().optional(),
+      "kościół mąż": z.coerce.number().nullable(),
+      "kościół żona": z.coerce.number().nullable(),
       UWAGI: z.string().optional(),
     })
   ),
@@ -97,24 +97,6 @@ export const action = async ({ request }: ActionArgs) => {
         })
       }
 
-      const clearedInviters = removeTextInParentheses(couple["zapraszający"])
-      const invitedBy = await db.couple.findFirst({
-        where: {
-          organizationUnitId:
-            clearedInviters &&
-            Number.isInteger(Number(clearedInviters?.split(" ")[3]))
-              ? Number(clearedInviters?.split(" ")[3])
-              : 0,
-          husband: {
-            firstName: clearedInviters ? clearedInviters?.split(" ")[1] : "-",
-            lastName: clearedInviters ? clearedInviters?.split(" ")[0] : "-",
-          },
-          wife: {
-            firstName: clearedInviters ? clearedInviters.split(" ")[2] : "-",
-          },
-        },
-      })
-
       const husband = await db.person.create({
         data: {
           vocative: couple["wołacz mąż"] ?? "-",
@@ -155,17 +137,12 @@ export const action = async ({ request }: ActionArgs) => {
           postalCode: couple["kod pocztowy"],
           city: couple["miejsce zamieszkania"] ?? "-",
           group: couple["Grupa"],
-          invitedById: invitedBy?.id,
+          invitedBy: couple["zapraszający"] ? couple["zapraszający"] : "-",
           attendanceNumber: couple["nr"],
           weddingYear: extractFullYearFromString(couple["data ślubu"]),
           organizationUnitId: almaEvent.organizationUnitId,
           almaEventId: almaEvent.id,
-          comments:
-            (!invitedBy
-              ? couple["zapraszający"]
-                ? "Zaproszeni przez: " + couple["zapraszający"] + "/"
-                : ""
-              : "") + couple["UWAGI"],
+          comments: couple["UWAGI"],
         },
       })
     }
@@ -181,7 +158,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function UploadRoute() {
   const [fileName, setFileName] = useState("")
 
-  const handleFileInputChange = (event: any) => {
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0]
     if (selectedFile) {
       const fileName = selectedFile.name
