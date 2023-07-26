@@ -20,7 +20,8 @@
     "db:show": "prisma studio",
     "db:format": "prisma format",
     "lint": "eslint \"app/**/*.{ts,tsx}\" --fix",
-    "lint:check": "eslint \"app/**/*.{ts,tsx}\""
+    "lint:check": "eslint \"app/**/*.{ts,tsx}\"",
+    "init:script": "ts-node scripts/init-users.ts"
   },
   "dependencies": {
     "@emotion/cache": "latest",
