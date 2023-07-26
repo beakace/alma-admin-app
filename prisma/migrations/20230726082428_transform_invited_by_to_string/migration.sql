@@ -11,3 +11,8 @@ ALTER TABLE "Couple" DROP CONSTRAINT "Couple_invitedById_fkey";
 ALTER TABLE "Couple" DROP COLUMN "invitedById",
 ADD COLUMN     "invitedBy" TEXT,
 ALTER COLUMN "comments" DROP NOT NULL;
+
+DELETE FROM "Couple";
+DELETE FROM "Person";
+DELETE FROM "AlmaEvent";
+
