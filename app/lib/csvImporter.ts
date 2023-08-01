@@ -10,13 +10,13 @@ export function zodEnumFromObjKeys<K extends string>(
 }
 
 export function extractFullYearFromString(dateStr: string): number {
-  const dateObj = new Date(dateStr)
+  const year = Number(dateStr.substring(dateStr.lastIndexOf(".") + 1))
 
-  if (!isNaN(dateObj.getTime())) {
-    return dateObj.getFullYear()
+  if (isNaN(year)) {
+    return 0
   }
 
-  return 0
+  return year
 }
 
 export async function decodeFile(blob: Blob) {
