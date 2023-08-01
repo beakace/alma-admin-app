@@ -66,13 +66,13 @@ export default function DataTable({
         </Box>
       ),
     },
-    { field: "city", headerName: "Miejscowość", minWidth: 130, flex: 1 },
+    { field: "city", headerName: "Miejscowość", minWidth: 140, flex: 2 },
     {
       field: "group",
       type: "string",
       headerName: "Grupa",
       minWidth: 65,
-      flex: 1,
+      flex: 0.5,
       align: "center",
       cellClassName: (params: GridCellParams<string>) => {
         if (params.value == null) {
