@@ -14,15 +14,19 @@ import {
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { type Group } from "@prisma/client"
-import { redirect, type ActionArgs, json } from "@remix-run/node"
+import { redirect, json } from "@remix-run/node"
+import type { LoaderArgs, ActionArgs } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { db } from "~/db/db.server"
 import ManIcon from "@mui/icons-material/Man"
 import WomanIcon from "@mui/icons-material/Woman"
 import WcIcon from "@mui/icons-material/Wc"
+import { requireUser } from "~/db/session.server"
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderArgs) => {
+  const { organizationUnitId } = await requireUser(request)
+
   const almaEvents = await db.almaEvent.findMany({
     select: {
       id: true,
@@ -30,6 +34,7 @@ export const loader = async () => {
       month: true,
       organizationUnitId: true,
     },
+    where: { organizationUnitId },
   })
 
   const organizationUnits = await db.organizationUnit.findMany()
@@ -82,7 +87,7 @@ export const action = async ({ request }: ActionArgs) => {
       city: String(formObject.city),
       group: formObject.group as Group,
       postalCode: String(formObject.postalCode),
-      weddingYear: Number(formObject.weddingYear),
+      weddingDate: String(formObject.weddingDate),
       invitedBy: String(formObject.invitedBy),
       wife: {
         create: {
@@ -389,12 +394,12 @@ export default function AddCouple() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
-                  <InputLabel id="organizationUnit-label">Oddział</InputLabel>
+                  <InputLabel id="organizationUnit-label">Nr Bazy</InputLabel>
                   <Select
                     name="organizationUnit"
                     labelId="organizationUnit-label"
                     id="organizationUnit"
-                    label="Oddział"
+                    label="Nr Bazy"
                   >
                     {organizationUnits.map((orgUnit) => (
                       <MenuItem key={orgUnit.id} value={orgUnit.id}>

@@ -123,7 +123,7 @@ export default function Create() {
                 <MenuItem value={11}>Listopad</MenuItem>
                 <MenuItem value={12}>Grudzień</MenuItem>
               </Select>
-              <InputLabel id="organizationUnit-label">Oddział</InputLabel>
+              <InputLabel id="organizationUnit-label">Nr Bazy</InputLabel>
               <Select
                 name="organizationUnit"
                 labelId="organizationUnit-label"

@@ -44,11 +44,28 @@ export default function DataTable({
       renderCell: (params) => (
         <Box>
           <Typography sx={{ fontSize: "15px" }}>
-            {params.row.wife.firstName} {params.row.wife.lastName}
+            {params.row.wife.lastName} {params.row.wife.firstName}
           </Typography>
 
           <Typography sx={{ fontSize: "15px" }}>
-            {params.row.husband.firstName} {params.row.husband.lastName}
+            {params.row.husband.lastName} {params.row.husband.firstName}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "phoneNumber",
+      headerName: "Telefon",
+      minWidth: 125,
+      flex: 1,
+      renderCell: (params) => (
+        <Box>
+          <Typography sx={{ fontSize: "15px" }}>
+            {params.row.wife.phoneNumber}
+          </Typography>
+
+          <Typography sx={{ fontSize: "15px" }}>
+            {params.row.husband.phoneNumber}
           </Typography>
         </Box>
       ),
@@ -57,7 +74,7 @@ export default function DataTable({
       field: "postalCode",
       headerName: "Kod pocztowy",
       minWidth: 85,
-      flex: 1,
+      flex: 0.7,
       renderHeader: () => (
         <Box>
           <Typography sx={{ fontSize: "15px" }}>Kod</Typography>
@@ -114,7 +131,7 @@ export default function DataTable({
       ),
     },
     {
-      field: "weddingYear",
+      field: "weddingDate",
       headerName: "Data ślubu",
       minWidth: 85,
       flex: 1,

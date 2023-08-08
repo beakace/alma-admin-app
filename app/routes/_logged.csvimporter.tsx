@@ -13,7 +13,7 @@ import {
 } from "@remix-run/node"
 import { Form } from "@remix-run/react"
 import { parse } from "papaparse"
-import type { ChangeEvent} from "react";
+import type { ChangeEvent } from "react"
 import { useState } from "react"
 import { z } from "zod"
 import { db } from "~/db/db.server"
@@ -41,7 +41,7 @@ const parsedDataSchema = z.object({
       Grupa: groupSchema,
       zapraszający: z.string().nullable(),
       "nr bazy": z.coerce.number(),
-      "nr Almy": z.string(),
+      "nr Almy": z.coerce.number(),
       "kiedy na Almie": z.string(),
       nr: z.coerce.number(),
       "data ur mąż": z.string(),
@@ -92,7 +92,7 @@ export const action = async ({ request }: ActionArgs) => {
           data: {
             year: Number(couple["kiedy na Almie"].split(".")[0]),
             month: Number(couple["kiedy na Almie"].split(".")[1]),
-            organizationUnitId: couple["nr bazy"],
+            organizationUnitId: couple["nr Almy"],
           },
         })
       }
@@ -125,13 +125,13 @@ export const action = async ({ request }: ActionArgs) => {
           husbandId: husband.id,
           wifeId: wife.id,
           coupleId:
-            couple["nr Almy"] +
-            "-" +
             almaEvent.organizationUnitId +
+            "-" +
+            couple["nr Almy"] +
             "-" +
             almaEvent.year +
             "." +
-            almaEvent.month +
+            almaEvent.month.toString().padStart(2, "0") +
             "-" +
             String(couple["nr"]),
           postalCode: couple["kod pocztowy"],
@@ -139,7 +139,8 @@ export const action = async ({ request }: ActionArgs) => {
           group: couple["Grupa"],
           invitedBy: couple["zapraszający"] ? couple["zapraszający"] : "-",
           attendanceNumber: couple["nr"],
-          weddingYear: extractFullYearFromString(couple["data ślubu"]),
+          weddingDate:
+            couple["data ślubu"] === "Invalid date" ? "" : couple["data ślubu"],
           organizationUnitId: almaEvent.organizationUnitId,
           almaEventId: almaEvent.id,
           comments: couple["UWAGI"],

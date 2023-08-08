@@ -17,14 +17,16 @@ const columns: GridColDef<
     flex: 1,
     renderCell: (params) => (
       <Box>
-        <Typography sx={{ fontSize: "15px" }}>{params.row.month}</Typography>
+        <Typography sx={{ fontSize: "15px" }}>
+          {params.row.month.toString().padStart(2, "0")}
+        </Typography>
       </Box>
     ),
   },
   { field: "year", headerName: "Rok", minWidth: 130, flex: 1 },
   {
     field: "organizationUnitId",
-    headerName: "Oddział",
+    headerName: "Nr Bazy",
     minWidth: 130,
     flex: 1,
   },

@@ -1,17 +1,22 @@
 import EventIcon from "@mui/icons-material/Event"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
+import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import EventsTable from "~/components/eventstable"
 import { db } from "~/db/db.server"
+import { requireUser } from "~/db/session.server"
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderArgs) => {
+  const { organizationUnitId } = await requireUser(request)
+
   return json({
     almaEvents: await db.almaEvent.findMany({
       include: {
         organizationUnit: true,
       },
+      where: { organizationUnitId },
     }),
   })
 }

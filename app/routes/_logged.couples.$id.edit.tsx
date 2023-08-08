@@ -97,7 +97,7 @@ export const action = async ({ request }: ActionArgs) => {
       city: String(formObject.city),
       group: formObject.group as Group,
       postalCode: String(formObject.postalCode),
-      weddingYear: Number(formObject.weddingYear),
+      weddingDate: String(formObject.weddingDate),
       invitedBy: String(formObject.invitedBy),
       wife: {
         update: {
@@ -384,19 +384,12 @@ export default function EditCouple() {
                   required
                 />
                 <TextField
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      max: 2100,
-                      min: 0,
-                    },
-                  }}
-                  name="weddingYear"
-                  id="weddingYear"
-                  label="Rok ślubu"
+                  name="weddingDate"
+                  id="weddingDate"
+                  label="Data ślubu"
                   variant="outlined"
-                  defaultValue={couple?.weddingYear}
-                  required
+                  defaultValue={couple?.weddingDate}
+                  placeholder="dd.mm.rrrr"
                 />
                 <TextField
                   type="number"
@@ -426,12 +419,12 @@ export default function EditCouple() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
-                  <InputLabel id="organizationUnit-label">Oddział</InputLabel>
+                  <InputLabel id="organizationUnit-label">Nr Bazy</InputLabel>
                   <Select
                     name="organizationUnit"
                     labelId="organizationUnit-label"
                     id="organizationUnit"
-                    label="Oddział"
+                    label="Nr Bazy"
                     defaultValue={couple?.organizationUnitId}
                   >
                     {organizationUnits.map((orgUnit) => (
@@ -450,13 +443,18 @@ export default function EditCouple() {
                   ></TextField>
                 </FormControl>
                 <FormControl fullWidth>
+                  <input
+                    id="almaEvent"
+                    name="almaEvent"
+                    defaultValue={couple?.almaEventId}
+                    hidden
+                  />
                   <InputLabel id="almaEvent-label">Event</InputLabel>
                   <Select
-                    name="almaEvent"
                     labelId="almaEvent-label"
-                    id="almaEvent"
                     label="Event"
                     defaultValue={couple?.almaEventId}
+                    disabled
                   >
                     {almaEvents.map(({ id, label }) => (
                       <MenuItem key={id} id={id} value={id}>

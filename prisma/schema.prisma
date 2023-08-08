@@ -20,7 +20,7 @@ model Couple {
   group              Group
   city               String
   postalCode         String
-  weddingYear        Int
+  weddingDate        String
   attendanceNumber   Int
   invitedBy          String?
   organizationUnitId Int

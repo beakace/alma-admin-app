@@ -25,6 +25,9 @@ export const loader = async ({ request }: LoaderArgs) => {
   const { organizationUnitId } = await requireUser(request)
   return {
     couples: await db.couple.findMany({
+      where: {
+        organizationUnitId,
+      },
       include: {
         husband: true,
         wife: true,
@@ -36,17 +39,19 @@ export const loader = async ({ request }: LoaderArgs) => {
   }
 }
 
+const defaultCheckboxFilters = {
+  isCheckedA: true,
+  isCheckedB: true,
+  isCheckedC: true,
+  isCheckedD: true,
+  isCheckedSX: false,
+  isCheckedNoMail: false,
+}
+
 export default function Couples() {
   const { couples, userOrganizationUnitId } = useLoaderData<typeof loader>()
   const [search, setSearch] = useState<string>("")
-  const [checkboxFilters, setCheckboxFilters] = useState({
-    isCheckedA: true,
-    isCheckedB: true,
-    isCheckedC: true,
-    isCheckedD: false,
-    isCheckedSX: false,
-    isCheckedNoMail: false,
-  })
+  const [checkboxFilters, setCheckboxFilters] = useState(defaultCheckboxFilters)
 
   const handleCheckboxFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCheckboxFilters((checkboxFilters) => ({
@@ -56,14 +61,7 @@ export default function Couples() {
   }
 
   const handleClearClick = () => {
-    setCheckboxFilters({
-      isCheckedA: true,
-      isCheckedB: true,
-      isCheckedC: true,
-      isCheckedD: false,
-      isCheckedSX: false,
-      isCheckedNoMail: false,
-    })
+    setCheckboxFilters(defaultCheckboxFilters)
   }
 
   const filteredCouples = couples
@@ -76,6 +74,7 @@ export default function Couples() {
         c.husband.firstName,
         c.husband.lastName,
         c.husband.email,
+        c.invitedBy,
       ]
         .join("")
         .toLowerCase()
@@ -113,7 +112,7 @@ export default function Couples() {
     })
 
   return (
-    <Box margin="3rem">
+    <Box margin="3rem" marginTop="1.5rem">
       <Box
         component="form"
         noValidate
@@ -218,7 +217,7 @@ export default function Couples() {
                     checkboxFilters.isCheckedA &&
                     checkboxFilters.isCheckedB &&
                     checkboxFilters.isCheckedC &&
-                    !checkboxFilters.isCheckedD &&
+                    checkboxFilters.isCheckedD &&
                     !checkboxFilters.isCheckedNoMail &&
                     !checkboxFilters.isCheckedSX
                   }
