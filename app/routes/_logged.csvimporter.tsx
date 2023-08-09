@@ -84,6 +84,7 @@ export const action = async ({ request }: ActionArgs) => {
         where: {
           year: Number(couple["kiedy na Almie"].split(".")[0]),
           month: Number(couple["kiedy na Almie"].split(".")[1]),
+          organizationUnitId: couple["nr Almy"],
         },
       })
 
@@ -125,9 +126,9 @@ export const action = async ({ request }: ActionArgs) => {
           husbandId: husband.id,
           wifeId: wife.id,
           coupleId:
-            almaEvent.organizationUnitId +
+            couple["nr bazy"] +
             "-" +
-            couple["nr Almy"] +
+            almaEvent.organizationUnitId +
             "-" +
             almaEvent.year +
             "." +
@@ -141,7 +142,7 @@ export const action = async ({ request }: ActionArgs) => {
           attendanceNumber: couple["nr"],
           weddingDate:
             couple["data ślubu"] === "Invalid date" ? "" : couple["data ślubu"],
-          organizationUnitId: almaEvent.organizationUnitId,
+          organizationUnitId: couple["nr bazy"],
           almaEventId: almaEvent.id,
           comments: couple["UWAGI"],
         },

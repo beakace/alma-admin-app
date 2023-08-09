@@ -29,7 +29,7 @@ async function main() {
     data: {
       username: "Admin",
       passwordHash: await hash("Admin12!", 10),
-      organizationUnitId: 1,
+      organizationUnitId: 2,
     },
   })
 }
