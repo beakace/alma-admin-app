@@ -1,0 +1,6 @@
+# pack-refs with: peeled fully-peeled sorted 
+e9667dad1ec66737fcab1a260607bc180fa83d4e refs/heads/couples-view
+e0e93f89533eda3ff46d178975f6403e533ace41 refs/heads/develop
+b12f6e081172f00cb0d451cd1f8ba168fe8089a5 refs/heads/main
+3447ca672765d9322ba6fb9c89046f55eb6bacc1 refs/heads/michal
+2f7a1365c603937a586a186cd5d91d3d567001cc refs/heads/michal-new
